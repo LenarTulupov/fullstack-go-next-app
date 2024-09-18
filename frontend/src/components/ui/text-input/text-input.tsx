@@ -5,13 +5,15 @@ export default function TextInput({
   type,
   className,
   id,
-  placeholder }: ITextInput) {
+  placeholder,
+  required }: ITextInput) {
   return (
     <input
       id={id}
       type={type}
       className={`${styles['text-input']} ${className || ''}`}
       placeholder={placeholder}
+      required={required}
     />
   )
 };

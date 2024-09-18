@@ -7,7 +7,8 @@ export default function Button({
   className,
   variant = 'black',
   size = 'md',
-  disabled = false }: IButton) {
+  disabled = false,
+  type="button" }: IButton) {
   return (
     <button
       onClick={onClick}
@@ -18,6 +19,7 @@ export default function Button({
         ${className || ''}
       `}
       disabled={disabled}
+      type={type}
     >
       {children}
     </button>

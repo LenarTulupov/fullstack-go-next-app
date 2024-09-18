@@ -7,4 +7,5 @@ export interface IButton {
   variant?: 'black' | 'white';
   size?: 'sm' | 'md';
   disabled?: boolean;
+  type?: 'button' | 'submit';
 }

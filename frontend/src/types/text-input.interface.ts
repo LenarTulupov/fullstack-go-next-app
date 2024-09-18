@@ -3,4 +3,5 @@ export interface ITextInput {
   id: string;
   placeholder: string;
   className?: string;
+  required: boolean;
 }

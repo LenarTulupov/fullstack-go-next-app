@@ -1,0 +1,12 @@
+.text-input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--gray);
+  outline: none;
+  &:hover {
+    box-shadow: 0 0 0 1px var(--black);
+  }
+  &:focus {
+    box-shadow: 0 0 0 2px var(--black);
+  }
+}
