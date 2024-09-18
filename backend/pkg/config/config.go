@@ -1,23 +1,25 @@
 package config
 
 import (
-    "database/sql"
-    "log"
-    "os"
+	"database/sql"
+	"log"
+	"os"
 
-    _ "github.com/lib/pq" // PostgreSQL driver
-    "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
+var (
+    DB *sql.DB
+    JwtSecretKey string
+)
+
 
 func LoadConfig() {
-    // Load environment variables from .env file
     if err := godotenv.Load("..//.env"); err != nil {
         log.Fatalf("Error loading .env file: %v", err)
     }
 
-    // Retrieve DATABASE_URL from environment variables
     dsn := os.Getenv("DATABASE_URL")
     if dsn == "" {
         log.Fatal("DATABASE_URL environment variable is not set")
@@ -29,8 +31,12 @@ func LoadConfig() {
         log.Fatalf("Error connecting to database: %v", err)
     }
 
-    // Optionally, check if the database is reachable
     if err := DB.Ping(); err != nil {
         log.Fatalf("Error pinging database: %v", err)
+    }
+
+    JwtSecretKey = os.Getenv("JWT_SECRET_KEY");
+    if JwtSecretKey == "" {
+        log.Fatal("JWT_SECRET_KEY environment variable is not set")
     }
 }

@@ -2,13 +2,15 @@ package router
 
 import (
     "github.com/gin-gonic/gin"
-    "api/pkg/handlers" // Убедитесь, что путь правильный
+    "api/pkg/handlers" 
 )
 
 func SetupRouter() *gin.Engine {
     r := gin.Default()
 
-    r.GET("/health", handlers.HealthCheckHandler)
-    
+    r.POST("/register", handlers.RegisterUser)
+    r.POST("/login", handlers.LoginUser)
+
+
     return r
 }
