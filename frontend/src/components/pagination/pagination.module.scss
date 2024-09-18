@@ -1,0 +1,18 @@
+.pagination__products {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.pagination__buttons {
+  display: flex;
+  gap: 5px;
+}
+.pagination__button {
+  background-color: var(--black);
+  color: var(--white);
+  border: none;
+  min-width: 50px;
+  min-height: 50px;
+  &:disabled {
+    background-color: var(--blueMuted);
+  }
+}

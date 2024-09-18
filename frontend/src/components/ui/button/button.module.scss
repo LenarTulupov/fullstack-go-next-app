@@ -1,0 +1,32 @@
+.button {
+  border-radius: var(--border-radius);
+  outline: none;
+  border: none;
+}
+
+.black {
+  background-color: var(--black);
+  color: var(--white);
+  transition: background-color .3s ease;
+  &:hover {
+    background-color: var(--black-hover);
+  }
+}
+
+.white {
+  background-color: var(--white);
+  border: 1px solid var(--black);
+  transition: background-color .3s ease-in-out, color .3s ease-in-out;
+  &:hover {
+    background-color: var(--black);
+    color: var(--white);
+  }
+}
+
+.sm {
+  padding: 5px 10px;
+}
+
+.md {
+  padding: 10px 20px;
+}

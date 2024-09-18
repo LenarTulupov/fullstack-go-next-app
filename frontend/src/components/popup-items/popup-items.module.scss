@@ -1,0 +1,30 @@
+.popup-items {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  &__content {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 20px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .flex-col {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .items-wrapper {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

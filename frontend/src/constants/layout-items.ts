@@ -1,0 +1,1 @@
+export const layoutItems = ['size', 'color', 'price', 'sort'];

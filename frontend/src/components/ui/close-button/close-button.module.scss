@@ -1,0 +1,16 @@
+.close-button {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  background-color: var(--black);
+  color: var(--white);
+  border-radius: 100%;
+  border: none;
+  outline: none;
+  transition: transform .3s;
+  &:hover {
+    transform: rotate(-180deg);
+    background-color: var(--black-hover);
+  }
+}
+
