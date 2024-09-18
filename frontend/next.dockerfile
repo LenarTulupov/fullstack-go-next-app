@@ -66,3 +66,45 @@ ENV HOSTNAME "0.0.0.0"
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["node", "server.js"]
+
+# # Используем Node.js образ для сборки
+# FROM node:18-alpine AS builder
+
+# WORKDIR /app
+
+# # Копирование зависимостей
+# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+# RUN \
+#   if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
+#   elif [ -f package-lock.json ]; then npm ci; \
+#   elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm install --frozen-lockfile; \
+#   else echo "Lockfile not found." && exit 1; \
+#   fi
+
+# # Копирование исходного кода и сборка приложения
+# COPY . .
+# RUN yarn build
+
+# # Создание минимального образа для продакшена
+# FROM node:18-alpine AS runner
+
+# WORKDIR /app
+
+# ENV NODE_ENV production
+
+# # Установка пользователя
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 nextjs
+# USER nextjs
+
+# # Копирование файлов из сборочного образа
+# COPY --from=builder /app/.next/standalone ./
+# COPY --from=builder /app/.next/static ./.next/static
+# COPY --from=builder /app/public ./public
+
+# EXPOSE 3000
+
+# ENV PORT 3000
+# ENV HOST "0.0.0.0"
+
+# CMD ["node", "server.js"]
