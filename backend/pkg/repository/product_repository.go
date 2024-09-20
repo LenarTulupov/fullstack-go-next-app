@@ -42,3 +42,22 @@ func InsertProduct(db *sql.DB, product *models.Product) error {
 
     return nil
 }
+
+func GetAllProducts(db *sql.DB) ([]models.Product, error) {
+    query := `SELECT id, title, subtitle, description, price_new, price_old, quantity, category_id, available, created_at, updated_at FROM products`
+    rows, err := db.Query(query)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var products []models.Product
+    for rows.Next() {
+        var product models.Product
+        if err := rows.Scan(&product.ID, &product.Title, &product.Subtitle, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.CategoryID, &product.Available, &product.CreatedAt, &product.UpdatedAt); err != nil {
+            return nil, err
+        }
+        products = append(products, product)
+    }
+    return products, nil
+}

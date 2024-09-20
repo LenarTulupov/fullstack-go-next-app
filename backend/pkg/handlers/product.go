@@ -9,6 +9,15 @@ import (
     "github.com/gin-gonic/gin"
 )
 
+func GetAllProducts(c *gin.Context) {
+    products, err := repository.GetAllProducts(config.DB)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
+        return
+    }
+    c.JSON(http.StatusOK, products)
+}
+
 func GetProduct(c *gin.Context) {
     productID := c.Param("id")
     id, err := strconv.Atoi(productID)
