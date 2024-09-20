@@ -19,7 +19,7 @@ export default function SignIn() {
           <p className={styles['sign-in__form-text']}>
             Enter your email below to login to your account
           </p>
-          <form action="" className={styles['sign-in__form']}>
+          <form className={styles['sign-in__form']}>
             {signInFields.map((field, index) => (
               <InputField
                 key={index}

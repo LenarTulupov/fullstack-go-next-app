@@ -1,8 +1,10 @@
 .text-input {
   padding: 10px;
   border-radius: 6px;
-  border: 1px solid var(--gray);
+  box-shadow: 0 0 0 1px var(--gray);
   outline: none;
+  border: none;
+  transition: box-shadow .3s ease;
   &:hover {
     box-shadow: 0 0 0 1px var(--black);
   }
