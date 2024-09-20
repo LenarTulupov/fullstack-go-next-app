@@ -10,6 +10,7 @@ func SetupRouter() *gin.Engine {
 
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
+    r.POST("/products", handlers.CreateProduct)
 
 
     return r
