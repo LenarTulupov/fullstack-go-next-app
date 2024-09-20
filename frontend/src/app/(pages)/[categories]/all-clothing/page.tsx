@@ -26,6 +26,8 @@ export default function Page() {
     fetchProducts();
   }, [dispatch]);
 
+  console.log(products)
+
   return (
     <div className={styles.all}>
       <Container>
