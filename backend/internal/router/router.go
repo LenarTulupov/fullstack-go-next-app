@@ -2,7 +2,7 @@ package router
 
 import (
     "github.com/gin-gonic/gin"
-    "api/pkg/handlers" 
+    "api/pkg/handlers"
 )
 
 func SetupRouter() *gin.Engine {
@@ -11,7 +11,7 @@ func SetupRouter() *gin.Engine {
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
     r.POST("/products", handlers.CreateProduct)
-
+    r.GET("/products/:id", handlers.GetProduct) 
 
     return r
 }

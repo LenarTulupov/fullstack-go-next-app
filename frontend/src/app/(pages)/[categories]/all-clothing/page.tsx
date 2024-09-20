@@ -15,9 +15,13 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('/api/products');
-      const data = await res.json();
-      dispatch(setProducts(data));
+      const res = await fetch('/api/products'); 
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(setProducts(data));
+      } else {
+        console.error("Failed to fetch products");
+      }
     }
     fetchProducts();
   }, [dispatch]);
