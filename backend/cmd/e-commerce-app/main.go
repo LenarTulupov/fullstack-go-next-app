@@ -12,7 +12,7 @@ import (
 
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        c.Header("Access-Control-Allow-Origin", "https://fullstack-go-next-app-4.onrender.com")
+        c.Header("Access-Control-Allow-Origin", "*") 
         c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
         c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
         c.Header("Access-Control-Allow-Credentials", "true")

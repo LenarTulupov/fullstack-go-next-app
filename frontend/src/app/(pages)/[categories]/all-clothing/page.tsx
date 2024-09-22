@@ -17,7 +17,7 @@ export default function Page() {
     let isMounted = true; // флаг для проверки, монтирован ли компонент
   
     async function fetchProducts() {
-      const res = await fetch('https://fullstack-go-next-app.onrender.com/products');
+      const res = await fetch('https://fullstack-go-next-app.onrender.com/products/');
       if (res.ok) {
         const data = await res.json();
         if (isMounted) {
