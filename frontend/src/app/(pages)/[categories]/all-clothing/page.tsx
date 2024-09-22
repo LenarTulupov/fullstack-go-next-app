@@ -15,7 +15,7 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('/api/products'); 
+      const res = await fetch('https://fullstack-go-next-app.onrender.com/products'); 
       if (res.ok) {
         const data = await res.json();
         dispatch(setProducts(data));
