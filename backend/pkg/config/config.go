@@ -16,10 +16,6 @@ var (
 
 
 func LoadConfig() {
-    if err := godotenv.Load("/app/.env"); err != nil {
-        log.Fatalf("Error loading .env file: %v", err)
-    }
-
     dsn := os.Getenv("DATABASE_URL")
     if dsn == "" {
         log.Fatal("DATABASE_URL environment variable is not set")
