@@ -7,15 +7,16 @@ import (
     
     "api/pkg/config"
     "api/internal/router"
-    "api/pkg/handlers"
     "github.com/gin-gonic/gin"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        c.Header("Access-Control-Allow-Origin", "https://fullstack-go-next-app-4.onrender.com")
+        c.Header("Access-Control-Allow-Origin", "*")
         c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+
+        fmt.Println("CORS Middleware called for:", c.Request.Method)
         
         if c.Request.Method == http.MethodOptions {
             c.AbortWithStatus(http.StatusNoContent)
@@ -32,8 +33,6 @@ func main() {
     r := router.SetupRouter()
 
     r.Use(CORSMiddleware())
-
-    r.GET("/health", handlers.HealthHandler)
 
     port := ":8000"
     fmt.Printf("Server is running on port %s\n", port)

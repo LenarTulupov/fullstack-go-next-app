@@ -13,6 +13,7 @@ func SetupRouter() *gin.Engine {
     r.POST("/products", handlers.CreateProduct)
     r.GET("/products", handlers.GetAllProducts)
     r.GET("/products/:id", handlers.GetProduct) 
+    r.GET("/health", handlers.HealthHandler)
 
     return r
 }
