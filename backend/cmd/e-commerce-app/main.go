@@ -10,7 +10,6 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-// CORSMiddleware sets the headers required for handling CORS requests
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         c.Header("Access-Control-Allow-Origin", "https://fullstack-go-next-app-4.onrender.com")
@@ -18,17 +17,12 @@ func CORSMiddleware() gin.HandlerFunc {
         c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
         c.Header("Access-Control-Allow-Credentials", "true")
 
-        fmt.Println("Request Headers:", c.Request.Header)
-        fmt.Println("Response Headers before Next:", c.Writer.Header())
-
         if c.Request.Method == http.MethodOptions {
             c.AbortWithStatus(http.StatusNoContent)
             return
         }
 
         c.Next()
-
-        fmt.Println("Response Headers after Next:", c.Writer.Header())
     }
 }
 
