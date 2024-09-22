@@ -12,27 +12,26 @@ import (
 )
 
 type User struct {
-	Id       int    `json:"id"`
-	Name		 string `json:"name"`
-	Email    string `json:"email"`
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
-// main function
 func main() {
-	//connect to database
+	// Подключение к базе данных
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	// create table if not exists
+	// Создание таблицы, если она не существует
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT, email TEXT)")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// create router
+	// Создание маршрутизатора
 	router := mux.NewRouter()
 	router.HandleFunc("/api/go/users", getUsers(db)).Methods("GET")
 	router.HandleFunc("/api/go/users", createUser(db)).Methods("POST")
@@ -40,41 +39,35 @@ func main() {
 	router.HandleFunc("/api/go/users/{id}", updateUser(db)).Methods("PUT")
 	router.HandleFunc("/api/go/users/{id}", deleteUser(db)).Methods("DELETE")
 
-	// wrap the router with CORS and JSON content type middlewares
-	enhancedRouter := enableCORS(jsonContentTypeMiddleware(router))
-
-	// start server
-	log.Fatal(http.ListenAndServe(":8000", enhancedRouter))
+	// Запуск сервера
+	log.Fatal(http.ListenAndServe(":8000", enableCORS(jsonContentTypeMiddleware(router))))
 }
 
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Set CORS headers
-		w.Header().Set("Access-Control-Allow-Origin", "*") // Allow any origin
+		// Установка заголовков CORS
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-		// Check if the request is for CORS preflight
-		if r.Method == "OPTIONS" {
+		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
 
-		// Pass down the request to the next middleware (or final handler)
 		next.ServeHTTP(w, r)
 	})
-
 }
 
 func jsonContentTypeMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Set JSON Content-Type
+		// Установка заголовка Content-Type
 		w.Header().Set("Content-Type", "application/json")
 		next.ServeHTTP(w, r)
 	})
 }
 
-// get all users
+// Получение всех пользователей
 func getUsers(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.Query("SELECT * FROM users")
@@ -83,7 +76,7 @@ func getUsers(db *sql.DB) http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		users := []User{} // array of users
+		users := []User{} // массив пользователей
 		for rows.Next() {
 			var u User
 			if err := rows.Scan(&u.Id, &u.Name, &u.Email); err != nil {
@@ -99,7 +92,7 @@ func getUsers(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-//get user by id
+// Получение пользователя по ID
 func getUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -116,7 +109,7 @@ func getUser(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-// create user
+// Создание пользователя
 func createUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var u User
@@ -131,7 +124,7 @@ func createUser(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-//update user
+// Обновление пользователя
 func updateUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var u User
@@ -140,25 +133,25 @@ func updateUser(db *sql.DB) http.HandlerFunc {
 		vars := mux.Vars(r)
 		id := vars["id"]
 
-		// Execute the update query
+		// Выполнение запроса на обновление
 		_, err := db.Exec("UPDATE users SET name = $1, email = $2 WHERE id = $3", u.Name, u.Email, id)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Retrieve the updated user data from the database
+		// Получение обновленных данных пользователя из базы данных
 		var updatedUser User
 		err = db.QueryRow("SELECT id, name, email FROM users WHERE id = $1", id).Scan(&updatedUser.Id, &updatedUser.Name, &updatedUser.Email)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Send the updated user data in the response
+		// Отправка обновленных данных пользователя в ответе
 		json.NewEncoder(w).Encode(updatedUser)
 	}
 }
 
-// delete user
+// Удаление пользователя
 func deleteUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -172,7 +165,6 @@ func deleteUser(db *sql.DB) http.HandlerFunc {
 		} else {
 			_, err := db.Exec("DELETE FROM users WHERE id = $1", id)
 			if err != nil {
-				//todo : fix error handling
 				w.WriteHeader(http.StatusNotFound)
 				return
 			}

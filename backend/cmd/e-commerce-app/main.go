@@ -7,6 +7,7 @@ import (
     
     "api/pkg/config"
     "api/internal/router"
+    "api/pkg/handlers"
     "github.com/gin-gonic/gin"
 )
 
@@ -32,7 +33,10 @@ func main() {
 
     r.Use(CORSMiddleware())
 
-    port := ":8080"
+    // Регистрация эндпоинта /health
+    r.GET("/health", handlers.HealthHandler)
+
+    port := ":8000"
     fmt.Printf("Server is running on port %s\n", port)
     if err := r.Run(port); err != nil {
         log.Fatal("Failed to start server: ", err)
