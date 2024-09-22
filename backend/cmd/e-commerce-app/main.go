@@ -13,28 +13,22 @@ import (
 // CORSMiddleware sets the headers required for handling CORS requests
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        // Allow only specific origin (replace with your actual frontend URL)
-        c.Header("Access-Control-Allow-Origin", "https://fullstack-go-next-app-4.onrender.com") // Set to your frontend's URL
-
-        // Allow common HTTP methods
+        c.Header("Access-Control-Allow-Origin", "https://fullstack-go-next-app-4.onrender.com")
         c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
-
-        // Allow common headers used in requests
         c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
-
-        // Allow credentials if needed (cookies, authorization headers, etc.)
         c.Header("Access-Control-Allow-Credentials", "true")
 
-        fmt.Println("CORS Middleware called for:", c.Request.Method)
+        fmt.Println("Request Headers:", c.Request.Header)
+        fmt.Println("Response Headers before Next:", c.Writer.Header())
 
-        // Handle preflight requests
         if c.Request.Method == http.MethodOptions {
             c.AbortWithStatus(http.StatusNoContent)
             return
         }
 
-        // Continue to the next middleware or handler
         c.Next()
+
+        fmt.Println("Response Headers after Next:", c.Writer.Header())
     }
 }
 
