@@ -33,7 +33,6 @@ func main() {
 
     r.Use(CORSMiddleware())
 
-    // Регистрация эндпоинта /health
     r.GET("/health", handlers.HealthHandler)
 
     port := ":8000"

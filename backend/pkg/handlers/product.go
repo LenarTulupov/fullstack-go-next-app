@@ -3,11 +3,14 @@ package handlers
 import (
     "net/http"
     "strconv"
-    "api/pkg/repository"
     "api/pkg/models"
     "api/pkg/config"
+    "api/pkg/repository"
+    "api/pkg/services"
     "github.com/gin-gonic/gin"
 )
+
+var productService = services.ProductService{}
 
 func GetAllProducts(c *gin.Context) {
     products, err := repository.GetAllProducts(config.DB)
@@ -26,7 +29,7 @@ func GetProduct(c *gin.Context) {
         return
     }
 
-    product, err := repository.GetProductByID(config.DB, id)
+    product, err := productService.GetProduct(id)
     if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
         return
