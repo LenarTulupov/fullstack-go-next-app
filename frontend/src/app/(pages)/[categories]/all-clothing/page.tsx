@@ -14,7 +14,7 @@ export default function Page() {
   const products = useSelector(productsArray);
 
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
 
     async function fetchProducts() {
       try {
@@ -23,12 +23,12 @@ export default function Page() {
           headers: {
             'Content-Type': 'application/json',
           },
-          mode: 'no-cors', 
-          credentials: 'include', 
+          mode: 'no-cors',
+          credentials: 'include',
         });
 
         if (res.ok) {
-          const data = await res.json(); 
+          const data = await res.json();
           if (isMounted) {
             dispatch(setProducts(data));
           }
@@ -43,7 +43,7 @@ export default function Page() {
     fetchProducts();
 
     return () => {
-      isMounted = false; 
+      isMounted = false;
     };
   }, [dispatch]);
 
@@ -53,7 +53,13 @@ export default function Page() {
     <div className={styles.all}>
       <Container>
         <ProductsGrid>
-          Here should be a card
+
+          {products.map((product) => (
+            <div key={product.id}>
+              {product.title}
+            </div>
+          ))
+          }
           {/* {products.map((product) => {
             const imageUrl =
               product.product_colors[0].product_color_images[0].image_path;
