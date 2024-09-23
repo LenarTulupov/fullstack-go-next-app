@@ -14,24 +14,35 @@ export default function Page() {
   const products = useSelector(productsArray);
 
   useEffect(() => {
-    let isMounted = true; // флаг для проверки, монтирован ли компонент
-  
+    let isMounted = true; 
+
     async function fetchProducts() {
-      const res = await fetch('https://fullstack-go-next-app.onrender.com/products/');
-      if (res.ok) {
-        const data = await res.json();
-        if (isMounted) {
-          dispatch(setProducts(data));
+      try {
+        const res = await fetch('https://fullstack-go-next-app.onrender.com/products/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', 
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) {
+            dispatch(setProducts(data));
+          }
+        } else {
+          console.error("Failed to fetch products:", res.statusText);
         }
-      } else {
-        console.error("Failed to fetch products:", res.statusText);
+      } catch (error) {
+        console.error("Fetch error:", error);
       }
     }
-  
+
     fetchProducts();
-  
+
     return () => {
-      isMounted = false; // устанавливаем флаг в false при размонтировании
+      isMounted = false; 
     };
   }, [dispatch]);
 
