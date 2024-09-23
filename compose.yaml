@@ -15,8 +15,8 @@ services:
     container_name: goapp
     image: goapp:1.0.0
     build:
-      context: .
-      dockerfile: ./backend/go.dockerfile
+      context: ./backend
+      dockerfile: go.dockerfile
     environment:
       DATABASE_URL: ${DATABASE_URL}
       env_file:

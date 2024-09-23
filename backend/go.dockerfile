@@ -6,9 +6,6 @@ WORKDIR /app
 # Копируем go.mod и go.sum для загрузки зависимостей
 COPY go.mod go.sum ./
 
-# Копируем .env файл
-# COPY ../.env ./
-
 # Загружаем зависимости
 RUN go mod download
 
@@ -28,29 +25,3 @@ RUN chmod +x api
 
 # Запуск исполняемого файла
 CMD ["./api"]
-
-
-
-
-# Рабочий файл
-# FROM golang:latest
-
-# WORKDIR /app
-
-# COPY backend/go.mod backend/go.sum ./
-
-# COPY .env ./
-
-# RUN go mod download
-
-# COPY backend/cmd ./cmd
-# COPY backend/pkg ./pkg
-# COPY backend/internal ./internal 
-
-# WORKDIR /app/cmd/e-commerce-app
-
-# RUN go build -o api .
-
-# RUN chmod +x api
-
-# CMD ["./api"]
