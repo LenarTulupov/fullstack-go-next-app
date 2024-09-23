@@ -53,7 +53,8 @@ export default function Page() {
     <div className={styles.all}>
       <Container>
         <ProductsGrid>
-          {products.map((product) => {
+          Here should be a card
+          {/* {products.map((product) => {
             const imageUrl =
               product.product_colors[0].product_color_images[0].image_path;
               console.log(product.sizes);
@@ -69,7 +70,7 @@ export default function Page() {
                 alt={product.title}
               />
             )
-          })}
+          })} */}
         </ProductsGrid>
         <Pagination products={products} />
       </Container>
