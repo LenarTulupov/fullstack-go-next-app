@@ -18,7 +18,7 @@ export default function Page() {
 
     async function fetchProducts() {
       try {
-        const res = await fetch('https://fullstack-go-next-app.onrender.com/products/', {
+        const res = await fetch('https://fullstack-go-next-app.onrender.com/products', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
