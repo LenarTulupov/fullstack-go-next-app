@@ -2,7 +2,7 @@ package repository
 
 import (
     "database/sql"
-    "api/pkg/models"
+    "api/pkg/models/product"
 )
 
 func GetProductWithDetails(db *sql.DB, id int) (*models.Product, error) {

@@ -23,11 +23,12 @@ export default function Page() {
           headers: {
             'Content-Type': 'application/json',
           },
+          mode: 'no-cors', 
           credentials: 'include', 
         });
 
         if (res.ok) {
-          const data = await res.json();
+          const data = await res.json(); 
           if (isMounted) {
             dispatch(setProducts(data));
           }

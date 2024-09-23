@@ -3,7 +3,7 @@ package handlers
 import (
     "net/http"
     "strconv"
-    "api/pkg/models"
+    "api/pkg/models/product"
     "api/pkg/config"
     "api/pkg/repository"
     "api/pkg/services"
