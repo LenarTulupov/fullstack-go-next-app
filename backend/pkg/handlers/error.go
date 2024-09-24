@@ -6,9 +6,8 @@ import (
 	"api/pkg/models/errors"
 )
 
-func responseError(err error, w http.ResponseWriter) {
+func ResponseError(err error, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if nerr, ok := err.(*errors.ErrorDb); ok {
 		w.WriteHeader(nerr.HttpStatusCode)
