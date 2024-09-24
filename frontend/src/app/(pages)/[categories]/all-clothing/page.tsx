@@ -14,37 +14,16 @@ export default function Page() {
   const products = useSelector(productsArray);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function fetchProducts() {
-      try {
-        const res = await fetch('https://fullstack-go-next-app.onrender.com/products', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          mode: 'no-cors',
-          credentials: 'include',
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted) {
-            dispatch(setProducts(data));
-          }
-        } else {
-          console.error("Failed to fetch products:", res.statusText);
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
+      const res = await fetch('https://fullstack-go-next-app.onrender.com');
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(setProducts(data));
+      } else {
+        console.error("Failed to fetch products");
       }
     }
-
     fetchProducts();
-
-    return () => {
-      isMounted = false;
-    };
   }, [dispatch]);
 
   console.log(products)
@@ -53,7 +32,6 @@ export default function Page() {
     <div className={styles.all}>
       <Container>
         <ProductsGrid>
-
           {products.map((product) => (
             <div key={product.id}>
               {product.title}
