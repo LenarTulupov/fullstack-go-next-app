@@ -6,7 +6,7 @@ import { productsArray, setProducts } from "@/store/products/productsSlice";
 import Container from "@/components/ui/container/container";
 import Pagination from "@/components/pagination/pagination";
 import ProductsGrid from "@/components/ui/products-grid/products-grid";
-import Card from "@/components/card/card";
+// import Card from "@/components/card/card";
 import styles from './page.module.scss'
 
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('https://fullstack-go-next-app.onrender.com');
+      const res = await fetch('https://fullstack-go-next-app.onrender.com/products');
       if (res.ok) {
         const data = await res.json();
         dispatch(setProducts(data));
