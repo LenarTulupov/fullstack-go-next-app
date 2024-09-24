@@ -9,8 +9,6 @@ import (
 	"api/pkg/config"
 )
 
-
-
 func main() {
     config.LoadConfig()
 

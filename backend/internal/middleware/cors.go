@@ -14,7 +14,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Настройка CORS
 		config := cors.Config{
-			AllowOrigins:     []string{"https://fullstack-go-next-app.onrender.com/"},
+			AllowOrigins:     []string{"https://fullstack-go-next-app.onrender.com"},
 			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 			ExposeHeaders:    []string{"Content-Length"},
