@@ -15,8 +15,8 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('/api/products'); // Локальный маршрут в Next.js
-  
+      const res = await fetch('/api/products'); // Локальный API маршрут
+
       if (res.ok) {
         const data = await res.json();
         dispatch(setProducts(data)); // Диспатчим данные
@@ -24,7 +24,7 @@ export default function Page() {
         console.error("Failed to fetch products");
       }
     }
-  
+
     fetchProducts();
   }, [dispatch]);
 
