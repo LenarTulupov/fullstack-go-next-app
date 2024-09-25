@@ -15,11 +15,11 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('https://fullstack-go-next-app.onrender.com/products'); // Локальный API маршрут
+      const res = await fetch('https://fullstack-go-next-app.onrender.com/products');
 
       if (res.ok) {
         const data = await res.json();
-        dispatch(setProducts(data)); // Диспатчим данные
+        dispatch(setProducts(data));
       } else {
         console.error("Failed to fetch products");
       }
