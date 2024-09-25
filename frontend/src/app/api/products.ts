@@ -4,7 +4,8 @@ export async function GET(request: Request) {
 
   return new Response(JSON.stringify(data), {
     headers: {
-      'Access-Control-Allow-Origin': 'https://fullstack-go-next-app-4.onrender.com',
+      'Access-Control-Allow-Origin': 'https://fullstack-go-next-app.onrender.com',
+      'Access-Control-Allow-Headers': 'Content-Type'
     }
   });
 }
