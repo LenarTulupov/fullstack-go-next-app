@@ -16,7 +16,7 @@ func SetupRouter() *gin.Engine {
     r.DELETE("/users/:id", handlers.DeleteUser)
 
     r.POST("/products", handlers.CreateProduct)
-    r.GET("/products", handlers.GetAllProducts)
+    r.GET("api/products", handlers.GetAllProducts)
     r.GET("/products/:id", handlers.GetProduct) 
 
     r.GET("/health", handlers.HealthHandler)
