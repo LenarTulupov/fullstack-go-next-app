@@ -3,10 +3,13 @@ package router
 import (
     "github.com/gin-gonic/gin"
     "api/pkg/handlers"
+    "api/internal/middleware"
 )
 
 func SetupRouter() *gin.Engine {
     r := gin.Default()
+
+    r.Use(middleware.CORSMiddleware())
 
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
