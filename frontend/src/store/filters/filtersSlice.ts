@@ -22,18 +22,18 @@ export const filtersSlice = createSlice({
     setFilters: (state, action: PayloadAction<IProduct[]>) => {
       const products = action.payload;
 
-      const sizesArray = products.reduce((prev, curr) => 
-        curr.sizes.length > prev.sizes.length ? curr : prev);
+      // const sizesArray = products.reduce((prev, curr) => 
+      //   curr.sizes.length > prev.sizes.length ? curr : prev);
 
-      const colorsArray = products
-        .flatMap((product) => product.product_colors[0].color.name)
-        .filter((value, index, self) => self.indexOf(value) === index);
+      // const colorsArray = products
+      //   .flatMap((product) => product.product_colors[0].color.name)
+      //   .filter((value, index, self) => self.indexOf(value) === index);
 
-      state.sizes = sizesArray.sizes.map(size => ({
-        id: size.id,
-        name: size.name || '' // Обработайте потенциальное значение undefined
-      }));
-      state.colors = colorsArray;
+      // state.sizes = sizesArray.sizes.map(size => ({
+      //   id: size.id,
+      //   name: size.name || '' // Обработайте потенциальное значение undefined
+      // }));
+      // state.colors = colorsArray;
     },
   },
 });
