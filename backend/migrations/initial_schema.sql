@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS tokens CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS sizes CASCADE;
 DROP TABLE IF EXISTS colors CASCADE;
-DROP TABLE IF EXISTS product_thumbnails CASCADE;
+DROP TABLE IF EXISTS thumbnail CASCADE;
+DROP TABLE IF EXISTS product_color_images CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -43,7 +44,6 @@ CREATE TABLE IF NOT EXISTS tokens (
 CREATE TABLE IF NOT EXISTS categories (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE products (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    subtitle VARCHAR(255),
     description TEXT NOT NULL,
     price_new NUMERIC(10, 2) NOT NULL,
     price_old NUMERIC(10, 2),
@@ -66,7 +65,6 @@ CREATE TABLE sizes (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     abbreviation VARCHAR(10),
-    description VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -81,7 +79,6 @@ CREATE TABLE colors (
 CREATE TABLE product_colors (
     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE,
-    image VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (product_id, color_id)
@@ -95,11 +92,21 @@ CREATE TABLE product_sizes (
     PRIMARY KEY (product_id, size_id)
 );
 
-CREATE TABLE product_thumbnails (
+CREATE TABLE thumbnail (
+    id SERIAL PRIMARY KEY,
     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE,
     thumbnail VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (product_id, color_id)
+    UNIQUE (product_id, color_id)
 );
+
+CREATE TABLE product_color_images (
+    id SERIAL PRIMARY KEY,
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
+    color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE,
+    image VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
