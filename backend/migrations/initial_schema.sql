@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS sizes CASCADE;
 DROP TABLE IF EXISTS colors CASCADE;
 DROP TABLE IF EXISTS thumbnail CASCADE;
-DROP TABLE IF EXISTS product_color_images CASCADE;
+DROP TABLE IF EXISTS images CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -102,7 +102,7 @@ CREATE TABLE thumbnail (
     UNIQUE (product_id, color_id)
 );
 
-CREATE TABLE product_color_images (
+CREATE TABLE images (
     id SERIAL PRIMARY KEY,
     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE,
