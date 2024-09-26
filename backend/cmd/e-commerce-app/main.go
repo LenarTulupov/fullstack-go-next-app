@@ -35,7 +35,7 @@ func executeSchema() {
 
 func insertData() {
 	// Открытие файла с данными products_schema.sql
-	dataPath := filepath.Join("..", "..", "migrations", "products_schema.sql")
+	dataPath := filepath.Join("..", "..", "migrations", "products_data.sql")
 	file, err := os.Open(dataPath)
 	if err != nil {
 		log.Fatalf("Failed to open data file: %v", err)
