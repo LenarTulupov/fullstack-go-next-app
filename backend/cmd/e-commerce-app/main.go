@@ -4,7 +4,7 @@ import (
 	"fmt"
     "log"
     "os"
-
+    "path/filepath"
     "api/internal/middleware"
     "api/internal/router"
     "api/pkg/config"
@@ -13,7 +13,8 @@ import (
 
 func executeSchema() {
     // Открытие файла schema.sql
-    file, err := os.Open("../migrations/initial_schema.sql")
+    schemaPath := filepath.Join("..", "..", "migrations", "initial_schema.sql")
+    file, err := os.Open(schemaPath)
     if err != nil {
         log.Fatalf("Failed to open schema file: %v", err)
     }

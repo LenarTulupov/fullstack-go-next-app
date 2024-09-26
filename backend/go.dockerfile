@@ -13,6 +13,7 @@ RUN go mod download
 COPY cmd ./cmd
 COPY pkg ./pkg
 COPY internal ./internal
+COPY migrations ./migrations
 
 # Переходим в директорию с приложением
 WORKDIR /app/cmd/e-commerce-app
