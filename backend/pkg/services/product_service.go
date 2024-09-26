@@ -1,21 +1,48 @@
 package services
 
 import (
+    "database/sql"
+    "errors"
     "api/pkg/models/product"
     "api/pkg/repository"
-    "api/pkg/config" 
 )
 
-type ProductService struct {}
+type ProductService struct{}
 
-func (s *ProductService) GetProduct(productID int) (*models.Product, error) {
-    return repository.GetProductWithDetails(config.DB, productID) 
-}
-
-func FetchProductDetails(productID int) (*models.Product, error) {
-    product, err := repository.GetProductWithDetails(config.DB, productID)
+// Получить все продукты
+func (ps *ProductService) GetAllProducts(db *sql.DB) ([]models.Product, error) {
+    products, err := repository.GetAllProducts(db)
     if err != nil {
         return nil, err
     }
+    return products, nil
+}
+
+// Получить продукт по ID
+func (ps *ProductService) GetProductDetails(db *sql.DB, productID int) (*models.Product, error) {
+    product, err := repository.GetProductByID(db, productID)
+    if err != nil {
+        return nil, err
+    }
+
+    // Получение размеров и цветов продукта через репозиторий
+    product.Sizes = repository.GetSizesForProduct(db, product.ID)
+    product.Colors = repository.GetColorsForProduct(db, product.ID)
+
     return product, nil
+}
+
+// Создать новый продукт
+func (ps *ProductService) CreateProduct(db *sql.DB, product *models.Product) error {
+    // Дополнительная валидация или обработка бизнес-логики перед созданием продукта
+    if product.Quantity < 0 {
+        return errors.New("quantity cannot be negative")
+    }
+
+    err := repository.CreateProduct(db, product)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

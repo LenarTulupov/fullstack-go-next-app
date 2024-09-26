@@ -21,7 +21,6 @@ type User struct {
     Email string `json:"email"`
 }
 
-// RegisterUser handles user registration
 func RegisterUser(c *gin.Context) {
     var req RegisterRequest
     if err := c.ShouldBindJSON(&req); err != nil {
@@ -44,7 +43,6 @@ func RegisterUser(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
 }
 
-// GetAllUsers retrieves all users from the database
 func GetAllUsers(c *gin.Context) {
     rows, err := config.DB.Query("SELECT id, name, email FROM users")
     if err != nil {
@@ -66,7 +64,6 @@ func GetAllUsers(c *gin.Context) {
     c.JSON(http.StatusOK, users)
 }
 
-// GetUser retrieves a user by ID
 func GetUser(c *gin.Context) {
     id := c.Param("id")
     var user User
@@ -82,7 +79,6 @@ func GetUser(c *gin.Context) {
     c.JSON(http.StatusOK, user)
 }
 
-// CreateUser creates a new user
 func CreateUser(c *gin.Context) {
     var user User
     if err := c.ShouldBindJSON(&user); err != nil {
@@ -99,7 +95,6 @@ func CreateUser(c *gin.Context) {
     c.JSON(http.StatusCreated, user)
 }
 
-// UpdateUser updates an existing user
 func UpdateUser(c *gin.Context) {
     id := c.Param("id")
     var user User
@@ -117,7 +112,6 @@ func UpdateUser(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
-// DeleteUser deletes a user by ID
 func DeleteUser(c *gin.Context) {
     id := c.Param("id")
     _, err := config.DB.Exec("DELETE FROM users WHERE id = $1", id)

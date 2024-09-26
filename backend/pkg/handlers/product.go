@@ -3,17 +3,16 @@ package handlers
 import (
     "net/http"
     "strconv"
-    "api/pkg/models/product"
     "api/pkg/config"
-    "api/pkg/repository"
     "api/pkg/services"
+    "api/pkg/models/product"
     "github.com/gin-gonic/gin"
 )
 
 var productService = services.ProductService{}
 
 func GetAllProducts(c *gin.Context) {
-    products, err := repository.GetAllProducts(config.DB)
+    products, err := productService.GetAllProducts(config.DB)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
         return
@@ -29,7 +28,7 @@ func GetProduct(c *gin.Context) {
         return
     }
 
-    product, err := productService.GetProduct(id)
+    product, err := productService.GetProductDetails(config.DB, id)
     if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
         return
@@ -44,7 +43,7 @@ func CreateProduct(c *gin.Context) {
         return
     }
 
-    if err := repository.InsertProduct(config.DB, &product); err != nil {
+    if err := productService.CreateProduct(config.DB, &product); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
