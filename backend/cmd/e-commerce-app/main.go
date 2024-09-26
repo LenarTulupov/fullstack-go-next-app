@@ -33,12 +33,36 @@ func executeSchema() {
     }
 }
 
+func insertData() {
+	// Открытие файла с данными products_schema.sql
+	dataPath := filepath.Join("..", "..", "migrations", "products_schema.sql")
+	file, err := os.Open(dataPath)
+	if err != nil {
+		log.Fatalf("Failed to open data file: %v", err)
+	}
+	defer file.Close()
+
+	// Чтение содержимого файла
+	data, err := io.ReadAll(file)
+	if err != nil {
+		log.Fatalf("Failed to read data file: %v", err)
+	}
+
+	// Выполнение SQL-скрипта для вставки данных
+	_, err = config.DB.Exec(string(data))
+	if err != nil {
+		log.Fatalf("Failed to execute data insertion: %v", err)
+	}
+}
+
 func main() {
     // Загрузка конфигурации
     config.LoadConfig()
 
     // Создание таблиц
     executeSchema()
+    // Дабаление данных в таблицы
+    insertData()
 
     // Настройка роутера
     r := router.SetupRouter()
