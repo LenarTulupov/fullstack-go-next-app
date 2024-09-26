@@ -13,7 +13,7 @@ import (
 
 func executeSchema() {
     // Открытие файла schema.sql
-    file, err := os.Open("migrations/initial_schema.sql")
+    file, err := os.Open("../../migrations/initial_schema.sql")
     if err != nil {
         log.Fatalf("Failed to open schema file: %v", err)
     }
