@@ -9,6 +9,7 @@ import (
     "github.com/gin-gonic/gin"
     "encoding/json"
     "time"
+    "log"
 )
 
 var productService = services.ProductService{}
@@ -16,7 +17,8 @@ var productService = services.ProductService{}
 func GetAllProducts(c *gin.Context) {
     products, err := productService.GetAllProducts(config.DB)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
+        log.Printf("Error fetching products: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products", "details": err.Error()})
         return
     }
     c.JSON(http.StatusOK, products)
