@@ -70,13 +70,13 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 
     // SQL-запрос для вставки продукта
     query := `
-        INSERT INTO products (title, subtitle, description, price_new, price_old, quantity, available, created_at, updated_at)
+        INSERT INTO products (title, description, price_new, price_old, quantity, available, created_at, updated_at)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING id
     `
 
     var id int
-    err := config.DB.QueryRow(query, product.Title, product.Subtitle, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CreatedAt, product.UpdatedAt).Scan(&id)
+    err := config.DB.QueryRow(query, product.Title, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CreatedAt, product.UpdatedAt).Scan(&id)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return

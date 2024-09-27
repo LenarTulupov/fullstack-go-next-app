@@ -5,7 +5,6 @@ import "time"
 type Product struct {
     ID          int         `json:"id"`
     Title       string      `json:"title"`
-    Subtitle    *string     `json:"subtitle,omitempty"`
     Description string      `json:"description"`
     PriceNew    float64     `json:"price_new"`
     PriceOld    *float64    `json:"price_old,omitempty"`
@@ -14,7 +13,8 @@ type Product struct {
     CategoryID  *int        `json:"category_id,omitempty"`
     Sizes       []Size      `json:"sizes"`
     Colors      []Color     `json:"colors"`
-    Thumbnail   *Thumbnail  `json:"thumbnail,omitempty"`
+    Thumbnail   Thumbnail  `json:"thumbnail,omitempty"`
+    Images      []Image     `json:"images"`
     CreatedAt   time.Time      `json:"created_at"`
     UpdatedAt   time.Time     `json:"updated_at"`
 }
@@ -35,4 +35,10 @@ type Thumbnail struct {
     ProductID int    `json:"product_id"`
     ColorID   int    `json:"color_id"`
     Thumbnail string `json:"thumbnail"`
+}
+
+type Image struct {
+    ID int `json:"id"`
+    ProductID int `json:"product_id"`
+    ImageURL string `json:"image_url"`
 }
