@@ -11,6 +11,7 @@ type Product struct {
     Quantity    int         `json:"quantity"`
     Available   bool        `json:"available"`
     CategoryID  *int        `json:"category_id,omitempty"`
+    CategoryName string    `json:"category_name"`
     Sizes       []Size      `json:"sizes"`
     Colors      []Color     `json:"colors"`
     Thumbnail   Thumbnail  `json:"thumbnail,omitempty"`
