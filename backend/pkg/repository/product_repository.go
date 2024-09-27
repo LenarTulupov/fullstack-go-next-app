@@ -51,6 +51,9 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         json.Unmarshal([]byte(imagesJSON), &product.Images)
         json.Unmarshal([]byte(colorsJSON), &product.Colors)
 
+        // Получение размеров для продукта
+        product.Sizes = GetSizesForProduct(db, product.ID)
+
         product.Thumbnail = thumbnail
         product.CategoryName = categoryName
         products = append(products, product)
