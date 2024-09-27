@@ -10,7 +10,7 @@ import (
 func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
-            p.id, p.title, p.subtitle, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
     `
@@ -24,7 +24,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     for rows.Next() {
         var product models.Product
         var categoryName *string
-        err := rows.Scan(&product.ID, &product.Title, &product.Subtitle, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
+        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
         if err != nil {
             return nil, err
         }
@@ -40,7 +40,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
 func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     query := `
         SELECT 
-            p.id, p.title, p.subtitle, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.id = $1
@@ -49,7 +49,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
 
     var product models.Product
     var categoryName *string
-    err := row.Scan(&product.ID, &product.Title, &product.Subtitle, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
+    err := row.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
     if err != nil {
         if err == sql.ErrNoRows {
             return nil, errors.New("product not found")
@@ -66,11 +66,11 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
 // Создать новый продукт
 func CreateProduct(db *sql.DB, product *models.Product) error {
     query := `
-        INSERT INTO products (title, subtitle, description, price_new, price_old, quantity, available, category_id, created_at, updated_at)
+        INSERT INTO products (title, description, price_new, price_old, quantity, available, category_id, created_at, updated_at)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
         RETURNING id
     `
-    err := db.QueryRow(query, product.Title, product.Subtitle, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CategoryID).Scan(&product.ID)
+    err := db.QueryRow(query, product.Title, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CategoryID).Scan(&product.ID)
     if err != nil {
         return err
     }
@@ -145,7 +145,7 @@ func GetSizesForProduct(db *sql.DB, productID int) []models.Size {
 // Получить цвета продукта
 func GetColorsForProduct(db *sql.DB, productID int) []models.Color {
     query := `
-        SELECT c.id, c.name, pc.image
+        SELECT c.id, c.name
         FROM product_colors pc
         JOIN colors c ON pc.color_id = c.id
         WHERE pc.product_id = $1
@@ -159,7 +159,7 @@ func GetColorsForProduct(db *sql.DB, productID int) []models.Color {
     var colors []models.Color
     for rows.Next() {
         var color models.Color
-        err := rows.Scan(&color.ID, &color.Name, &color.Image)
+        err := rows.Scan(&color.ID, &color.Name)
         if err != nil {
             continue
         }
