@@ -4,16 +4,26 @@ import (
     "database/sql"
     "errors"
     "api/pkg/models/product"
+    "encoding/json"
 )
 
 // Получить все продукты
 func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
-            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, 
+            c.name AS category_name,
+            t.thumbnail, t.color_id AS thumbnail_color_id,
+            json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images,
+            json_agg(DISTINCT jsonb_build_object('id', col.id, 'name', col.name)) AS colors
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN thumbnail t ON p.id = t.product_id
+        LEFT JOIN images img ON p.id = img.product_id
+        LEFT JOIN colors col ON img.color_id = col.id OR t.color_id = col.id
+        GROUP BY p.id, c.name, t.thumbnail, t.color_id
     `
+    
     rows, err := db.Query(query)
     if err != nil {
         return nil, err
@@ -23,13 +33,24 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     var products []models.Product
     for rows.Next() {
         var product models.Product
-        var categoryName *string
-        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
+        var thumbnail models.Thumbnail
+        var imagesJSON, colorsJSON []byte
+        
+        err := rows.Scan(
+            &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
+            &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, 
+            &product.CategoryID, &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
+        )
+        
         if err != nil {
             return nil, err
         }
-        product.Sizes = GetSizesForProduct(db, product.ID) 
-        product.Colors = GetColorsForProduct(db, product.ID) 
+
+        // Парсинг JSON для изображений и цветов
+        json.Unmarshal(imagesJSON, &product.Images)
+        json.Unmarshal(colorsJSON, &product.Colors)
+
+        product.Thumbnail = thumbnail
         products = append(products, product)
     }
 
