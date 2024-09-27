@@ -34,12 +34,13 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     for rows.Next() {
         var product models.Product
         var thumbnail models.Thumbnail
-        var imagesJSON, colorsJSON []byte
+        var categoryName string
+        var imagesJSON, colorsJSON string
         
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
             &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, 
-            &product.CategoryID, &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
+            &categoryName, &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
         )
         
         if err != nil {
@@ -47,10 +48,11 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         }
 
         // Парсинг JSON для изображений и цветов
-        json.Unmarshal(imagesJSON, &product.Images)
-        json.Unmarshal(colorsJSON, &product.Colors)
+        json.Unmarshal([]byte(imagesJSON), &product.Images)
+        json.Unmarshal([]byte(colorsJSON), &product.Colors)
 
         product.Thumbnail = thumbnail
+        product.CategoryName = categoryName
         products = append(products, product)
     }
 
@@ -69,8 +71,11 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     row := db.QueryRow(query, productID)
 
     var product models.Product
-    var categoryName *string
-    err := row.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName)
+    var categoryName string
+    err := row.Scan(
+        &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
+        &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName,
+    )
     if err != nil {
         if err == sql.ErrNoRows {
             return nil, errors.New("product not found")
@@ -78,6 +83,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
         return nil, err
     }
 
+    product.CategoryName = categoryName
     product.Sizes = GetSizesForProduct(db, product.ID)
     product.Colors = GetColorsForProduct(db, product.ID)
 
@@ -88,7 +94,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
 func CreateProduct(db *sql.DB, product *models.Product) error {
     query := `
         INSERT INTO products (title, description, price_new, price_old, quantity, available, category_id, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
         RETURNING id
     `
     err := db.QueryRow(query, product.Title, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CategoryID).Scan(&product.ID)
