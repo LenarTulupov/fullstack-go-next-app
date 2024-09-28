@@ -40,7 +40,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
             &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt,
-            &product.Category, &product.Color, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
+            &product.CategoryID, &product.ColorID, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
         )
         
         if err != nil {
@@ -84,7 +84,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     err := row.Scan(
         &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
         &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt,
-        &product.Category, &product.Color, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
+        &product.CategoryID, &product.ColorID, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
     )
     if err != nil {
         if err == sql.ErrNoRows {
