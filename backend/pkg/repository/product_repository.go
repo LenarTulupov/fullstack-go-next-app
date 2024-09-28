@@ -15,7 +15,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
             c.name AS category,
             t.thumbnail, t.color_id AS thumbnail_color_id,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images,
-            json_agg(DISTINCT jsonb_build_object('id', col.id, 'name', col.name)) AS colors
+            jsonb_build_object('id', col.id, 'name', col.name) AS color -- Изменено для получения одного цвета
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN thumbnail t ON p.id = t.product_id
@@ -34,22 +34,21 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     for rows.Next() {
         var product models.Product
         var thumbnail models.Thumbnail
-        var imagesJSON, colorsJSON string
+        var imagesJSON string
         
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
             &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, 
-            &product.Category, // Здесь изменяем
-            &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
+            &product.Category, 
+            &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &product.Color, // Изменено
         )
         
         if err != nil {
             return nil, err
         }
 
-        // Парсинг JSON для изображений и цветов
+        // Парсинг JSON для изображений
         json.Unmarshal([]byte(imagesJSON), &product.Images)
-        json.Unmarshal([]byte(colorsJSON), &product.Colors)
 
         // Получение размеров для продукта
         product.Sizes = GetSizesForProduct(db, product.ID)
@@ -62,13 +61,15 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
 }
 
 // Получить продукт по ID
-// Получить продукт по ID
 func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     query := `
         SELECT 
-            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, 
+            c.name AS category,
+            jsonb_build_object('id', col.id, 'name', col.name) AS color -- Изменено для получения одного цвета
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN colors col ON p.id = col.product_id -- Убедитесь, что это правильно
         WHERE p.id = $1
     `
     row := db.QueryRow(query, productID)
@@ -76,7 +77,9 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     var product models.Product
     err := row.Scan(
         &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
-        &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &product.Category, // Здесь изменяем
+        &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, 
+        &product.Category, 
+        &product.Color, // Изменено
     )
     if err != nil {
         if err == sql.ErrNoRows {
@@ -86,10 +89,10 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     }
 
     product.Sizes = GetSizesForProduct(db, product.ID)
-    product.Colors = GetColorsForProduct(db, product.ID)
 
     return &product, nil
 }
+
 
 
 // Создать новый продукт

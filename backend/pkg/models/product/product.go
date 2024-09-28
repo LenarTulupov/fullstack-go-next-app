@@ -13,7 +13,7 @@ type Product struct {
     CategoryID  *int        `json:"category_id,omitempty"`
     Category    string      `json:"category"`
     Sizes       []Size      `json:"sizes"`
-    Colors      []Color     `json:"colors"`
+    Color       Color       `json:"color"`
     Thumbnail   Thumbnail   `json:"thumbnail,omitempty"`
     Images      []Image     `json:"images"`
     CreatedAt   time.Time   `json:"created_at"`
