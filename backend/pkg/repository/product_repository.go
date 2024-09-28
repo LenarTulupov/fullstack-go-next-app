@@ -2,9 +2,9 @@ package repository
 
 import (
     "database/sql"
+    "encoding/json"
     "errors"
     "api/pkg/models/product"
-    "encoding/json"
 )
 
 // Получить все продукты
@@ -12,8 +12,8 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at,
-            c.name AS category, col.name AS color,
-            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'description', s.description)) AS sizes,
+            p.category_id, col.name AS color,
+            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation)) AS sizes,
             t.thumbnail,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images
         FROM products p
@@ -23,7 +23,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         LEFT JOIN sizes s ON ps.size_id = s.id
         LEFT JOIN thumbnail t ON p.id = t.product_id
         LEFT JOIN images img ON p.id = img.product_id
-        GROUP BY p.id, c.name, col.name, t.thumbnail
+        GROUP BY p.id, col.name, t.thumbnail
     `
     
     rows, err := db.Query(query)
@@ -48,8 +48,12 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         }
 
         // Парсинг JSON для размеров и изображений
-        json.Unmarshal([]byte(sizesJSON), &product.Sizes)
-        json.Unmarshal([]byte(imagesJSON), &product.Images)
+        if err := json.Unmarshal([]byte(sizesJSON), &product.Sizes); err != nil {
+            return nil, err
+        }
+        if err := json.Unmarshal([]byte(imagesJSON), &product.Images); err != nil {
+            return nil, err
+        }
 
         products = append(products, product)
     }
@@ -62,8 +66,8 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at,
-            c.name AS category, col.name AS color,
-            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'description', s.description)) AS sizes,
+            p.category_id, col.name AS color,
+            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation)) AS sizes,
             t.thumbnail,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images
         FROM products p
@@ -74,7 +78,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
         LEFT JOIN thumbnail t ON p.id = t.product_id
         LEFT JOIN images img ON p.id = img.product_id
         WHERE p.id = $1
-        GROUP BY p.id, c.name, col.name, t.thumbnail
+        GROUP BY p.id, col.name, t.thumbnail
     `
     row := db.QueryRow(query, productID)
 
@@ -94,8 +98,12 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     }
 
     // Парсинг JSON для размеров и изображений
-    json.Unmarshal([]byte(sizesJSON), &product.Sizes)
-    json.Unmarshal([]byte(imagesJSON), &product.Images)
+    if err := json.Unmarshal([]byte(sizesJSON), &product.Sizes); err != nil {
+        return nil, err
+    }
+    if err := json.Unmarshal([]byte(imagesJSON), &product.Images); err != nil {
+        return nil, err
+    }
 
     return &product, nil
 }
