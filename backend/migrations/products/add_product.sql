@@ -1,21 +1,11 @@
 -- Добавление уникального ограничения на название продукта (если ещё не добавлено)
 ALTER TABLE products ADD CONSTRAINT unique_product_title UNIQUE (title);
 
--- Вставка данных в таблицу categories, если категории не существует
-INSERT INTO categories (name, created_at, updated_at)
-SELECT 'trousers', NOW(), NOW()
-WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'trousers');
-
--- Вставка данных в таблицу colors, если цвет не существует
-INSERT INTO colors (name, created_at, updated_at)
-SELECT 'beige', NOW(), NOW()
-WHERE NOT EXISTS (SELECT 1 FROM colors WHERE name = 'beige');
-
 -- Вставка продукта только если такого продукта ещё нет в таблице products
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
-    'Рабочая одежда не должна быть скучной, и эти рабочие брюки — безопасный выбор стиля. Немного более формальная одежда, эти брюки с высокой талией и зауженные к низу. Выбирайте между пуговицей или молнией, эти элегантные брюки нарядны и остры как бритва, внушая серьезное отношение. Всегда практичный элемент гардероба, наденьте их и готовьтесь произвести впечатление в любом профессиональном сценарии или ситуации.',
+    'Work clothes don’t have to be boring, and these work trousers are a secure style. Slightly more formal attire, these are tailored, high waisted, and tapered at the ankle. Choose between button or zip-up detail, these are smart pants that are sharply tailored, serving some serious attitude. Always a practical piece to have in your wardrobe, throw these on and prepare to impress in any professional setting or scenario.',
     20.00,
     25.00,
     10,
@@ -112,61 +102,4 @@ WHERE NOT EXISTS (
     SELECT 1 FROM product_sizes 
     WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1) 
     AND size_id = id
-);
-
--- Второй товар
-
-INSERT INTO products (title, description, price_new, price_old, quantity, category_id, available, created_at, updated_at)
-SELECT 
-    'SUPER STRETCH TAPERED TAILORED TROUSER',
-    'Эти супер эластичные брюки с зауженными штанинами и приталенным кроем идеально подходят для делового или повседневного стиля.',
-    20.00,
-    25.00,
-    10,
-    (SELECT id FROM categories WHERE name = 'trousers'),
-    TRUE,
-    NOW(),
-    NOW()
-WHERE NOT EXISTS (
-    SELECT 1 FROM products 
-    WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' 
-    AND id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1)
-);
-
--- Вставка данных в таблицу thumbnail для нового цвета (например, синий цвет)
-INSERT INTO thumbnail (product_id, color_id, thumbnail, created_at, updated_at)
-SELECT 
-    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_blue_xl/female-super-stretch-tapered-tailored-trouser.jpg', 
-    NOW(), 
-    NOW()
-WHERE NOT EXISTS (
-    SELECT 1 FROM thumbnail 
-    WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1) 
-    AND color_id = (SELECT id FROM colors WHERE name = 'blue' LIMIT 1)
-);
-
--- Вставка изображений для нового товара с другим цветом
-INSERT INTO images (product_id, color_id, image, created_at, updated_at)
-SELECT 
-    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_blue_xl_1/female-super-stretch-tapered-tailored-trouser-1.jpg', 
-    NOW(), 
-    NOW()
-WHERE NOT EXISTS (
-    SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_blue_xl_1/female-super-stretch-tapered-tailored-trouser-1.jpg'
-)
-UNION ALL
-SELECT 
-    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_blue_xl_2/female-super-stretch-tapered-tailored-trouser-2.jpg', 
-    NOW(), 
-    NOW()
-WHERE NOT EXISTS (
-    SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_blue_xl_2/female-super-stretch-tapered-tailored-trouser-2.jpg'
 );
