@@ -11,7 +11,7 @@ import (
     "io"
 )
 
-func executeSchema(fileName string, folderName string) {
+func executeSchema( folderName string, fileName string,) {
     // Открытие файла schema.sql
     schemaPath := filepath.Join("..", "..", "migrations", folderName, fileName)
     file, err := os.Open(schemaPath)
