@@ -11,13 +11,13 @@ type Product struct {
     Quantity    int         `json:"quantity"`
     Available   bool        `json:"available"`
     CategoryID  *int        `json:"category_id,omitempty"`
-    CategoryName string    `json:"category_name"`
+    Category    string      `json:"category"`
     Sizes       []Size      `json:"sizes"`
     Colors      []Color     `json:"colors"`
-    Thumbnail   Thumbnail  `json:"thumbnail,omitempty"`
+    Thumbnail   Thumbnail   `json:"thumbnail,omitempty"`
     Images      []Image     `json:"images"`
-    CreatedAt   time.Time      `json:"created_at"`
-    UpdatedAt   time.Time     `json:"updated_at"`
+    CreatedAt   time.Time   `json:"created_at"`
+    UpdatedAt   time.Time   `json:"updated_at"`
 }
 
 type Size struct {

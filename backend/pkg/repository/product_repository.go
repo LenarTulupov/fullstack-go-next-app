@@ -12,7 +12,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, 
-            c.name AS category_name,
+            c.name AS category, // Обратите внимание на это
             t.thumbnail, t.color_id AS thumbnail_color_id,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images,
             json_agg(DISTINCT jsonb_build_object('id', col.id, 'name', col.name)) AS colors
@@ -34,13 +34,13 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     for rows.Next() {
         var product models.Product
         var thumbnail models.Thumbnail
-        var categoryName string
         var imagesJSON, colorsJSON string
         
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
             &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, 
-            &categoryName, &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
+            &product.Category, // Здесь изменяем
+            &thumbnail.Thumbnail, &thumbnail.ColorID, &imagesJSON, &colorsJSON,
         )
         
         if err != nil {
@@ -55,7 +55,6 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         product.Sizes = GetSizesForProduct(db, product.ID)
 
         product.Thumbnail = thumbnail
-        product.CategoryName = categoryName
         products = append(products, product)
     }
 
@@ -63,10 +62,11 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
 }
 
 // Получить продукт по ID
+// Получить продукт по ID
 func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     query := `
         SELECT 
-            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category_name
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, c.name as category
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.id = $1
@@ -74,10 +74,9 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     row := db.QueryRow(query, productID)
 
     var product models.Product
-    var categoryName string
     err := row.Scan(
         &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, 
-        &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &categoryName,
+        &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt, &product.Category, // Здесь изменяем
     )
     if err != nil {
         if err == sql.ErrNoRows {
@@ -86,12 +85,12 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
         return nil, err
     }
 
-    product.CategoryName = categoryName
     product.Sizes = GetSizesForProduct(db, product.ID)
     product.Colors = GetColorsForProduct(db, product.ID)
 
     return &product, nil
 }
+
 
 // Создать новый продукт
 func CreateProduct(db *sql.DB, product *models.Product) error {
