@@ -12,7 +12,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at, 
-            c.name AS category, // Обратите внимание на это
+            c.name AS category,
             t.thumbnail, t.color_id AS thumbnail_color_id,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images,
             json_agg(DISTINCT jsonb_build_object('id', col.id, 'name', col.name)) AS colors
