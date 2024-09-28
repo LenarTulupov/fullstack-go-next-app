@@ -35,7 +35,7 @@ type Color struct {
 type Thumbnail struct {
     ID        int    `json:"id"`
     ProductID int    `json:"product_id"`
-    ColorID   int    `json:"color_id"`
+    ColorID   *int    `json:"color_id,omitempty"`
     Thumbnail string `json:"thumbnail"`
 }
 
