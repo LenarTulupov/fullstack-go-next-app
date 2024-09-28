@@ -33,27 +33,24 @@ func executeSchema( folderName string, fileName string,) {
     }
 }
 
-// func insertData() {
-// 	// Открытие файла с данными products_schema.sql
-// 	dataPath := filepath.Join("..", "..", "migrations", "products_data.sql")
-// 	file, err := os.Open(dataPath)
-// 	if err != nil {
-// 		log.Fatalf("Failed to open data file: %v", err)
-// 	}
-// 	defer file.Close()
+func executeSQL(folderName string, fileName string) {
+	dataPath := filepath.Join("..", "..", "migrations", folderName, fileName)
+	file, err := os.Open(dataPath)
+	if err != nil {
+		log.Fatalf("Failed to open data file: %v", err)
+	}
+	defer file.Close()
 
-// 	// Чтение содержимого файла
-// 	data, err := io.ReadAll(file)
-// 	if err != nil {
-// 		log.Fatalf("Failed to read data file: %v", err)
-// 	}
+	data, err := io.ReadAll(file)
+	if err != nil {
+		log.Fatalf("Failed to read data file: %v", err)
+	}
 
-// 	// Выполнение SQL-скрипта для вставки данных
-// 	_, err = config.DB.Exec(string(data))
-// 	if err != nil {
-// 		log.Fatalf("Failed to execute data insertion: %v", err)
-// 	}
-// }
+	_, err = config.DB.Exec(string(data))
+	if err != nil {
+		log.Fatalf("Failed to execute data insertion: %v", err)
+	}
+}
 
 func main() {
     // Загрузка конфигурации
@@ -66,7 +63,10 @@ func main() {
     executeSchema("products", "sizes.sql")
     executeSchema("products", "products.sql")
     // Дабаление данных в таблицы
-    // insertData()
+    executeSQL("products", "add_category.sql")
+    executeSQL("products", "add_size.sql")
+    executeSQL("products", "add_color.sql")
+    executeSQL("products", "add_product.sql")
 
     // Настройка роутера
     r := router.SetupRouter()
