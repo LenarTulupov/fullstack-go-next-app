@@ -2,7 +2,7 @@
 ALTER TABLE products ADD CONSTRAINT unique_product_title UNIQUE (title);
 
 -- Вставка продукта только если такого продукта ещё нет в таблице products
-INSERT INTO products (title, description, price_new, price_old, quantity, category_id, available, created_at, updated_at)
+INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
     'Work clothes don’t have to be boring, and these work trousers are a secure style. Slightly more formal attire, these are tailored, high waisted, and tapered at the ankle. Choose between button or zip-up detail, these are smart pants that are sharply tailored, serving some serious attitude. Always a practical piece to have in your wardrobe, throw these on and prepare to impress in any professional setting or scenario.',
@@ -10,6 +10,7 @@ SELECT
     25.00,
     10,
     (SELECT id FROM categories WHERE name = 'trousers'),
+    (SELECT id FROM colors WHERE name = 'beige'),
     TRUE,
     NOW(),
     NOW()

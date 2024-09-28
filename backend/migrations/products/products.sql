@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS products (
     price_old NUMERIC(10, 2),
     quantity INTEGER NOT NULL CHECK (quantity >= 0),
     category_id BIGINT REFERENCES categories(id) ON DELETE SET NULL,
-    color_id BIGINT REFERENCES colors(id) ON DELETE SET NULL, -- Добавлено поле color_id
+    color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE NOT NULL,
     available BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
