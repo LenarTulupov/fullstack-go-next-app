@@ -15,7 +15,7 @@ type Product struct {
     ColorID     *int        `json:"color_id,omitempty"` // Изменено на указатель
     Color       string       `json:"color"`
     Sizes       []Size     `json:"sizes"`
-    Thumbnail   Thumbnail   `json:"thumbnail,omitempty"`
+    Thumbnail   Thumbnail   `json:"thumbnail"`
     Images      []Image     `json:"images"`
     CreatedAt   time.Time   `json:"created_at"`
     UpdatedAt   time.Time   `json:"updated_at"`
@@ -34,9 +34,6 @@ type Color struct {
 }
 
 type Thumbnail struct {
-    ID        int    `json:"id"`
-    ProductID int    `json:"product_id"`
-    ColorID   *int   `json:"color_id,omitempty"`
     Thumbnail string `json:"thumbnail"`
 }
 

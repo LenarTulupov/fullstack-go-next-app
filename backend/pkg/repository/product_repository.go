@@ -12,18 +12,16 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at,
-            p.category_id, col.name AS color,
-            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation)) AS sizes,
-            t.thumbnail,
+            p.category_id, c.name AS category, col.name AS color,
+            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'description', s.description)) AS sizes,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN colors col ON p.color_id = col.id
         LEFT JOIN product_sizes ps ON ps.product_id = p.id
         LEFT JOIN sizes s ON ps.size_id = s.id
-        LEFT JOIN thumbnail t ON p.id = t.product_id
         LEFT JOIN images img ON p.id = img.product_id
-        GROUP BY p.id, col.name, t.thumbnail
+        GROUP BY p.id, c.name, col.name
     `
     
     rows, err := db.Query(query)
@@ -40,7 +38,7 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
             &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt,
-            &product.CategoryID, &product.ColorID, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
+            &product.CategoryID, &product.Category, &product.Color, &sizesJSON, &imagesJSON,
         )
         
         if err != nil {
@@ -55,6 +53,11 @@ func GetAllProducts(db *sql.DB) ([]models.Product, error) {
             return nil, err
         }
 
+        // Установка thumbnail как первой картинки из массива images
+        if len(product.Images) > 0 {
+            product.Thumbnail.Thumbnail = product.Images[0].URL
+        }
+
         products = append(products, product)
     }
 
@@ -66,19 +69,17 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.created_at, p.updated_at,
-            p.category_id, col.name AS color,
-            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation)) AS sizes,
-            t.thumbnail,
+            p.category_id, c.name AS category, col.name AS color,
+            json_agg(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'description', s.description)) AS sizes,
             json_agg(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image)) AS images
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN colors col ON p.color_id = col.id
         LEFT JOIN product_sizes ps ON ps.product_id = p.id
         LEFT JOIN sizes s ON ps.size_id = s.id
-        LEFT JOIN thumbnail t ON p.id = t.product_id
         LEFT JOIN images img ON p.id = img.product_id
         WHERE p.id = $1
-        GROUP BY p.id, col.name, t.thumbnail
+        GROUP BY p.id, c.name, col.name
     `
     row := db.QueryRow(query, productID)
 
@@ -88,7 +89,7 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     err := row.Scan(
         &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
         &product.Quantity, &product.Available, &product.CreatedAt, &product.UpdatedAt,
-        &product.CategoryID, &product.ColorID, &sizesJSON, &product.Thumbnail.Thumbnail, &imagesJSON,
+        &product.CategoryID, &product.Category, &product.Color, &sizesJSON, &imagesJSON,
     )
     if err != nil {
         if err == sql.ErrNoRows {
@@ -103,6 +104,11 @@ func GetProductByID(db *sql.DB, productID int) (*models.Product, error) {
     }
     if err := json.Unmarshal([]byte(imagesJSON), &product.Images); err != nil {
         return nil, err
+    }
+
+    // Установка thumbnail как первой картинки из массива images
+    if len(product.Images) > 0 {
+        product.Thumbnail.Thumbnail = product.Images[0].URL
     }
 
     return &product, nil
