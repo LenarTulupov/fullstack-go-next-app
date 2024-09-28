@@ -11,9 +11,9 @@ import (
     "io"
 )
 
-func executeSchema(fileName string) {
+func executeSchema(fileName string, folderName string) {
     // Открытие файла schema.sql
-    schemaPath := filepath.Join("..", "..", "migrations", fileName)
+    schemaPath := filepath.Join("..", "..", "migrations", folderName, fileName)
     file, err := os.Open(schemaPath)
     if err != nil {
         log.Fatalf("Failed to open schema file: %v", err)
@@ -60,11 +60,11 @@ func main() {
     config.LoadConfig()
 
     // Создание таблиц
-    executeSchema("users.sql")
-    executeSchema("categories.sql")
-    executeSchema("colors.sql")
-    executeSchema("sizes.sql")
-    executeSchema("products.sql")
+    executeSchema("users", "users.sql")
+    executeSchema("products", "categories.sql")
+    executeSchema("products", "colors.sql")
+    executeSchema("products", "sizes.sql")
+    executeSchema("products", "products.sql")
     // Дабаление данных в таблицы
     // insertData()
 
