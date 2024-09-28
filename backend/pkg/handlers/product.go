@@ -71,7 +71,7 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
     // SQL-запрос для вставки продукта
     query := `
         INSERT INTO products (title, description, price_new, price_old, quantity, available, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING id
     `
 

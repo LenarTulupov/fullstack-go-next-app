@@ -107,94 +107,15 @@ func CreateProduct(db *sql.DB, product *models.Product) error {
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
         RETURNING id
     `
-    err := db.QueryRow(query, product.Title, product.Description, product.PriceNew, product.PriceOld, product.Quantity, product.Available, product.CategoryID, product.ColorID).Scan(&product.ID)
-    if err != nil {
-        return err
-    }
 
-    // Вставляем размеры для продукта
-    for _, size := range product.Sizes {
-        sizeQuery := `
-            INSERT INTO product_sizes (product_id, size_id)
-            VALUES ($1, $2)
-        `
-        _, err := db.Exec(sizeQuery, product.ID, size.ID)
-        if err != nil {
-            return err
-        }
-    }
-
-    return nil
-}
-
-// Добавление размера для продукта
-func AddProductSize(db *sql.DB, productID int, sizeID int) error {
-    query := `
-        INSERT INTO product_sizes (product_id, size_id) VALUES ($1, $2)
-    `
-    _, err := db.Exec(query, productID, sizeID)
-    return err
-}
-
-// Добавление цвета для продукта
-func AddProductColor(db *sql.DB, productID int, colorID int) error {
-    query := `
-        INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)
-    `
-    _, err := db.Exec(query, productID, colorID)
-    return err
-}
-
-// Получить размеры продукта
-func GetSizesForProduct(db *sql.DB, productID int) []models.Size {
-    query := `
-        SELECT s.id, s.name, s.abbreviation
-        FROM product_sizes ps
-        JOIN sizes s ON ps.size_id = s.id
-        WHERE ps.product_id = $1
-    `
-    rows, err := db.Query(query, productID)
-    if err != nil {
-        return nil
-    }
-    defer rows.Close()
-
-    var sizes []models.Size
-    for rows.Next() {
-        var size models.Size
-        err := rows.Scan(&size.ID, &size.Name, &size.Abbreviation)
-        if err != nil {
-            continue
-        }
-        sizes = append(sizes, size)
-    }
-
-    return sizes
-}
-
-// Получить цвета продукта
-func GetColorsForProduct(db *sql.DB, productID int) []models.Color {
-    query := `
-        SELECT c.id, c.name
-        FROM product_colors pc
-        JOIN colors c ON pc.color_id = c.id
-        WHERE pc.product_id = $1
-    `
-    rows, err := db.Query(query, productID)
-    if err != nil {
-        return nil
-    }
-    defer rows.Close()
-
-    var colors []models.Color
-    for rows.Next() {
-        var color models.Color
-        err := rows.Scan(&color.ID, &color.Name)
-        if err != nil {
-            continue
-        }
-        colors = append(colors, color)
-    }
-
-    return colors
+    return db.QueryRow(query,
+        product.Title,
+        product.Description,
+        product.PriceNew,
+        product.PriceOld,
+        product.Quantity,
+        product.Available,
+        product.CategoryID,
+        product.ColorID,
+    ).Scan(&product.ID)
 }
