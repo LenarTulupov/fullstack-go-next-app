@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS product_colors (
 CREATE TABLE IF NOT EXISTS product_sizes (
     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     size_id BIGINT REFERENCES sizes(id) ON DELETE CASCADE,
+    available BOOLEAN DEFAULT TRUE,
+    quantity INTEGER NOT NULL CHECK (quantity >= 0)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (product_id, size_id)
