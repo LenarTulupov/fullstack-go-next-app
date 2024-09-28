@@ -76,20 +76,20 @@ WHERE NOT EXISTS (
 );
 
 -- Вставка данных в таблицу sizes (если эти размеры ещё не существуют)
-INSERT INTO sizes (name, abbreviation, created_at, updated_at)
-SELECT 'xs', 'XS', NOW(), NOW()
+INSERT INTO sizes (name, abbreviation, description, created_at, updated_at)
+SELECT 'xs', 'XS', 'Extra Small', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XS')
 UNION ALL
-SELECT 's', 'S', NOW(), NOW()
+SELECT 's', 'S', 'Small', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'S')
 UNION ALL
-SELECT 'm', 'M', NOW(), NOW()
+SELECT 'm', 'M', 'Medium', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'M')
 UNION ALL
-SELECT 'l', 'L', NOW(), NOW()
+SELECT 'l', 'L', 'Large', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'L')
 UNION ALL
-SELECT 'xl', 'XL', NOW(), NOW()
+SELECT 'xl', 'XL', 'Extra Large', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XL');
 
 -- Вставка данных в таблицу product_sizes, проверка на существующие записи
