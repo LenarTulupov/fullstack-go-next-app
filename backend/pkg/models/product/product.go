@@ -24,6 +24,7 @@ type Size struct {
     ID           int    `json:"id"`
     Name         string `json:"name"`
     Abbreviation string `json:"abbreviation"`
+    Description  string `json:"description"`
 }
 
 type Color struct {
@@ -40,6 +41,5 @@ type Thumbnail struct {
 
 type Image struct {
     ID int `json:"id"`
-    ProductID int `json:"product_id"`
-    ImageURL string `json:"image_url"`
+    URL string `json:"image_url"`
 }

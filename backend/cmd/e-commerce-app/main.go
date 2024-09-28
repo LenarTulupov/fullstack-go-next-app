@@ -11,9 +11,9 @@ import (
     "io"
 )
 
-func executeSchema() {
+func executeSchema(fileName string) {
     // Открытие файла schema.sql
-    schemaPath := filepath.Join("..", "..", "migrations", "initial_schema.sql")
+    schemaPath := filepath.Join("..", "..", "migrations", fileName)
     file, err := os.Open(schemaPath)
     if err != nil {
         log.Fatalf("Failed to open schema file: %v", err)
@@ -33,36 +33,40 @@ func executeSchema() {
     }
 }
 
-func insertData() {
-	// Открытие файла с данными products_schema.sql
-	dataPath := filepath.Join("..", "..", "migrations", "products_data.sql")
-	file, err := os.Open(dataPath)
-	if err != nil {
-		log.Fatalf("Failed to open data file: %v", err)
-	}
-	defer file.Close()
+// func insertData() {
+// 	// Открытие файла с данными products_schema.sql
+// 	dataPath := filepath.Join("..", "..", "migrations", "products_data.sql")
+// 	file, err := os.Open(dataPath)
+// 	if err != nil {
+// 		log.Fatalf("Failed to open data file: %v", err)
+// 	}
+// 	defer file.Close()
 
-	// Чтение содержимого файла
-	data, err := io.ReadAll(file)
-	if err != nil {
-		log.Fatalf("Failed to read data file: %v", err)
-	}
+// 	// Чтение содержимого файла
+// 	data, err := io.ReadAll(file)
+// 	if err != nil {
+// 		log.Fatalf("Failed to read data file: %v", err)
+// 	}
 
-	// Выполнение SQL-скрипта для вставки данных
-	_, err = config.DB.Exec(string(data))
-	if err != nil {
-		log.Fatalf("Failed to execute data insertion: %v", err)
-	}
-}
+// 	// Выполнение SQL-скрипта для вставки данных
+// 	_, err = config.DB.Exec(string(data))
+// 	if err != nil {
+// 		log.Fatalf("Failed to execute data insertion: %v", err)
+// 	}
+// }
 
 func main() {
     // Загрузка конфигурации
     config.LoadConfig()
 
     // Создание таблиц
-    executeSchema()
+    executeSchema("users.sql")
+    executeSchema("categories.sql")
+    executeSchema("colors.sql")
+    executeSchema("sizes.sql")
+    executeSchema("products.sql")
     // Дабаление данных в таблицы
-    insertData()
+    // insertData()
 
     // Настройка роутера
     r := router.SetupRouter()
