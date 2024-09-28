@@ -25,10 +25,6 @@ func (ps *ProductService) GetProductDetails(db *sql.DB, productID int) (*models.
         return nil, err
     }
 
-    // Получение размеров и цветов продукта через репозиторий
-    product.Sizes = repository.GetSizesForProduct(db, product.ID)
-    product.Colors = repository.GetColorsForProduct(db, product.ID)
-
     return product, nil
 }
 
