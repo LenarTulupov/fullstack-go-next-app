@@ -1,7 +1,7 @@
 -- Добавление уникального ограничения на название продукта (если ещё не добавлено)
 ALTER TABLE products ADD CONSTRAINT unique_product_title UNIQUE (title);
 
--- Вставка продукта только если такого продукта ещё нет в таблице products
+-- Вставка первого продукта только если такого продукта ещё нет в таблице products
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
@@ -137,12 +137,7 @@ WHERE NOT EXISTS (
     AND size_id = id
 );
 
-
-
-
-
-
--- Второй продукт.
+-- Вставка второго продукта только если такого продукта ещё нет в таблице products
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
@@ -154,7 +149,7 @@ SELECT
         0  -- значение по умолчанию, если подзапрос вернет NULL
     ),
     (SELECT id FROM categories WHERE name = 'trousers'),
-    (SELECT id FROM colors WHERE name = 'blue'),
+    (SELECT id FROM colors WHERE name = 'beige'),
     -- Продукт доступен, если есть хотя бы один размер с положительным количеством
     CASE 
         WHEN (SELECT COUNT(*) FROM product_sizes WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1) AND quantity > 0) > 0
@@ -188,60 +183,60 @@ WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XXL');
 INSERT INTO thumbnail (product_id, color_id, thumbnail, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
     'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 
     NOW(), 
     NOW()
 WHERE NOT EXISTS (
     SELECT 1 FROM thumbnail 
     WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1) 
-    AND color_id = (SELECT id FROM colors WHERE name = 'blue' LIMIT 1)
+    AND color_id = (SELECT id FROM colors WHERE name = 'beige' LIMIT 1)
 );
 
 -- Вставка данных в таблицу images, проверка дубликатов по ссылкам на изображение
 INSERT INTO images (product_id, color_id, image, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl/female-navy-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser', 
     NOW(), 
     NOW()
 WHERE NOT EXISTS (
     SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl/female-navy-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit'
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser'
 )
 UNION ALL
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_1/female-navy-super-stretch-tapered-tailored-trouser', 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser', 
     NOW(), 
     NOW()
 WHERE NOT EXISTS (
     SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_1/female-navy-super-stretch-tapered-tailored-trouser'
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser'
 )
 UNION ALL
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_2/female-navy-super-stretch-tapered-tailored-trouser', 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser', 
     NOW(), 
     NOW()
 WHERE NOT EXISTS (
     SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_2/female-navy-super-stretch-tapered-tailored-trouser'
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser'
 )
 UNION ALL
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    (SELECT id FROM colors WHERE name = 'blue' LIMIT 1), 
-    'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_3/female-navy-super-stretch-tapered-tailored-trouser', 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser', 
     NOW(), 
     NOW()
 WHERE NOT EXISTS (
     SELECT 1 FROM images 
-    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_3/female-navy-super-stretch-tapered-tailored-trouser'
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser'
 );
 
 -- Вставка данных в таблицу product_sizes с учетом доступности
@@ -251,24 +246,22 @@ SELECT
     id,
     COALESCE(
         CASE abbreviation 
-            WHEN 'XS' THEN 2
-            WHEN 'S' THEN 22
-            WHEN 'M' THEN 1
-            WHEN 'L' THEN 14
-            WHEN 'XL' THEN 6
-            WHEN 'XXL' THEN 3
+            WHEN 'XS' THEN 6
+            WHEN 'S' THEN 11
+            WHEN 'M' THEN 3
+            WHEN 'L' THEN 4
+            WHEN 'XL' THEN 7
             ELSE 0 
         END, 0),  -- значение по умолчанию, если подзапрос вернет NULL
     -- Доступность размера зависит от количества
     CASE 
         WHEN COALESCE(
             CASE abbreviation 
-                WHEN 'XS' THEN 2
-                WHEN 'S' THEN 22
-                WHEN 'M' THEN 1
-                WHEN 'L' THEN 14
-                WHEN 'XL' THEN 6
-                WHEN 'XXL' THEN 3
+                WHEN 'XS' THEN 6
+                WHEN 'S' THEN 11
+                WHEN 'M' THEN 3
+                WHEN 'L' THEN 4
+                WHEN 'XL' THEN 7
                 ELSE 0 
             END, 0) > 0 THEN TRUE
         ELSE FALSE
