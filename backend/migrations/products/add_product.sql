@@ -1,5 +1,5 @@
 -- Добавление уникального ограничения на название продукта (если ещё не добавлено)
-ALTER TABLE products ADD CONSTRAINT unique_product_title UNIQUE (title, color_id);
+ALTER TABLE products ADD CONSTRAINT unique_product_thumbnail UNIQUE (thumbnail);
 
 -- Вставка первого продукта только если такого продукта ещё нет в таблице products
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
