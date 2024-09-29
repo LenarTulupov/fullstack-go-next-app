@@ -91,13 +91,24 @@ SELECT 'l', 'L', 'Large', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'L')
 UNION ALL
 SELECT 'xl', 'XL', 'Extra Large', NOW(), NOW()
-WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XL');
+WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XL')
+UNION ALL
+SELECT 'xxl', 'XXL', 'Extra Extra Large', NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XXL');
 
 -- Вставка данных в таблицу product_sizes, проверка на существующие записи
-INSERT INTO product_sizes (product_id, size_id)
+INSERT INTO product_sizes (product_id, size_id, quantity)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
-    id 
+    id,
+    CASE abbreviation 
+        WHEN 'XS' THEN 6
+        WHEN 'S' THEN 11
+        WHEN 'M' THEN 3
+        WHEN 'L' THEN 4
+        WHEN 'XL' THEN 7
+        ELSE 0 
+    END
 FROM sizes
 WHERE NOT EXISTS (
     SELECT 1 FROM product_sizes 
