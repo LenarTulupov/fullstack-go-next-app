@@ -44,6 +44,65 @@ UNION ALL
 SELECT 'xxl', 'XXL', 'Extra Extra Large', NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1 FROM sizes WHERE abbreviation = 'XXL');
 
+INSERT INTO thumbnail (product_id, color_id, thumbnail, created_at, updated_at)
+SELECT 
+    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 
+    NOW(), 
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM thumbnail 
+    WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1) 
+    AND color_id = (SELECT id FROM colors WHERE name = 'beige' LIMIT 1)
+);
+
+-- Вставка данных в таблицу images, проверка дубликатов по ссылкам на изображение
+INSERT INTO images (product_id, color_id, image, created_at, updated_at)
+SELECT 
+    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser', 
+    NOW(), 
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM images 
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser'
+)
+UNION ALL
+SELECT 
+    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser', 
+    NOW(), 
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM images 
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser'
+)
+UNION ALL
+SELECT 
+    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser', 
+    NOW(), 
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM images 
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser'
+)
+UNION ALL
+SELECT 
+    (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
+    (SELECT id FROM colors WHERE name = 'beige' LIMIT 1), 
+    'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser', 
+    NOW(), 
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM images 
+    WHERE image = 'https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser'
+);
+
 -- Вставка данных в таблицу product_sizes с учетом доступности
 INSERT INTO product_sizes (product_id, size_id, quantity, available)
 SELECT 
