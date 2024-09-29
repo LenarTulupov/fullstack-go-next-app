@@ -8,8 +8,10 @@ SELECT
     'Work clothes don’t have to be boring, and these work trousers are a secure style. Slightly more formal attire, these are tailored, high waisted, and tapered at the ankle. Choose between button or zip-up detail, these are smart pants that are sharply tailored, serving some serious attitude. Always a practical piece to have in your wardrobe, throw these on and prepare to impress in any professional setting or scenario.',
     20.00,
     25.00,
-    -- Высчитываем общее количество по размерам
-    (SELECT SUM(quantity) FROM product_sizes WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1)),
+    COALESCE(
+        (SELECT SUM(quantity) FROM product_sizes WHERE product_id = (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1)),
+        0  -- значение по умолчанию, если подзапрос вернет NULL
+    ),
     (SELECT id FROM categories WHERE name = 'trousers'),
     (SELECT id FROM colors WHERE name = 'beige'),
     -- Продукт доступен, если есть хотя бы один размер с положительным количеством
@@ -47,24 +49,26 @@ INSERT INTO product_sizes (product_id, size_id, quantity, available)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
     id,
-    CASE abbreviation 
-        WHEN 'XS' THEN 6
-        WHEN 'S' THEN 11
-        WHEN 'M' THEN 3
-        WHEN 'L' THEN 4
-        WHEN 'XL' THEN 7
-        ELSE 0 
-    END,
-    -- Доступность размера зависит от количества
-    CASE 
-        WHEN CASE abbreviation 
+    COALESCE(
+        CASE abbreviation 
             WHEN 'XS' THEN 6
             WHEN 'S' THEN 11
             WHEN 'M' THEN 3
             WHEN 'L' THEN 4
             WHEN 'XL' THEN 7
             ELSE 0 
-        END > 0 THEN TRUE
+        END, 0),  -- значение по умолчанию, если подзапрос вернет NULL
+    -- Доступность размера зависит от количества
+    CASE 
+        WHEN COALESCE(
+            CASE abbreviation 
+                WHEN 'XS' THEN 6
+                WHEN 'S' THEN 11
+                WHEN 'M' THEN 3
+                WHEN 'L' THEN 4
+                WHEN 'XL' THEN 7
+                ELSE 0 
+            END, 0) > 0 THEN TRUE
         ELSE FALSE
     END
 FROM sizes
