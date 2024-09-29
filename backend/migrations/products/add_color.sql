@@ -6,3 +6,7 @@ INSERT INTO colors (name, created_at, updated_at)
 VALUES 
     ('beige', NOW(), NOW())
 ON CONFLICT (name) DO NOTHING;
+INSERT INTO colors (name, created_at, updated_at)
+VALUES 
+    ('blue', NOW(), NOW())
+ON CONFLICT (name) DO NOTHING;
