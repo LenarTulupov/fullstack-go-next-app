@@ -26,6 +26,8 @@ type Size struct {
     Name         string `json:"name"`
     Abbreviation string `json:"abbreviation"`
     Description  string `json:"description"`
+    Quantity     int    `json:"quantity"`
+    Available    bool   `json:"available"`
 }
 
 type Color struct {
