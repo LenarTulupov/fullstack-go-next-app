@@ -48,13 +48,13 @@ CREATE TABLE IF NOT EXISTS thumbnail (
 -- Удаление уникального ограничения, если оно существует
 DO $$
 BEGIN
-    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'unique_thumbnail_product_color') THEN
-        ALTER TABLE thumbnail DROP CONSTRAINT unique_thumbnail_product_color;
+    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'unique_product_title_color') THEN
+        ALTER TABLE products DROP CONSTRAINT unique_product_title_color;
     END IF;
 END $$;
 
--- Добавление уникального ограничения на thumbnail
-ALTER TABLE thumbnail ADD CONSTRAINT unique_thumbnail_product_color UNIQUE (product_id, color_id);
+-- Добавление уникального ограничения на title и color_id в таблице products
+ALTER TABLE products ADD CONSTRAINT unique_product_title_color UNIQUE (title, color_id);
 
 CREATE TABLE images (
     id SERIAL PRIMARY KEY,
@@ -64,6 +64,7 @@ CREATE TABLE images (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 
