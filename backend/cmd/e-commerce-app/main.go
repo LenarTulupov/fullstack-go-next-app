@@ -58,15 +58,14 @@ func main() {
 
     // Создание таблиц
     executeSchema("users", "users.sql")
-    executeSchema("products", "categories.sql")
-    executeSchema("products", "colors.sql")
-    executeSchema("products", "sizes.sql")
-    executeSchema("products", "products.sql")
+    executeSchema("products", "create_categories.sql")
+    executeSchema("products", "create_colors.sql")
+    executeSchema("products", "create_images.sql")
+    executeSchema("products", "create_product_sizes.sql")
+    executeSchema("products", "create_products.sql")
+    executeSchema("products", "create_sizes.sql")
     // Дабаление данных в таблицы
-    executeSQL("products", "add_category.sql")
-    executeSQL("products", "add_size.sql")
-    executeSQL("products", "add_color.sql")
-    executeSQL("products", "add_product.sql")
+    executeSQL("products", "insert_products.sql")
 
     // Настройка роутера
     r := router.SetupRouter()

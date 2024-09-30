@@ -1,45 +1,36 @@
 package models
 
-import "time"
+import (
+    "time"
+)
 
 type Product struct {
-    ID          int         `json:"id"`
-    Title       string      `json:"title"`
-    Description string      `json:"description"`
-    PriceNew    float64     `json:"price_new"`
-    PriceOld    *float64    `json:"price_old,omitempty"`
-    Quantity    int         `json:"quantity"`
-    Available   bool        `json:"available"`
-    CategoryID  *int        `json:"category_id,omitempty"`
-    Category    string      `json:"category"`
-    ColorID     *int        `json:"color_id,omitempty"`
-    Color       string       `json:"color"`
-    Sizes       []Size     `json:"sizes"`
-    Thumbnail   Thumbnail   `json:"thumbnail"`
-    Images      []Image     `json:"images"`
-    CreatedAt   time.Time   `json:"created_at"`
-    UpdatedAt   time.Time   `json:"updated_at"`
+    ID          int       `json:"id"`
+    Title       string    `json:"title"`
+    Description string    `json:"description"`
+    PriceNew    float64   `json:"price_new"`
+    PriceOld    float64   `json:"price_old,omitempty"`
+    Quantity    int       `json:"quantity"`
+    Available   bool      `json:"available"`
+    CategoryID  int       `json:"category_id"`
+    ColorID     int       `json:"color_id"`
+    Thumbnail   string    `json:"thumbnail,omitempty"`
+    CreatedAt   time.Time `json:"created_at"`
+    UpdatedAt   time.Time `json:"updated_at"`
+    Sizes       []Size    `json:"sizes"`
+    Images      []Image    `json:"images"`
 }
 
 type Size struct {
-    ID           int    `json:"id"`
-    Name         string `json:"name"`
+    ID          int    `json:"id"`
+    Name        string `json:"name"`
     Abbreviation string `json:"abbreviation"`
-    Description  string `json:"description"`
-    Quantity     int    `json:"quantity"`
-    Available    bool   `json:"available"`
-}
-
-type Color struct {
-    ID    int    `json:"id"`
-    Name  string `json:"name"`
-}
-
-type Thumbnail struct {
-    Thumbnail string `json:"thumbnail"`
+    Description string `json:"description,omitempty"`
+    Quantity    int    `json:"quantity"`
+    Available   bool   `json:"available"`
 }
 
 type Image struct {
-    ID int `json:"id"`
-    URL string `json:"image_url"`
+    ID       int    `json:"id"`
+    ImageURL string `json:"image_url"`
 }

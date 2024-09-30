@@ -3,19 +3,25 @@ package services
 import (
     "api/pkg/models/product"
     "api/pkg/repository"
-    "database/sql"
 )
 
-type ProductService struct{}
-
-func (p *ProductService) GetAllProducts(db *sql.DB) ([]models.Product, error) {
-    return repository.GetAllProducts(db)
+type ProductService interface {
+    GetAllProducts() ([]models.Product, error)
+    GetProductByID(id int) (models.Product, error)
 }
 
-func (p *ProductService) GetProductDetails(db *sql.DB, productID int) (*models.Product, error) {
-    return repository.GetProductByID(db, productID)
+type productService struct {
+    repo repository.ProductRepository
 }
 
-func (p *ProductService) CreateProduct(db *sql.DB, product *models.Product) error {
-    return repository.CreateProduct(db, product)
+func NewProductService(repo repository.ProductRepository) ProductService {
+    return &productService{repo}
+}
+
+func (s *productService) GetAllProducts() ([]models.Product, error) {
+    return s.repo.GetAll()
+}
+
+func (s *productService) GetProductByID(id int) (models.Product, error) {
+    return s.repo.GetByID(id)
 }
