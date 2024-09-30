@@ -1,9 +1,12 @@
 package services
 
 import (
+    "errors"
     "api/pkg/models/product"
     "api/pkg/repository"
 )
+
+var ErrProductNotFound = errors.New("product not found") // Добавляем ошибку
 
 type ProductService interface {
     GetAllProducts() ([]models.Product, error)
@@ -23,5 +26,10 @@ func (s *productService) GetAllProducts() ([]models.Product, error) {
 }
 
 func (s *productService) GetProductByID(id int) (models.Product, error) {
-    return s.repo.GetByID(id)
+    product, err := s.repo.GetByID(id)
+    if err != nil {
+        // Предположим, что если ошибка не nil, это означает, что продукт не найден
+        return product, ErrProductNotFound
+    }
+    return product, nil
 }
