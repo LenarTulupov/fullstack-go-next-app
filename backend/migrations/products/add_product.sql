@@ -1,7 +1,18 @@
--- Adding a unique constraint on product title and color (if not already added)
+-- Добавление уникального ограничения на название продукта и цвет (если еще не добавлено)
 ALTER TABLE products ADD CONSTRAINT unique_product_title_color UNIQUE (title, color_id);
 
--- Inserting the first product
+-- Вставка размеров в таблицу sizes с учетом уникального ограничения
+INSERT INTO sizes (name, abbreviation, description, created_at, updated_at)
+VALUES 
+    ('xs', 'XS', 'Extra Small', NOW(), NOW()),
+    ('s', 'S', 'Small', NOW(), NOW()),
+    ('m', 'M', 'Medium', NOW(), NOW()),
+    ('l', 'L', 'Large', NOW(), NOW()),
+    ('xl', 'XL', 'Extra Large', NOW(), NOW()),
+    ('xxl', 'XXL', 'Extra Extra Large', NOW(), NOW())
+ON CONFLICT (abbreviation) DO NOTHING;
+
+-- Вставка первого продукта
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
@@ -18,21 +29,7 @@ SELECT
     NOW(),
     NOW();
 
--- Inserting sizes into the sizes table
-INSERT INTO sizes (name, abbreviation, description, created_at, updated_at)
-SELECT 'xs', 'XS', 'Extra Small', NOW(), NOW()
-UNION ALL
-SELECT 's', 'S', 'Small', NOW(), NOW()
-UNION ALL
-SELECT 'm', 'M', 'Medium', NOW(), NOW()
-UNION ALL
-SELECT 'l', 'L', 'Large', NOW(), NOW()
-UNION ALL
-SELECT 'xl', 'XL', 'Extra Large', NOW(), NOW()
-UNION ALL
-SELECT 'xxl', 'XXL', 'Extra Extra Large', NOW(), NOW();
-
--- Inserting thumbnail for the product
+-- Вставка миниатюры для продукта
 INSERT INTO thumbnail (product_id, color_id, thumbnail, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
@@ -41,7 +38,7 @@ SELECT
     NOW(), 
     NOW();
 
--- Inserting images for the product
+-- Вставка изображений для продукта
 INSERT INTO images (product_id, color_id, image, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
@@ -71,7 +68,7 @@ SELECT
     NOW(), 
     NOW();
 
--- Inserting data into product_sizes
+-- Вставка данных в product_sizes
 INSERT INTO product_sizes (product_id, size_id, quantity, available)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
@@ -88,7 +85,7 @@ SELECT
     TRUE
 FROM sizes;
 
--- Inserting the second product
+-- Вставка второго продукта
 INSERT INTO products (title, description, price_new, price_old, quantity, category_id, color_id, available, created_at, updated_at)
 SELECT 
     'SUPER STRETCH TAPERED TAILORED TROUSER',
@@ -105,7 +102,7 @@ SELECT
     NOW(),
     NOW();
 
--- Inserting thumbnail for the second product
+-- Вставка миниатюры для второго продукта
 INSERT INTO thumbnail (product_id, color_id, thumbnail, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
@@ -114,7 +111,7 @@ SELECT
     NOW(), 
     NOW();
 
--- Inserting images for the second product
+-- Вставка изображений для второго продукта
 INSERT INTO images (product_id, color_id, image, created_at, updated_at)
 SELECT 
     (SELECT id FROM products WHERE title = 'SUPER STRETCH TAPERED TAILORED TROUSER' LIMIT 1), 
@@ -136,6 +133,7 @@ SELECT
     'https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_2/female-navy-super-stretch-tapered-tailored-trouser', 
     NOW(), 
     NOW();
+
 
 
 
