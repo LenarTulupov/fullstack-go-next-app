@@ -3,10 +3,10 @@ package router
 import (
     "github.com/gin-gonic/gin"
     "api/pkg/handlers"
+    "api/pkg/services"
+    "api/pkg/repository"
     "api/internal/middleware"
-    "api/pkg/repository"  // Импортируем пакет репозитория
-    "api/pkg/services"     // Импортируем пакет сервисов
-    "database/sql"         // Импортируем пакет для работы с БД
+    "database/sql"
 )
 
 func SetupRouter(db *sql.DB) *gin.Engine {
@@ -14,9 +14,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
     r.Use(middleware.CORSMiddleware())
 
-    // Создание экземпляра репозитория и сервиса
+    // Initialize the product service and repository
     productRepo := repository.NewProductRepository(db)
     productService := services.NewProductService(productRepo)
+    productHandler := handlers.NewProductHandler(productService)
 
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
@@ -27,8 +28,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
     r.GET("/health", handlers.HealthHandler)
 
-    // Регистрация обработчиков продуктов
-    productHandler := handlers.NewProductHandler(productService)
+    // Product routes
     r.GET("/products", productHandler.GetProducts)
     r.GET("/products/:id", productHandler.GetProduct)
 

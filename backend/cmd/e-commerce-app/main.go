@@ -68,7 +68,7 @@ func main() {
     executeSQL("products", "insert_products.sql")
 
     // Настройка роутера
-    r := router.SetupRouter()
+    r := router.SetupRouter(config.DB)
     r.Use(middleware.CORSMiddleware())
 
     port := ":8000"
