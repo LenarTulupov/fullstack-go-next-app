@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS images;
+
 CREATE TABLE images (
   id SERIAL PRIMARY KEY,
   image_url VARCHAR(255) NOT NULL,

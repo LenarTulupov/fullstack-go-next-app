@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS product_sizes;
+
 CREATE TABLE product_sizes (
     product_id INT,
     size_id INT,
