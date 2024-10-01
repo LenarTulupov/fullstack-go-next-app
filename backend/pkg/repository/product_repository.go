@@ -1,9 +1,9 @@
 package repository
 
 import (
-    "database/sql"
-    "log"
-    "api/pkg/models/product"
+	models "api/pkg/models/product"
+	"database/sql"
+	"log"
 )
 
 type ProductRepository interface {
@@ -43,13 +43,15 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
     var images []models.Image
 
     rows, err := r.db.Query(`
-        SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
-               s.id, s.name, s.abbreviation, img.id, img.image_url
+            SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
+               p.category_id, p.color_id, p.thumbnail,
+               s.id, s.name, s.abbreviation,
+               img.id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
         LEFT JOIN sizes s ON ps.size_id = s.id
         LEFT JOIN images img ON p.id = img.product_id
-        WHERE p.id = $1`, id)
+        WHERE p.id = $1`, id) // используйте параметр $1 для передачи id
 
     if err != nil {
         return product, err
@@ -61,8 +63,11 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
         var imgURL sql.NullString
         var size models.Size
 
-        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail,
-            &size.ID, &size.Name, &size.Abbreviation, &imgID, &imgURL)
+        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, 
+            &product.PriceOld, &product.Quantity, &product.Available, 
+            &product.CategoryID, &product.ColorID, &product.Thumbnail,
+            &size.ID, &size.Name, &size.Abbreviation, 
+            &imgID, &imgURL)
 
         if err != nil {
             return product, err
