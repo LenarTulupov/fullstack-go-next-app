@@ -39,7 +39,46 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
     var product models.Product
-    err := r.db.QueryRow("SELECT id, title, description, price_new, price_old, quantity, available, category_id, color_id, thumbnail FROM products WHERE id = $1", id).
-        Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail)
-    return product, err
+    var sizes []models.Size
+    var images []models.Image
+
+    rows, err := r.db.Query(`
+        SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
+               s.id, s.name, s.abbreviation, img.id, img.image_url
+        FROM products p
+        LEFT JOIN product_sizes ps ON p.id = ps.product_id
+        LEFT JOIN sizes s ON ps.size_id = s.id
+        LEFT JOIN images img ON p.id = img.product_id
+        WHERE p.id = $1`, id)
+
+    if err != nil {
+        return product, err
+    }
+    defer rows.Close()
+
+    for rows.Next() {
+        var imgID sql.NullInt32
+        var imgURL sql.NullString
+        var size models.Size
+
+        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail,
+            &size.ID, &size.Name, &size.Abbreviation, &imgID, &imgURL)
+
+        if err != nil {
+            return product, err
+        }
+
+        // Добавляем размеры и изображения, если они существуют
+        if size.ID != 0 {
+            sizes = append(sizes, size)
+        }
+        if imgID.Valid {
+            images = append(images, models.Image{ID: int(imgID.Int32), ImageURL: imgURL.String})
+        }
+    }
+
+    product.Sizes = sizes
+    product.Images = images
+
+    return product, nil
 }
