@@ -14,11 +14,11 @@ type Product struct {
     Available   bool      `json:"available"`
     CategoryID  int       `json:"category_id"`
     ColorID     int       `json:"color_id"`
+    Sizes       []Size    `json:"sizes"`
+    Images      []Image    `json:"images"`
     Thumbnail   string    `json:"thumbnail,omitempty"`
     CreatedAt   time.Time `json:"created_at"`
     UpdatedAt   time.Time `json:"updated_at"`
-    Sizes       []Size    `json:"sizes"`
-    Images      []Image    `json:"images"`
 }
 
 type Size struct {
