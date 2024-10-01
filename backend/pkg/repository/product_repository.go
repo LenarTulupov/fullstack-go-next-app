@@ -68,6 +68,9 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
             return product, err
         }
 
+        // Логирование
+        log.Printf("Retrieved Size: %+v, ImageID: %v, ImageURL: %v", size, imgID, imgURL)
+
         // Добавляем размеры и изображения, если они существуют
         if size.ID != 0 {
             sizes = append(sizes, size)
@@ -79,6 +82,9 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
     product.Sizes = sizes
     product.Images = images
+
+    // Логируем продукт с его размерами и изображениями
+    log.Printf("Retrieved Product: %+v", product)
 
     return product, nil
 }

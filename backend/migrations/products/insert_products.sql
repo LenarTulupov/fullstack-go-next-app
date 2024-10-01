@@ -29,7 +29,7 @@ VALUES
   NULL -- Временно NULL, мы обновим позже
 ),
 (
-  'SUPER STRETCH TAPERED TAILORED TROUSER - NAVY',
+  'SUPER STRETCH TAPERED TAILORED TROUSER',
   'Another color option for the SUPER STRETCH TAPERED TAILORED TROUSER, offering the same fit and style.',
   20.00, 
   25.00,
