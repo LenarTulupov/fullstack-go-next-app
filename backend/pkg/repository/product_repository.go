@@ -79,19 +79,23 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             size.Quantity = sizeQuantity
             size.Available = sizeAvailable
 
-            // Обновляем общее количество продукта
-            productMap[productID].Quantity += sizeQuantity
-
+            // Проверяем, существует ли размер, чтобы избежать дублирования
             sizeExists := false
-            for _, existingSize := range productMap[productID].Sizes {
+            for i, existingSize := range productMap[productID].Sizes {
                 if existingSize.ID == sizeID {
                     sizeExists = true
+                    // Обновляем количество уже существующего размера
+                    productMap[productID].Sizes[i].Quantity += sizeQuantity
                     break
                 }
             }
+            // Если размер не найден, добавляем его
             if !sizeExists {
                 productMap[productID].Sizes = append(productMap[productID].Sizes, size)
             }
+
+            // Обновляем общее количество продукта
+            productMap[productID].Quantity += sizeQuantity
         }
 
         // Добавляем уникальные изображения
