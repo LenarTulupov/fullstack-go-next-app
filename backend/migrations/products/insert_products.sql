@@ -77,10 +77,16 @@ UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id =
 UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 2 LIMIT 1) WHERE id = 2;
 
 INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
-(1, 1, 5), -- Размер XS для первого продукта
-(1, 2, 1), -- Размер S для первого продукта
-(1, 4, 3), -- Размер L для первого продукта
-(1, 5, 2), -- Размер XL для первого продукта
-(2, 1, 2), -- Размер XS для второго продукта
-(2, 2, 3), -- Размер S для второго продукта
-(2, 3, 10); -- Размер M для второго продукта
+(1, 1, 5), 
+(1, 2, 1), 
+(1, 3, 0), 
+(1, 4, 3), 
+(1, 5, 2), 
+(1, 6, 0); 
+
+(2, 1, 2),
+(2, 2, 3), 
+(2, 3, 10),
+(2, 4, 0), 
+(2, 5, 0),
+(2, 6, 0); 
