@@ -19,8 +19,8 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 }
 
 func (r *productRepository) GetAll() ([]models.Product, error) {
-    rows, err := r.db.Query(`
-        SELECT 
+    rows, err := r.db.Query(
+        `SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
             p.category_id, p.color_id, p.thumbnail, 
             s.id AS size_id, s.name, s.abbreviation, 
@@ -28,14 +28,12 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
         LEFT JOIN sizes s ON ps.size_id = s.id
-        LEFT JOIN images img ON p.id = img.product_id
-    `)
+        LEFT JOIN images img ON p.id = img.product_id`)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
 
-    // Мапа для группировки продуктов по ID
     var productMap = make(map[int]*models.Product)
 
     for rows.Next() {
@@ -57,24 +55,41 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             productMap[product.ID] = &product
         }
 
-        // Если у продукта есть размер, добавляем его
-        if size.ID != 0 {
+        // Добавляем размер, если его еще нет у продукта
+        if size.ID != 0 && !containsSize(productMap[product.ID].Sizes, size) {
             productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
         }
 
-        // Если у продукта есть изображение, добавляем его
-        if image.ID != 0 {
+        // Добавляем изображение, если его еще нет у продукта
+        if image.ID != 0 && !containsImage(productMap[product.ID].Images, image) {
             productMap[product.ID].Images = append(productMap[product.ID].Images, image)
         }
     }
 
-    // Преобразуем мапу обратно в массив продуктов
     var products []models.Product
     for _, product := range productMap {
         products = append(products, *product)
     }
 
     return products, nil
+}
+
+func containsSize(sizes []models.Size, size models.Size) bool {
+    for _, s := range sizes {
+        if s.ID == size.ID {
+            return true
+        }
+    }
+    return false
+}
+
+func containsImage(images []models.Image, image models.Image) bool {
+    for _, img := range images {
+        if img.ID == image.ID {
+            return true
+        }
+    }
+    return false
 }
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
