@@ -69,14 +69,19 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             product.ID = productID
             product.Sizes = []models.Size{}
             product.Images = []models.Image{}
+            product.Quantity = 0 // Инициализируем количество продукта
             productMap[productID] = &product
         }
 
-        // Добавляем уникальные размеры
+        // Добавляем уникальные размеры и обновляем количество
         if sizeID != 0 {
             size.ID = sizeID
             size.Quantity = sizeQuantity
             size.Available = sizeAvailable
+
+            // Обновляем общее количество продукта
+            productMap[productID].Quantity += sizeQuantity
+
             sizeExists := false
             for _, existingSize := range product.Sizes {
                 if existingSize.ID == sizeID {
@@ -104,9 +109,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             }
         }
 
-        // Обновляем количество и доступность продукта
-        productMap[productID].Quantity += sizeQuantity
-        if sizeQuantity > 0 {
+        // Обновляем доступность продукта
+        if productMap[productID].Quantity > 0 {
             productMap[productID].Available = true
         }
     }
@@ -118,15 +122,6 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
     }
 
     return products, nil
-}
-
-func containsImage(images []models.Image, image models.Image) bool {
-    for _, img := range images {
-        if img.ID == image.ID {
-            return true
-        }
-    }
-    return false
 }
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
