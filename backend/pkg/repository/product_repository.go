@@ -2,9 +2,8 @@ package repository
 
 import (
 	"database/sql"
-	"log"
-
 	"api/pkg/models/product"
+	"log"
 )
 
 type ProductRepository interface {
@@ -51,44 +50,47 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		var sizeQuantity int
 		var sizeAvailable bool
 
-		if err := rows.Scan(
+		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&sizeID, &size.Name, &size.Abbreviation,
 			&sizeQuantity, &sizeAvailable,
 			&imageID, &image.ImageURL,
-		); err != nil {
+		)
+		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
 
+		// Проверяем, существует ли продукт в мапе, или создаем новый продукт
 		if p, exists := productMap[productID]; exists {
 			product = *p
 		} else {
 			product.ID = productID
 			product.Sizes = []models.Size{}
 			product.Images = []models.Image{}
-			product.Quantity = 0
+			product.Quantity = 0 // Инициализируем количество продукта
 			productMap[productID] = &product
 		}
 
 		// Обработка размера
 		if sizeID != 0 {
-			size.ID = sizeID
-			size.Quantity = sizeQuantity
-			size.Available = sizeAvailable
-
 			// Ищем существующий размер в продукте
-			found := false
+			sizeExists := false
 			for i, existingSize := range productMap[productID].Sizes {
 				if existingSize.ID == sizeID {
+					sizeExists = true
+					// Обновляем количество существующего размера
 					productMap[productID].Sizes[i].Quantity += sizeQuantity
-					found = true
 					break
 				}
 			}
 
-			if !found {
+			// Если размер не найден, добавляем новый размер
+			if !sizeExists {
+				size.ID = sizeID
+				size.Quantity = sizeQuantity
+				size.Available = sizeAvailable
 				productMap[productID].Sizes = append(productMap[productID].Sizes, size)
 			}
 
@@ -98,8 +100,17 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 		// Обработка изображения
 		if imageID != 0 {
-			image.ID = len(productMap[productID].Images) + 1 // Задаем ID для изображения
-			productMap[productID].Images = append(productMap[productID].Images, image)
+			image.ID = imageID
+			imageExists := false
+			for _, existingImage := range productMap[productID].Images {
+				if existingImage.ID == imageID {
+					imageExists = true
+					break
+				}
+			}
+			if !imageExists {
+				productMap[productID].Images = append(productMap[productID].Images, image)
+			}
 		}
 
 		// Обновляем доступность продукта
@@ -110,8 +121,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 	// Преобразуем map в слайс продуктов
 	products := make([]models.Product, 0, len(productMap))
-	for _, p := range productMap {
-		products = append(products, *p)
+	for _, product := range productMap {
+		products = append(products, *product)
 	}
 
 	return products, nil
@@ -146,12 +157,13 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 		var imgURL sql.NullString
 		var size models.Size
 
-		if err := rows.Scan(
+		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&size.ID, &size.Name, &size.Abbreviation,
 			&imgID, &imgURL,
-		); err != nil {
+		)
+		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return product, err
 		}
