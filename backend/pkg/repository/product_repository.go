@@ -62,7 +62,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             return nil, err
         }
 
-        // Ищем продукт в мапе или создаем новый
+        // Проверяем, существует ли продукт в мапе, или создаем новый продукт
         if p, exists := productMap[productID]; exists {
             product = *p
         } else {
@@ -83,7 +83,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             productMap[productID].Quantity += sizeQuantity
 
             sizeExists := false
-            for _, existingSize := range product.Sizes {
+            for _, existingSize := range productMap[productID].Sizes {
                 if existingSize.ID == sizeID {
                     sizeExists = true
                     break
@@ -98,7 +98,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         if imageID != 0 {
             image.ID = imageID
             imageExists := false
-            for _, existingImage := range product.Images {
+            for _, existingImage := range productMap[productID].Images {
                 if existingImage.ID == imageID {
                     imageExists = true
                     break
