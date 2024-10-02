@@ -23,12 +23,13 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         `SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
             p.category_id, p.color_id, p.thumbnail, 
-            s.id AS size_id, s.name, s.abbreviation, 
+            s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, 
             img.id AS image_id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
         LEFT JOIN sizes s ON ps.size_id = s.id
         LEFT JOIN images img ON p.id = img.product_id`)
+
     if err != nil {
         return nil, err
     }
@@ -56,13 +57,17 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         }
 
         // Добавляем размер, если его еще нет у продукта
-        if size.ID != 0 && !containsSize(productMap[product.ID].Sizes, size) {
-            productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
+        if size.ID != 0 {
+            if !containsSize(productMap[product.ID].Sizes, size) {
+                productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
+            }
         }
 
         // Добавляем изображение, если его еще нет у продукта
-        if image.ID != 0 && !containsImage(productMap[product.ID].Images, image) {
-            productMap[product.ID].Images = append(productMap[product.ID].Images, image)
+        if image.ID != 0 {
+            if !containsImage(productMap[product.ID].Images, image) {
+                productMap[product.ID].Images = append(productMap[product.ID].Images, image)
+            }
         }
     }
 
