@@ -53,7 +53,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
     for rows.Next() {
         var p models.Product
-        var size models.Size // Assuming you have a Size struct in your models
+        var size models.Size
+        var imageURL sql.NullString // Добавлено для сканирования image_url
 
         err := rows.Scan(
             &p.ID,
@@ -69,6 +70,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             &size.Quantity,
             &size.Abbreviation,
             &size.Available,
+            &imageURL, // Сканирование поля image_url
             &p.Thumbnail,
         )
         if err != nil {
@@ -78,6 +80,11 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         // Append size information to product's sizes slice
         if size.ID != 0 { // Only add size if it exists
             p.Sizes = append(p.Sizes, size)
+        }
+
+        // Обработка imageURL для добавления в список изображений, если это необходимо
+        if imageURL.Valid {
+            p.Images = append(p.Images, models.Image{ImageURL: imageURL.String}) // Если у вас есть структура Images в Product
         }
 
         products = append(products, p)
@@ -91,14 +98,13 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
     var sizes []models.Size
     var images []models.Image
 
-    query := `
-        SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
-               s.id, s.abbreviation, img.id, img.image_url
-        FROM products p
-        LEFT JOIN product_sizes ps ON p.id = ps.product_id
-        LEFT JOIN sizes s ON ps.size_id = s.id
-        LEFT JOIN images img ON p.id = img.product_id
-        WHERE p.id = $1
+    query := `SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
+                      s.id, s.abbreviation, img.id, img.image_url
+              FROM products p
+              LEFT JOIN product_sizes ps ON p.id = ps.product_id
+              LEFT JOIN sizes s ON ps.size_id = s.id
+              LEFT JOIN images img ON p.id = img.product_id
+              WHERE p.id = $1
     `
 
     rows, err := r.db.Query(query, id)
