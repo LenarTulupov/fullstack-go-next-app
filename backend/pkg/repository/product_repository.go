@@ -21,9 +21,10 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 func (r *productRepository) GetAll() ([]models.Product, error) {
     rows, err := r.db.Query(
         `SELECT 
-            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
+            p.id, p.title, p.description, p.price_new, p.price_old, 
             p.category_id, p.color_id, p.thumbnail, 
-            s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, 
+            s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
+            ps.quantity, ps.available,  -- добавляем количество и доступность размера
             img.id AS image_id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
@@ -41,11 +42,15 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         var product models.Product
         var size models.Size
         var image models.Image
+        var sizeQuantity int
+        var sizeAvailable bool
 
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-            &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID,
-            &product.Thumbnail, &size.ID, &size.Name, &size.Abbreviation, &image.ID, &image.ImageURL,
+            &product.CategoryID, &product.ColorID, &product.Thumbnail,
+            &size.ID, &size.Name, &size.Abbreviation,
+            &sizeQuantity, &sizeAvailable,  // получаем количество и доступность размера
+            &image.ID, &image.ImageURL,
         )
         if err != nil {
             return nil, err
@@ -54,16 +59,23 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         // Если продукт еще не добавлен в мапу, добавляем его
         if _, exists := productMap[product.ID]; !exists {
             productMap[product.ID] = &product
+            productMap[product.ID].Sizes = []models.Size{} // инициализируем массив размеров
         }
 
-        // Добавляем размер, если его еще нет у продукта
+        // Обновляем количество и доступность
+        productMap[product.ID].Quantity += sizeQuantity
+        if sizeQuantity > 0 {
+            productMap[product.ID].Available = true
+        }
+
+        // Добавляем размер к продукту
         if size.ID != 0 {
-            if !containsSize(productMap[product.ID].Sizes, size) {
-                productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
-            }
+            size.Quantity = sizeQuantity
+            size.Available = sizeAvailable
+            productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
         }
 
-        // Добавляем изображение, если его еще нет у продукта
+        // Добавляем изображение
         if image.ID != 0 {
             if !containsImage(productMap[product.ID].Images, image) {
                 productMap[product.ID].Images = append(productMap[product.ID].Images, image)
