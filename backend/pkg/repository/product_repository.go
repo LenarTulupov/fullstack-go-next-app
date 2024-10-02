@@ -25,7 +25,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail, 
 			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-			COALESCE(ps.quantity, 0), COALESCE(s.available, FALSE),  
+			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(s.available, FALSE) AS size_available,
 			img.id AS image_id, img.image_url
 		FROM products p
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
@@ -73,32 +73,32 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			productMap[productID] = &product
 		}
 
-		// Добавляем уникальные размеры и обновляем количество
+		// Обработка размера
 		if sizeID != 0 {
-			size.ID = sizeID
-			size.Quantity = sizeQuantity
-			size.Available = sizeAvailable
-
-			// Проверяем, существует ли размер, чтобы избежать дублирования
+			// Ищем существующий размер в продукте
 			sizeExists := false
 			for i, existingSize := range productMap[productID].Sizes {
 				if existingSize.ID == sizeID {
 					sizeExists = true
-					// Обновляем количество уже существующего размера
-					productMap[productID].Sizes[i].Quantity += sizeQuantity // Здесь количество не должно умножаться на 4
+					// Обновляем количество существующего размера
+					productMap[productID].Sizes[i].Quantity += sizeQuantity
 					break
 				}
 			}
-			// Если размер не найден, добавляем его
+
+			// Если размер не найден, добавляем новый размер
 			if !sizeExists {
+				size.ID = sizeID
+				size.Quantity = sizeQuantity
+				size.Available = sizeAvailable
 				productMap[productID].Sizes = append(productMap[productID].Sizes, size)
 			}
 
 			// Обновляем общее количество продукта
-			productMap[productID].Quantity += sizeQuantity // Здесь также нужно учитывать только добавленное количество
+			productMap[productID].Quantity += sizeQuantity
 		}
 
-		// Добавляем уникальные изображения
+		// Обработка изображения
 		if imageID != 0 {
 			image.ID = imageID
 			imageExists := false
