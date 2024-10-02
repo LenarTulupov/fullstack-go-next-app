@@ -19,12 +19,12 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 }
 
 func (r *productRepository) GetAll() ([]models.Product, error) {
-    rows, err := r.db.Query(
-        `SELECT 
+    rows, err := r.db.Query(`
+        SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, 
             p.category_id, p.color_id, p.thumbnail, 
             s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-            ps.quantity, ps.available,  -- добавляем количество и доступность размера
+            ps.quantity, s.available,  -- Изменение здесь: используем s.available вместо ps.available
             img.id AS image_id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
@@ -36,7 +36,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
     }
     defer rows.Close()
 
-    var productMap = make(map[int]*models.Product)
+    productMap := make(map[int]*models.Product)
 
     for rows.Next() {
         var product models.Product
@@ -49,37 +49,31 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
             &product.CategoryID, &product.ColorID, &product.Thumbnail,
             &size.ID, &size.Name, &size.Abbreviation,
-            &sizeQuantity, &sizeAvailable,  // получаем количество и доступность размера
+            &sizeQuantity, &sizeAvailable,  // Изменение здесь: получаем s.available
             &image.ID, &image.ImageURL,
         )
         if err != nil {
             return nil, err
         }
 
-        // Если продукт еще не добавлен в мапу, добавляем его
         if _, exists := productMap[product.ID]; !exists {
             productMap[product.ID] = &product
-            productMap[product.ID].Sizes = []models.Size{} // инициализируем массив размеров
+            productMap[product.ID].Sizes = []models.Size{} 
         }
 
-        // Обновляем количество и доступность
         productMap[product.ID].Quantity += sizeQuantity
         if sizeQuantity > 0 {
             productMap[product.ID].Available = true
         }
 
-        // Добавляем размер к продукту
         if size.ID != 0 {
             size.Quantity = sizeQuantity
             size.Available = sizeAvailable
             productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
         }
 
-        // Добавляем изображение
-        if image.ID != 0 {
-            if !containsImage(productMap[product.ID].Images, image) {
-                productMap[product.ID].Images = append(productMap[product.ID].Images, image)
-            }
+        if image.ID != 0 && !containsImage(productMap[product.ID].Images, image) {
+            productMap[product.ID].Images = append(productMap[product.ID].Images, image)
         }
     }
 
@@ -91,14 +85,6 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
     return products, nil
 }
 
-func containsSize(sizes []models.Size, size models.Size) bool {
-    for _, s := range sizes {
-        if s.ID == size.ID {
-            return true
-        }
-    }
-    return false
-}
 
 func containsImage(images []models.Image, image models.Image) bool {
     for _, img := range images {
