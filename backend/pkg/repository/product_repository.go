@@ -25,7 +25,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
             p.category_id, p.color_id, p.thumbnail, 
             s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-            ps.quantity, s.available,  
+            COALESCE(ps.quantity, 0), COALESCE(s.available, FALSE),  
             img.id AS image_id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
@@ -45,8 +45,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         var product models.Product
         var size models.Size
         var image models.Image
-        var sizeQuantity sql.NullInt32
-        var sizeAvailable sql.NullBool
+        var sizeQuantity int
+        var sizeAvailable bool
 
         err := rows.Scan(
             &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
@@ -66,22 +66,17 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
             productMap[product.ID].Images = []models.Image{}
         }
 
-        // Обновляем количество и доступность продукта
-        if sizeQuantity.Valid {
-            productMap[product.ID].Quantity += int(sizeQuantity.Int32)
-            if sizeQuantity.Int32 > 0 {
-                productMap[product.ID].Available = true
-            }
+        productMap[product.ID].Quantity += sizeQuantity
+        if sizeQuantity > 0 {
+            productMap[product.ID].Available = true
         }
 
-        // Добавляем размеры, если они есть
         if size.ID != 0 {
-            size.Quantity = int(sizeQuantity.Int32)
-            size.Available = sizeAvailable.Bool
+            size.Quantity = sizeQuantity
+            size.Available = sizeAvailable
             productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
         }
 
-        // Добавляем изображения, если они есть
         if image.ID != 0 && !containsImage(productMap[product.ID].Images, image) {
             productMap[product.ID].Images = append(productMap[product.ID].Images, image)
         }
@@ -95,7 +90,6 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
     return products, nil
 }
 
-// Проверка на дублирование изображений
 func containsImage(images []models.Image, image models.Image) bool {
     for _, img := range images {
         if img.ID == image.ID {
@@ -113,7 +107,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
     query := `
         SELECT 
             p.id, p.title, p.description, p.price_new, p.price_old, 
-            p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
+            COALESCE(p.quantity, 0), COALESCE(p.available, FALSE), p.category_id, p.color_id, p.thumbnail,
             s.id, s.name, s.abbreviation, 
             img.id, img.image_url
         FROM products p
@@ -145,12 +139,10 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
             return product, err
         }
 
-        // Добавляем размеры, если они есть
         if size.ID != 0 {
             sizes = append(sizes, size)
         }
 
-        // Добавляем изображения, если они есть
         if imgID.Valid {
             images = append(images, models.Image{ID: int(imgID.Int32), ImageURL: imgURL.String})
         }
