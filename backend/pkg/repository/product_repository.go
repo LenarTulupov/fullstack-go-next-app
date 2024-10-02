@@ -31,6 +31,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
         LEFT JOIN sizes s ON ps.size_id = s.id
         LEFT JOIN images img ON p.id = img.product_id
+        ORDER BY p.id, s.id, img.id
     `
     rows, err := r.db.Query(query)
     if err != nil {
@@ -42,6 +43,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
     productMap := make(map[int]*models.Product)
 
     for rows.Next() {
+        var productID, sizeID, imageID int
         var product models.Product
         var size models.Size
         var image models.Image
@@ -49,40 +51,68 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
         var sizeAvailable bool
 
         err := rows.Scan(
-            &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
+            &productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
             &product.CategoryID, &product.ColorID, &product.Thumbnail,
-            &size.ID, &size.Name, &size.Abbreviation,
+            &sizeID, &size.Name, &size.Abbreviation,
             &sizeQuantity, &sizeAvailable,
-            &image.ID, &image.ImageURL,
+            &imageID, &image.ImageURL,
         )
         if err != nil {
             log.Printf("Error scanning row: %v", err)
             return nil, err
         }
 
-        if _, exists := productMap[product.ID]; !exists {
-            productMap[product.ID] = &product
-            productMap[product.ID].Sizes = []models.Size{}
-            productMap[product.ID].Images = []models.Image{}
+        // Ищем продукт в мапе или создаем новый
+        if p, exists := productMap[productID]; exists {
+            product = *p
+        } else {
+            product.ID = productID
+            product.Sizes = []models.Size{}
+            product.Images = []models.Image{}
+            productMap[productID] = &product
         }
 
-        productMap[product.ID].Quantity += sizeQuantity
-        if sizeQuantity > 0 {
-            productMap[product.ID].Available = true
-        }
-
-        if size.ID != 0 {
+        // Добавляем уникальные размеры
+        if sizeID != 0 {
+            size.ID = sizeID
             size.Quantity = sizeQuantity
             size.Available = sizeAvailable
-            productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
+            sizeExists := false
+            for _, existingSize := range product.Sizes {
+                if existingSize.ID == sizeID {
+                    sizeExists = true
+                    break
+                }
+            }
+            if !sizeExists {
+                productMap[productID].Sizes = append(productMap[productID].Sizes, size)
+            }
         }
 
-        if image.ID != 0 && !containsImage(productMap[product.ID].Images, image) {
-            productMap[product.ID].Images = append(productMap[product.ID].Images, image)
+        // Добавляем уникальные изображения
+        if imageID != 0 {
+            image.ID = imageID
+            imageExists := false
+            for _, existingImage := range product.Images {
+                if existingImage.ID == imageID {
+                    imageExists = true
+                    break
+                }
+            }
+            if !imageExists {
+                productMap[productID].Images = append(productMap[productID].Images, image)
+            }
+        }
+
+        // Обновляем количество и доступность продукта
+        productMap[productID].Quantity += sizeQuantity
+        if sizeQuantity > 0 {
+            productMap[productID].Available = true
         }
     }
 
-    var products []models.Product
+    // Преобразуем map в слайс продуктов
+    products := make([]models.Product, 0, len(productMap))
     for _, product := range productMap {
         products = append(products, *product)
     }
