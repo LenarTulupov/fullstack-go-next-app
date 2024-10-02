@@ -1,9 +1,8 @@
 package repository
 
 import (
-	models "api/pkg/models/product"
-	"database/sql"
-	"log"
+    "database/sql"
+    "api/pkg/models/product"
 )
 
 type ProductRepository interface {
@@ -20,20 +19,61 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 }
 
 func (r *productRepository) GetAll() ([]models.Product, error) {
-    rows, err := r.db.Query("SELECT id, title, description, price_new, price_old, quantity, available, category_id, color_id, thumbnail FROM products")
+    rows, err := r.db.Query(`
+        SELECT 
+            p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
+            p.category_id, p.color_id, p.thumbnail, 
+            s.id AS size_id, s.name, s.abbreviation, 
+            img.id AS image_id, img.image_url
+        FROM products p
+        LEFT JOIN product_sizes ps ON p.id = ps.product_id
+        LEFT JOIN sizes s ON ps.size_id = s.id
+        LEFT JOIN images img ON p.id = img.product_id
+    `)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
 
-    var products []models.Product
+    // Мапа для группировки продуктов по ID
+    var productMap = make(map[int]*models.Product)
+
     for rows.Next() {
         var product models.Product
-        if err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail); err != nil {
-            log.Fatal(err)
+        var size models.Size
+        var image models.Image
+
+        err := rows.Scan(
+            &product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
+            &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID,
+            &product.Thumbnail, &size.ID, &size.Name, &size.Abbreviation, &image.ID, &image.ImageURL,
+        )
+        if err != nil {
+            return nil, err
         }
-        products = append(products, product)
+
+        // Если продукт еще не добавлен в мапу, добавляем его
+        if _, exists := productMap[product.ID]; !exists {
+            productMap[product.ID] = &product
+        }
+
+        // Если у продукта есть размер, добавляем его
+        if size.ID != 0 {
+            productMap[product.ID].Sizes = append(productMap[product.ID].Sizes, size)
+        }
+
+        // Если у продукта есть изображение, добавляем его
+        if image.ID != 0 {
+            productMap[product.ID].Images = append(productMap[product.ID].Images, image)
+        }
     }
+
+    // Преобразуем мапу обратно в массив продуктов
+    var products []models.Product
+    for _, product := range productMap {
+        products = append(products, *product)
+    }
+
     return products, nil
 }
 
@@ -42,17 +82,17 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
     var sizes []models.Size
     var images []models.Image
 
-    rows, err := r.db.Query(`
-            SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, 
-               p.category_id, p.color_id, p.thumbnail,
-               s.id, s.name, s.abbreviation,
-               img.id, img.image_url
+    query := `
+        SELECT p.id, p.title, p.description, p.price_new, p.price_old, p.quantity, p.available, p.category_id, p.color_id, p.thumbnail,
+               s.id, s.name, s.abbreviation, img.id, img.image_url
         FROM products p
         LEFT JOIN product_sizes ps ON p.id = ps.product_id
         LEFT JOIN sizes s ON ps.size_id = s.id
         LEFT JOIN images img ON p.id = img.product_id
-        WHERE p.id = $1`, id) // используйте параметр $1 для передачи id
+        WHERE p.id = $1
+    `
 
+    rows, err := r.db.Query(query, id)
     if err != nil {
         return product, err
     }
@@ -63,20 +103,13 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
         var imgURL sql.NullString
         var size models.Size
 
-        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, 
-            &product.PriceOld, &product.Quantity, &product.Available, 
-            &product.CategoryID, &product.ColorID, &product.Thumbnail,
-            &size.ID, &size.Name, &size.Abbreviation, 
-            &imgID, &imgURL)
+        err := rows.Scan(&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld, &product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail,
+            &size.ID, &size.Name, &size.Abbreviation, &imgID, &imgURL)
 
         if err != nil {
             return product, err
         }
 
-        // Логирование
-        log.Printf("Retrieved Size: %+v, ImageID: %v, ImageURL: %v", size, imgID, imgURL)
-
-        // Добавляем размеры и изображения, если они существуют
         if size.ID != 0 {
             sizes = append(sizes, size)
         }
@@ -87,9 +120,6 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
     product.Sizes = sizes
     product.Images = images
-
-    // Логируем продукт с его размерами и изображениями
-    log.Printf("Retrieved Product: %+v", product)
 
     return product, nil
 }
