@@ -1,8 +1,12 @@
 -- Вставка категорий
-INSERT INTO categories (name) VALUES ('new'), ('summer'), ('trends'), ('dresses'), ('trousers');
+INSERT INTO categories (name) 
+VALUES ('new'), ('summer'), ('trends'), ('dresses'), ('trousers') 
+ON CONFLICT (name) DO NOTHING;
 
 -- Вставка цветов
-INSERT INTO colors (name) VALUES ('beige'), ('blue'), ('black');
+INSERT INTO colors (name) 
+VALUES ('beige'), ('blue'), ('black') 
+ON CONFLICT (name) DO NOTHING;
 
 -- Вставка продуктов
 INSERT INTO products (
@@ -38,7 +42,8 @@ VALUES
   5, -- Это также ID категории 'trousers'
   2, 
   NULL -- Временно NULL, мы обновим позже
-);
+)
+ON CONFLICT (title, color_id) DO NOTHING; -- Предполагаем, что уникальность по названию и цвету
 
 -- Вставка размеров для первого продукта
 INSERT INTO sizes (name, abbreviation, description, quantity, available) VALUES
@@ -47,7 +52,8 @@ INSERT INTO sizes (name, abbreviation, description, quantity, available) VALUES
 ('m', 'M', 'Medium', 0, FALSE),
 ('l', 'L', 'Large', 3, TRUE),
 ('xl', 'XL', 'Extra Large', 2, TRUE),
-('xxl', 'XXL', 'Extra Extra Large', 0, FALSE);
+('xxl', 'XXL', 'Extra Extra Large', 0, FALSE)
+ON CONFLICT (name) DO NOTHING; -- Предполагаем, что уникальность по названию размера
 
 -- Вставка размеров для второго продукта
 INSERT INTO sizes (name, abbreviation, description, quantity, available) VALUES
@@ -56,21 +62,24 @@ INSERT INTO sizes (name, abbreviation, description, quantity, available) VALUES
 ('m', 'M', 'Medium', 10, TRUE),
 ('l', 'L', 'Large', 0, FALSE),
 ('xl', 'XL', 'Extra Large', 0, FALSE),
-('xxl', 'XXL', 'Extra Extra Large', 0, FALSE);
+('xxl', 'XXL', 'Extra Extra Large', 0, FALSE)
+ON CONFLICT (name) DO NOTHING; -- Предполагаем, что уникальность по названию размера
 
 -- Вставка изображений для первого продукта
 INSERT INTO images (image_url, product_id) VALUES
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl/female-stone-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 1),
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser', 1),
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser', 1),
-('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser', 1);
+('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser', 1)
+ON CONFLICT (image_url, product_id) DO NOTHING; -- Предполагаем, что уникальность по URL изображения и продукту
 
 -- Вставка изображений для второго продукта
 INSERT INTO images (image_url, product_id) VALUES
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl/female-navy-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 2),
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_1/female-navy-super-stretch-tapered-tailored-trouser', 2),
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_2/female-navy-super-stretch-tapered-tailored-trouser', 2),
-('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_3/female-navy-super-stretch-tapered-tailored-trouser', 2);
+('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_3/female-navy-super-stretch-tapered-tailored-trouser', 2)
+ON CONFLICT (image_url, product_id) DO NOTHING; -- Предполагаем, что уникальность по URL изображения и продукту
 
 -- Обновление thumbnail для продуктов
 UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 1 LIMIT 1) WHERE id = 1;
@@ -89,4 +98,5 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (2, 3, 10),
 (2, 4, 0), 
 (2, 5, 0),
-(2, 6, 0); 
+(2, 6, 0)
+ON CONFLICT (product_id, size_id) DO NOTHING; -- Предполагаем, что уникальность по ID продукта и ID размера
