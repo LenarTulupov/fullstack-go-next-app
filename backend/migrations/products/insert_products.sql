@@ -1,6 +1,3 @@
-ALTER TABLE products ADD CONSTRAINT unique_title_color UNIQUE (title, color_id);
-ALTER TABLE images ADD CONSTRAINT unique_image_product UNIQUE (image_url, product_id);
-
 -- Вставка категорий
 INSERT INTO categories (name) 
 VALUES ('new'), ('summer'), ('trends'), ('dresses'), ('trousers') 
