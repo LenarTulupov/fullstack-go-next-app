@@ -100,11 +100,12 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		if sizeID != 0 {
 			size.ID = sizeID
 			size.Quantity = sizeQuantity // Добавляем количество для размера
-			p.Quantity += size.Quantity // Суммируем количество по всем размерам
 
+			// Суммируем количество только один раз
 			if !containsSize(p.Sizes, sizeID) {
 				p.Sizes = append(p.Sizes, size)
 			}
+			p.Quantity += sizeQuantity // Суммируем количество по всем размерам
 		}
 
 		// Устанавливаем доступность продукта
@@ -121,7 +122,6 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 	return products, nil
 }
-
 
 // Функция проверки на дубликаты размеров
 func containsSize(sizes []models.Size, sizeID int) bool {
