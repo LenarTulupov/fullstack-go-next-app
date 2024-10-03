@@ -2,8 +2,8 @@ package repository
 
 import (
 	"database/sql"
-	"api/pkg/models/product"
 	"log"
+	"api/pkg/models/product"
 )
 
 type ProductRepository interface {
@@ -25,7 +25,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail, 
 			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(s.available, FALSE) AS size_available,
+			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(ps.available, FALSE) AS size_available,
 			img.id AS image_id, img.image_url
 		FROM products p
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
@@ -43,86 +43,77 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	productMap := make(map[int]*models.Product)
 
 	for rows.Next() {
+		// Объявление переменных для сканирования
 		var productID, sizeID, imageID int
 		var product models.Product
 		var size models.Size
 		var image models.Image
 		var sizeQuantity int
 		var sizeAvailable bool
-
+		var imageURL string // Добавляем переменную для imageURL
+	
 		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&sizeID, &size.Name, &size.Abbreviation,
 			&sizeQuantity, &sizeAvailable,
-			&imageID, &image.ImageURL,
+			&imageID, &imageURL, // Сканируем imageID и imageURL
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
-
-		// Проверяем, существует ли продукт в мапе, или создаем новый продукт
-		if p, exists := productMap[productID]; exists {
-			product = *p
-		} else {
-			product.ID = productID
-			product.Sizes = []models.Size{}
-			product.Images = []models.Image{}
-			product.Quantity = 0 // Инициализируем количество продукта
-			productMap[productID] = &product
+	
+		// Проверка на наличие продукта
+		p, exists := productMap[productID]
+		if !exists {
+			p = &models.Product{
+				ID:          productID,
+				Title:       product.Title,
+				Description: product.Description,
+				PriceNew:    product.PriceNew,
+				PriceOld:    product.PriceOld,
+				CategoryID:  product.CategoryID,
+				ColorID:     product.ColorID,
+				Thumbnail:   product.Thumbnail,
+				Sizes:       []models.Size{},
+				Images:      []models.Image{},
+			}
+			productMap[productID] = p
 		}
-
-		// Обработка размера
+	
+		// Обрабатываем размеры
 		if sizeID != 0 {
-			// Ищем существующий размер в продукте
-			sizeExists := false
-			for i, existingSize := range productMap[productID].Sizes {
-				if existingSize.ID == sizeID {
-					sizeExists = true
-					// Обновляем количество существующего размера
-					productMap[productID].Sizes[i].Quantity += sizeQuantity
-					break
-				}
-			}
-
-			// Если размер не найден, добавляем новый размер
-			if !sizeExists {
-				size.ID = sizeID
-				size.Quantity = sizeQuantity
-				size.Available = sizeAvailable
-				productMap[productID].Sizes = append(productMap[productID].Sizes, size)
-			}
-
-			// Обновляем общее количество продукта
-			productMap[productID].Quantity += sizeQuantity
+			size.ID = sizeID
+			size.Quantity = sizeQuantity
+			size.Available = sizeAvailable
+			p.Sizes = append(p.Sizes, size)
 		}
-
-		// Обработка изображения
+	
+		// Обрабатываем изображения
 		if imageID != 0 {
 			image.ID = imageID
+			image.ImageURL = imageURL // Используем значение imageURL
 			imageExists := false
-			for _, existingImage := range productMap[productID].Images {
-				if existingImage.ID == imageID {
+			for _, img := range p.Images {
+				if img.ID == imageID {
 					imageExists = true
 					break
 				}
 			}
 			if !imageExists {
-				productMap[productID].Images = append(productMap[productID].Images, image)
+				p.Images = append(p.Images, image)
 			}
 		}
-
-		// Обновляем доступность продукта
-		if productMap[productID].Quantity > 0 {
-			productMap[productID].Available = true
-		}
+	
+		// Обновляем количество доступных товаров
+		p.Available = p.Quantity > 0
 	}
 
-	// Преобразуем map в слайс продуктов
-	products := make([]models.Product, 0, len(productMap))
-	for _, product := range productMap {
-		products = append(products, *product)
+	// Преобразуем мапу в слайс
+	var products []models.Product
+	for _, p := range productMap {
+		products = append(products, *p)
 	}
 
 	return products, nil

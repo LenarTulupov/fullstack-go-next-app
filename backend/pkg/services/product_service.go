@@ -6,7 +6,7 @@ import (
     "api/pkg/repository"
 )
 
-var ErrProductNotFound = errors.New("product not found") // Добавляем ошибку
+var ErrProductNotFound = errors.New("product not found")
 
 type ProductService interface {
     GetAllProducts() ([]models.Product, error)
