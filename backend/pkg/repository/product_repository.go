@@ -74,6 +74,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				Thumbnail:   product.Thumbnail,
 				Images:      []models.Image{}, 
 				Sizes:       []models.Size{},
+				Quantity:    0,
+				Available:   false, 
 			}
 			productMap[productID] = p
 		}
@@ -98,9 +100,16 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		if sizeID != 0 {
 			size.ID = sizeID
 			size.Quantity = sizeQuantity // Добавляем количество для размера
+			p.Quantity += size.Quantity // Суммируем количество по всем размерам
+
 			if !containsSize(p.Sizes, sizeID) {
 				p.Sizes = append(p.Sizes, size)
 			}
+		}
+
+		// Устанавливаем доступность продукта
+		if p.Quantity > 0 {
+			p.Available = true
 		}
 	}
 
@@ -112,6 +121,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 	return products, nil
 }
+
 
 // Функция проверки на дубликаты размеров
 func containsSize(sizes []models.Size, sizeID int) bool {
