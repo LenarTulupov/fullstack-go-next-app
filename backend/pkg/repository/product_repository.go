@@ -66,7 +66,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				CategoryID:  product.CategoryID,
 				ColorID:     product.ColorID,
 				Thumbnail:   product.Thumbnail,
-				Images:      []models.Image{}, // Инициализируем только Images
+				Images:      []models.Image{}, 
+				Sizes:       []models.Size{},
 			}
 			productMap[productID] = p
 		}
