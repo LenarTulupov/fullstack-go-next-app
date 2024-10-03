@@ -74,7 +74,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				Thumbnail:   product.Thumbnail,
 				Images:      []models.Image{}, 
 				Sizes:       []models.Size{},
-				Quantity:    0,
+				Quantity:    0, // Изначально количество равно 0
 				Available:   false, 
 			}
 			productMap[productID] = p
