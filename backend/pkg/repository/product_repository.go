@@ -28,7 +28,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, s.available AS size_available, ps.quantity AS size_quantity
 		FROM products p
 		LEFT JOIN images img ON p.id = img.product_id
-		LEFT JOIN product_sizes ps ON p.id = ps.product_id  -- таблица, связывающая продукты и размеры
+		LEFT JOIN product_sizes ps ON p.id = ps.product_id
 		LEFT JOIN sizes s ON ps.size_id = s.id
 		ORDER BY p.id, img.id, s.id
 	`
@@ -47,7 +47,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		var image models.Image
 		var imageURL string
 		var size models.Size
-		var sizeQuantity int  // Новая переменная для количества
+		var sizeQuantity int
 
 		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
@@ -73,7 +73,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				ColorID:     product.ColorID,
 				Thumbnail:   product.Thumbnail,
 				Images:      []models.Image{}, 
-				Sizes:       []models.Size{},  // инициализация
+				Sizes:       []models.Size{},
 			}
 			productMap[productID] = p
 		}
@@ -98,7 +98,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		if sizeID != 0 {
 			size.ID = sizeID
 			size.Quantity = sizeQuantity // Добавляем количество для размера
-			if !containsSize(p.Sizes, sizeID) { // добавление проверки на дубликаты
+			if !containsSize(p.Sizes, sizeID) {
 				p.Sizes = append(p.Sizes, size)
 			}
 		}
