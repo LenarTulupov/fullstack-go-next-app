@@ -27,7 +27,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.category_id, p.color_id, p.thumbnail,
 			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
 			FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
-			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'available', s.available, 'quantity', ps.quantity))
+			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity))
 			FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
 		FROM products p
 		LEFT JOIN images img ON p.id = img.product_id
@@ -74,11 +74,26 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		}
 
 		// Подсчитываем общее количество и доступность
-		for _, size := range product.Sizes {
-			product.Quantity += size.Quantity
+		totalQuantity := 0
+		hasAvailableSize := false
+
+		for i := range product.Sizes {
+			size := &product.Sizes[i]
+
+			// Логика доступности на уровне размера
+			if size.Quantity > 0 {
+				size.Available = true
+				hasAvailableSize = true
+			} else {
+				size.Available = false
+			}
+
+			totalQuantity += size.Quantity
 		}
 
-		product.Available = product.Quantity > 0
+		// Доступность продукта
+		product.Quantity = totalQuantity
+		product.Available = hasAvailableSize
 
 		products = append(products, product)
 	}
