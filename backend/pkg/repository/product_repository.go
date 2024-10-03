@@ -24,10 +24,13 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		SELECT 
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail,
-			img.id AS image_id, img.image_url
+			img.id AS image_id, img.image_url,
+			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, s.available AS size_available
 		FROM products p
 		LEFT JOIN images img ON p.id = img.product_id
-		ORDER BY p.id, img.id
+		LEFT JOIN product_sizes ps ON p.id = ps.product_id  -- таблица, связывающая продукты и размеры
+		LEFT JOIN sizes s ON ps.size_id = s.id
+		ORDER BY p.id, img.id, s.id
 	`
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -39,15 +42,17 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	productMap := make(map[int]*models.Product)
 
 	for rows.Next() {
-		var productID, imageID int
+		var productID, imageID, sizeID int
 		var product models.Product
 		var image models.Image
-		var imageURL string 
+		var imageURL string
+		var size models.Size
 
 		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&imageID, &imageURL, 
+			&sizeID, &size.Name, &size.Abbreviation, &size.Available,
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
@@ -67,7 +72,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				ColorID:     product.ColorID,
 				Thumbnail:   product.Thumbnail,
 				Images:      []models.Image{}, 
-				Sizes:       []models.Size{},
+				Sizes:       []models.Size{},  // инициализация
 			}
 			productMap[productID] = p
 		}
@@ -87,6 +92,14 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				p.Images = append(p.Images, image)
 			}
 		}
+
+		// Обрабатываем размеры
+		if sizeID != 0 {
+			size.ID = sizeID
+			if !containsSize(p.Sizes, sizeID) { // добавление проверки на дубликаты
+				p.Sizes = append(p.Sizes, size)
+			}
+		}
 	}
 
 	// Преобразуем мапу в слайс
@@ -96,6 +109,16 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	}
 
 	return products, nil
+}
+
+// Функция проверки на дубликаты размеров
+func containsSize(sizes []models.Size, sizeID int) bool {
+	for _, size := range sizes {
+		if size.ID == sizeID {
+			return true
+		}
+	}
+	return false
 }
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
