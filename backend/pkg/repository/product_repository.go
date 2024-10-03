@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"api/pkg/models/product"
+	"encoding/json"
 )
 
 type ProductRepository interface {
@@ -24,14 +25,18 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		SELECT 
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail,
-			img.id AS image_id, img.image_url,
-			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, s.available AS size_available, ps.quantity AS size_quantity
+			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
+			FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
+			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'available', s.available, 'quantity', ps.quantity))
+			FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
 		FROM products p
 		LEFT JOIN images img ON p.id = img.product_id
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
 		LEFT JOIN sizes s ON ps.size_id = s.id
-		ORDER BY p.id, img.id, s.id
+		GROUP BY p.id
+		ORDER BY p.id
 	`
+
 	rows, err := r.db.Query(query)
 	if err != nil {
 		log.Printf("Error querying products: %v", err)
@@ -39,101 +44,63 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	}
 	defer rows.Close()
 
-	productMap := make(map[int]*models.Product)
+	var products []models.Product
 
 	for rows.Next() {
-		var productID, imageID, sizeID int
 		var product models.Product
-		var image models.Image
-		var imageURL string
-		var size models.Size
-		var sizeQuantity int
+		var imagesJSON, sizesJSON string
 
 		err := rows.Scan(
-			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
+			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
-			&imageID, &imageURL, 
-			&sizeID, &size.Name, &size.Abbreviation, &size.Available, &sizeQuantity,
+			&imagesJSON, &sizesJSON,
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
 
-		// Проверка на наличие продукта
-		p, exists := productMap[productID]
-		if !exists {
-			p = &models.Product{
-				ID:          productID,
-				Title:       product.Title,
-				Description: product.Description,
-				PriceNew:    product.PriceNew,
-				PriceOld:    product.PriceOld,
-				CategoryID:  product.CategoryID,
-				ColorID:     product.ColorID,
-				Thumbnail:   product.Thumbnail,
-				Images:      []models.Image{}, 
-				Sizes:       []models.Size{},
-				Quantity:    0, // Изначально количество равно 0
-				Available:   false, 
-			}
-			productMap[productID] = p
+		// Парсим JSON строки в структуры
+		product.Images, err = parseImages(imagesJSON)
+		if err != nil {
+			log.Printf("Error parsing images: %v", err)
+			return nil, err
 		}
 
-		// Обрабатываем изображения
-		if imageID != 0 {
-			image.ID = imageID
-			image.ImageURL = imageURL
-			imageExists := false
-			for _, img := range p.Images {
-				if img.ID == imageID {
-					imageExists = true
-					break
-				}
-			}
-			if !imageExists {
-				p.Images = append(p.Images, image)
-			}
+		product.Sizes, err = parseSizes(sizesJSON)
+		if err != nil {
+			log.Printf("Error parsing sizes: %v", err)
+			return nil, err
 		}
 
-		// Обрабатываем размеры
-		if sizeID != 0 {
-			size.ID = sizeID
-			size.Quantity = sizeQuantity // Добавляем количество для размера
-
-			// Суммируем количество только один раз
-			if !containsSize(p.Sizes, sizeID) {
-				p.Sizes = append(p.Sizes, size)
-			}
-			p.Quantity += sizeQuantity // Суммируем количество по всем размерам
+		// Подсчитываем общее количество и доступность
+		for _, size := range product.Sizes {
+			product.Quantity += size.Quantity
 		}
 
-		// Устанавливаем доступность продукта
-		if p.Quantity > 0 {
-			p.Available = true
-		}
-	}
+		product.Available = product.Quantity > 0
 
-	// Преобразуем мапу в слайс
-	var products []models.Product
-	for _, p := range productMap {
-		products = append(products, *p)
+		products = append(products, product)
 	}
 
 	return products, nil
 }
 
-// Функция проверки на дубликаты размеров
-func containsSize(sizes []models.Size, sizeID int) bool {
-	for _, size := range sizes {
-		if size.ID == sizeID {
-			return true
-		}
-	}
-	return false
+// Парсинг JSON строк в слайсы структур
+func parseImages(jsonData string) ([]models.Image, error) {
+	var images []models.Image
+	err := json.Unmarshal([]byte(jsonData), &images)
+	return images, err
+}
+
+func parseSizes(jsonData string) ([]models.Size, error) {
+	var sizes []models.Size
+	err := json.Unmarshal([]byte(jsonData), &sizes)
+	return sizes, err
 }
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
+	// Оставляем как есть, можно добавить агрегацию если нужно
 	var product models.Product
 	var images []models.Image
 
