@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS products;
-
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     description TEXT,

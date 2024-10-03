@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS images;
-
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
   id SERIAL PRIMARY KEY,
   image_url VARCHAR(255) NOT NULL,
   product_id INT REFERENCES products(id) ON DELETE CASCADE
