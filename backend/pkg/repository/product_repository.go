@@ -25,7 +25,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail,
 			img.id AS image_id, img.image_url,
-			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, s.available AS size_available
+			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation, s.available AS size_available, ps.quantity AS size_quantity
 		FROM products p
 		LEFT JOIN images img ON p.id = img.product_id
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id  -- таблица, связывающая продукты и размеры
@@ -47,12 +47,13 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		var image models.Image
 		var imageURL string
 		var size models.Size
+		var sizeQuantity int  // Новая переменная для количества
 
 		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&imageID, &imageURL, 
-			&sizeID, &size.Name, &size.Abbreviation, &size.Available,
+			&sizeID, &size.Name, &size.Abbreviation, &size.Available, &sizeQuantity,
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
@@ -96,6 +97,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		// Обрабатываем размеры
 		if sizeID != 0 {
 			size.ID = sizeID
+			size.Quantity = sizeQuantity // Добавляем количество для размера
 			if !containsSize(p.Sizes, sizeID) { // добавление проверки на дубликаты
 				p.Sizes = append(p.Sizes, size)
 			}
