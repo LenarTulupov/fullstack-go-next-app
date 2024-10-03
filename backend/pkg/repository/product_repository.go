@@ -23,15 +23,11 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	query := `
 		SELECT 
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
-			p.category_id, p.color_id, p.thumbnail, 
-			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(s.available, FALSE) AS size_available,
+			p.category_id, p.color_id, p.thumbnail,
 			img.id AS image_id, img.image_url
 		FROM products p
-		LEFT JOIN product_sizes ps ON p.id = ps.product_id
-		LEFT JOIN sizes s ON ps.size_id = s.id
 		LEFT JOIN images img ON p.id = img.product_id
-		ORDER BY p.id, s.id, img.id
+		ORDER BY p.id, img.id
 	`
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -43,27 +39,21 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	productMap := make(map[int]*models.Product)
 
 	for rows.Next() {
-		// Объявление переменных для сканирования
-		var productID, sizeID, imageID int
+		var productID, imageID int
 		var product models.Product
-		var size models.Size
 		var image models.Image
-		var sizeQuantity int
-		var sizeAvailable bool
-		var imageURL string // Добавляем переменную для imageURL
-	
+		var imageURL string 
+
 		err := rows.Scan(
 			&productID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.CategoryID, &product.ColorID, &product.Thumbnail,
-			&sizeID, &size.Name, &size.Abbreviation,
-			&sizeQuantity, &sizeAvailable,
-			&imageID, &imageURL, // Сканируем imageID и imageURL
+			&imageID, &imageURL, 
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
-	
+
 		// Проверка на наличие продукта
 		p, exists := productMap[productID]
 		if !exists {
@@ -76,24 +66,15 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				CategoryID:  product.CategoryID,
 				ColorID:     product.ColorID,
 				Thumbnail:   product.Thumbnail,
-				Sizes:       []models.Size{},
-				Images:      []models.Image{},
+				Images:      []models.Image{}, // Инициализируем только Images
 			}
 			productMap[productID] = p
 		}
-	
-		// Обрабатываем размеры
-		if sizeID != 0 {
-			size.ID = sizeID
-			size.Quantity = sizeQuantity
-			size.Available = sizeAvailable
-			p.Sizes = append(p.Sizes, size)
-		}
-	
+
 		// Обрабатываем изображения
 		if imageID != 0 {
 			image.ID = imageID
-			image.ImageURL = imageURL // Используем значение imageURL
+			image.ImageURL = imageURL
 			imageExists := false
 			for _, img := range p.Images {
 				if img.ID == imageID {
@@ -105,9 +86,6 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 				p.Images = append(p.Images, image)
 			}
 		}
-	
-		// Обновляем количество доступных товаров
-		p.Available = p.Quantity > 0
 	}
 
 	// Преобразуем мапу в слайс
@@ -121,18 +99,14 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
 	var product models.Product
-	var sizes []models.Size
 	var images []models.Image
 
 	query := `
 		SELECT 
 			p.id, p.title, p.description, p.price_new, p.price_old, 
-			COALESCE(p.quantity, 0), COALESCE(p.available, FALSE), p.category_id, p.color_id, p.thumbnail,
-			s.id, s.name, s.abbreviation, 
+			p.category_id, p.color_id, p.thumbnail,
 			img.id, img.image_url
 		FROM products p
-		LEFT JOIN product_sizes ps ON p.id = ps.product_id
-		LEFT JOIN sizes s ON ps.size_id = s.id
 		LEFT JOIN images img ON p.id = img.product_id
 		WHERE p.id = $1
 	`
@@ -146,12 +120,10 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	for rows.Next() {
 		var imgID sql.NullInt32
 		var imgURL sql.NullString
-		var size models.Size
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.Quantity, &product.Available, &product.CategoryID, &product.ColorID, &product.Thumbnail,
-			&size.ID, &size.Name, &size.Abbreviation,
+			&product.CategoryID, &product.ColorID, &product.Thumbnail,
 			&imgID, &imgURL,
 		)
 		if err != nil {
@@ -159,16 +131,11 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			return product, err
 		}
 
-		if size.ID != 0 {
-			sizes = append(sizes, size)
-		}
-
 		if imgID.Valid {
 			images = append(images, models.Image{ID: int(imgID.Int32), ImageURL: imgURL.String})
 		}
 	}
 
-	product.Sizes = sizes
 	product.Images = images
 
 	return product, nil
