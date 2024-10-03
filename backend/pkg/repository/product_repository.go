@@ -25,7 +25,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
 			p.category_id, p.color_id, p.thumbnail, 
 			s.id AS size_id, s.name AS size_name, s.abbreviation AS size_abbreviation,
-			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(ps.available, FALSE) AS size_available,
+			COALESCE(ps.quantity, 0) AS size_quantity, COALESCE(s.available, FALSE) AS size_available,
 			img.id AS image_id, img.image_url
 		FROM products p
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
