@@ -1,15 +1,10 @@
-ALTER TABLE products ADD CONSTRAINT unique_title_color UNIQUE (title, color_id);
-ALTER TABLE images ADD CONSTRAINT unique_image_product UNIQUE (image_url, product_id);
-
 -- Вставка категорий
 INSERT INTO categories (name) 
-VALUES ('new'), ('summer'), ('trends'), ('dresses'), ('trousers') 
-ON CONFLICT (name) DO NOTHING;
+VALUES ('new'), ('summer'), ('trends'), ('dresses'), ('trousers');
 
 -- Вставка цветов
 INSERT INTO colors (name) 
-VALUES ('beige'), ('blue'), ('black') 
-ON CONFLICT (name) DO NOTHING;
+VALUES ('beige'), ('blue'), ('black');
 
 -- Вставка продуктов
 INSERT INTO products (
@@ -45,8 +40,7 @@ VALUES
   5, -- Это также ID категории 'trousers'
   2, 
   NULL -- Временно NULL, мы обновим позже
-)
-ON CONFLICT (title, color_id) DO NOTHING;
+);
 
 -- Вставка изображений для первого продукта
 INSERT INTO images (image_url, product_id) VALUES
@@ -54,7 +48,7 @@ INSERT INTO images (image_url, product_id) VALUES
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_1/female-stone-super-stretch-tapered-tailored-trouser', 1),
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_2/female-stone-super-stretch-tapered-tailored-trouser', 1),
 ('https://media.boohoo.com/i/boohoo/fzz77463_stone_xl_3/female-stone-super-stretch-tapered-tailored-trouser', 1)
-ON CONFLICT (image_url, product_id) DO NOTHING; 
+; 
 
 -- Вставка изображений для второго продукта
 INSERT INTO images (image_url, product_id) VALUES
@@ -62,7 +56,7 @@ INSERT INTO images (image_url, product_id) VALUES
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_1/female-navy-super-stretch-tapered-tailored-trouser', 2),
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_2/female-navy-super-stretch-tapered-tailored-trouser', 2),
 ('https://media.boohoo.com/i/boohoo/fzz77463_navy_xl_3/female-navy-super-stretch-tapered-tailored-trouser', 2)
-ON CONFLICT (image_url, product_id) DO NOTHING; 
+; 
 
 -- Обновление thumbnail для продуктов
 UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 1 LIMIT 1) WHERE id = 1;
@@ -81,5 +75,4 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (2, 3, 10),
 (2, 4, 0), 
 (2, 5, 0),
-(2, 6, 0)
-ON CONFLICT (product_id, size_id) DO NOTHING; 
+(2, 6, 0); 
