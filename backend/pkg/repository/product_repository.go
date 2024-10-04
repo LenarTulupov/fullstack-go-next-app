@@ -23,17 +23,27 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 func (r *productRepository) GetAll() ([]models.Product, error) {
 	query := `
 		SELECT 
-			p.id AS product_id, p.title, p.description, p.price_new, p.price_old, 
-			p.category_id, p.color_id, p.thumbnail,
+			p.id AS product_id,
+			p.title, 
+			p.description, 
+			p.price_new, 
+			p.price_old, 
+			p.category_id, 
+			cat.name AS category, 
+			p.color_id, 
+			cl.name AS color, 
+			p.thumbnail,
 			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
 			FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
 			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity))
 			FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
 		FROM products p
+		LEFT JOIN categories cat ON p.category_id = cat.id
+		LEFT JOIN colors cl ON p.color_id = cl.id
 		LEFT JOIN images img ON p.id = img.product_id
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
 		LEFT JOIN sizes s ON ps.size_id = s.id
-		GROUP BY p.id
+		GROUP BY p.id, cat.name, cl.name
 		ORDER BY p.id
 	`
 
@@ -52,7 +62,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.CategoryID, &product.ColorID, &product.Thumbnail,
+			&product.CategoryID, &product.Category, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imagesJSON, &sizesJSON,
 		)
 		if err != nil {
@@ -121,10 +131,19 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
 	query := `
 		SELECT 
-			p.id, p.title, p.description, p.price_new, p.price_old, 
-			p.category_id, p.color_id, p.thumbnail,
-			img.id, img.image_url
+			p.id, 
+			p.title, 
+			p.description, 
+			p.price_new, 
+			p.price_old, 
+			p.category_id, 
+			p.color_id, 
+			p.thumbnail,
+			img.id, 
+			img.image_url
 		FROM products p
+		LEFT JOIN categories cat ON p.category_id = cat.id
+		LEFT JOIN colors cl ON p.color_id = cl.id
 		LEFT JOIN images img ON p.id = img.product_id
 		WHERE p.id = $1
 	`
@@ -141,7 +160,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.CategoryID, &product.ColorID, &product.Thumbnail,
+			&product.CategoryID, &product.Category, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imgID, &imgURL,
 		)
 		if err != nil {
