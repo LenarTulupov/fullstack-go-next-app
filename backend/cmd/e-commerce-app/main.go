@@ -59,6 +59,7 @@ func main() {
     // Создание таблиц
     executeSchema("users", "users.sql")
     executeSchema("products", "create_categories.sql")
+    executeSchema("products", "create_subcategories.sql")
     executeSchema("products", "create_colors.sql")
     executeSchema("products", "create_sizes.sql")
     executeSchema("products", "create_products.sql")
@@ -66,6 +67,7 @@ func main() {
     executeSchema("products", "create_product_sizes.sql")
     // Дабаление данных в таблицы
     executeSQL("products", "insert_categories.sql")
+    executeSQL("products", "insert_subcategories.sql")
     executeSQL("products", "insert_colors.sql")
     executeSQL("products", "insert_sizes.sql")
     executeSQL("products", "insert_products.sql")
