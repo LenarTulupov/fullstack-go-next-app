@@ -65,7 +65,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.CategoryID, &product.Category, &product.ColorID, &product.Color, &product.Thumbnail,
+			&product.CategoryID, &product.Category, &product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imagesJSON, &sizesJSON,
 		)
 		if err != nil {
