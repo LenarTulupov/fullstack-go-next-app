@@ -1,5 +1,7 @@
 ALTER TABLE products ADD CONSTRAINT unique_title_color UNIQUE (title, color_id);
 ALTER TABLE images ADD CONSTRAINT unique_image_url_product UNIQUE (image_url, product_id);
+ALTER TABLE products ADD COLUMN subcategory_id INT;
+ALTER TABLE products ADD CONSTRAINT fk_subcategory FOREIGN KEY (subcategory_id) REFERENCES subcategories(id);
 
 -- Вставка продуктов
 INSERT INTO products (
@@ -10,6 +12,7 @@ INSERT INTO products (
   quantity, 
   available, 
   category_id, 
+  subcategory_id,
   color_id, 
   thumbnail
 )
@@ -21,7 +24,8 @@ VALUES
   25.00,
   0,
   FALSE,
-  5, -- Это ID категории 'trousers'
+  NULL, -- Это ID категории '...'
+  1,
   1, 
   NULL -- Временно NULL, мы обновим позже
 ),
@@ -32,7 +36,8 @@ VALUES
   25.00,
   0,
   FALSE,
-  5, -- Это также ID категории 'trousers'
+  NULL, -- Это также ID категории 'trousers'
+  1,
   2, 
   NULL -- Временно NULL, мы обновим позже
 )
@@ -94,7 +99,8 @@ VALUES
   25.00,
   0,
   FALSE,
-  5,
+  NULL,
+  1,
   3, 
   NULL 
 )
@@ -140,6 +146,7 @@ VALUES
   0,
   FALSE,
   3,
+  2,
   4, 
   NULL 
 )

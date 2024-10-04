@@ -5,22 +5,24 @@ import (
 )
 
 type Product struct {
-    ID          int       `json:"id"`
-    Title       string    `json:"title"`
-    Description string    `json:"description"`
-    PriceNew    float64   `json:"price_new"`
-    PriceOld    float64   `json:"price_old,omitempty"`
-    Quantity    int       `json:"quantity"`
-    Available   bool      `json:"available"`
-    CategoryID  int       `json:"category_id"`
-    Category    string    `json:"category"`
-    ColorID     int       `json:"color_id"`
-    Color       string    `json:"color"`
-    Sizes       []Size    `json:"sizes"`
-    Images      []Image    `json:"images"`
-    Thumbnail   string    `json:"thumbnail,omitempty"`
-    CreatedAt   time.Time `json:"created_at"`
-    UpdatedAt   time.Time `json:"updated_at"`
+    ID             int       `json:"id"`
+    Title          string    `json:"title"`
+    Description    string    `json:"description"`
+    PriceNew       float64   `json:"price_new"`
+    PriceOld       float64   `json:"price_old,omitempty"`
+    Quantity       int       `json:"quantity"`
+    Available      bool      `json:"available"`
+    Category       *string    `json:"category,omitempty"`
+    Subcategory    string    `json:"subcategory"`
+    Color          string    `json:"color"`
+    Sizes          []Size    `json:"sizes"`
+    Images         []Image   `json:"images"`
+    Thumbnail      string    `json:"thumbnail,omitempty"`
+    ColorID        int       `json:"color_id"`
+    CategoryID     *int       `json:"category_id,omitempty"`
+    SubcategoryID  int       `json:"subcategory_id"`
+    CreatedAt      time.Time `json:"created_at"`
+    UpdatedAt      time.Time `json:"updated_at"`
 }
 
 type Size struct {

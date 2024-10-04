@@ -30,6 +30,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			p.price_old, 
 			p.category_id, 
 			cat.name AS category, 
+			p.subcategory_id,
+			subcat.name AS subcategory,
 			p.color_id, 
 			cl.name AS color, 
 			p.thumbnail,
@@ -39,11 +41,12 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
 		FROM products p
 		LEFT JOIN categories cat ON p.category_id = cat.id
+		LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 		LEFT JOIN colors cl ON p.color_id = cl.id
 		LEFT JOIN images img ON p.id = img.product_id
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
 		LEFT JOIN sizes s ON ps.size_id = s.id
-		GROUP BY p.id, cat.name, cl.name
+		GROUP BY p.id, cat.name, subcat.name, cl.name
 		ORDER BY p.id
 	`
 
