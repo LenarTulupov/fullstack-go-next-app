@@ -8,6 +8,7 @@ import Container from "@/components/ui/container/container";
 import ProductsGrid from "@/components/ui/products-grid/products-grid";
 // import Card from "@/components/card/card";
 import styles from './page.module.scss'
+import Card from "@/components/card/card";
 
 export default function Page() {
   const dispatch = useDispatch();
@@ -34,12 +35,26 @@ export default function Page() {
     <div className={styles.all}>
       <Container>
         <ProductsGrid>
-          {products.map((product) => (
+          {products.map((product) => {
+            return (
+              <Card
+                key={product.id}
+                title={product.title}
+                src={product.images[0].image_url}
+                alt={product.title}
+                price_new={product.price_new}
+                price_old={product.price_old}
+                sizes={product.sizes}
+              />
+            )
+          })}
+
+          {/* {products.map((product) => (
             <div key={product.id}>
               {product.title}
             </div>
           ))
-          }
+          } */}
           {/* {products.map((product) => {
             const imageUrl =
               product.product_colors[0].product_color_images[0].image_path;

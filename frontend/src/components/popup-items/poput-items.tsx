@@ -7,7 +7,9 @@ interface IPopupItems {
   items: ISize[];
 }
 
+
 export default function PopupItems({ items }: IPopupItems) {
+  console.log(items)
   return (
     <div className={styles['popup-items']}>
       <div className={styles['popup-items__content']}>
