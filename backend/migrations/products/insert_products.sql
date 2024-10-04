@@ -73,3 +73,47 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (2, 5, 0),
 (2, 6, 0)
 ON CONFLICT (product_id, size_id) DO NOTHING; 
+
+-- Третий продукта
+INSERT INTO products (
+  title, 
+  description, 
+  price_new, 
+  price_old, 
+  quantity, 
+  available, 
+  category_id, 
+  color_id, 
+  thumbnail
+)
+VALUES 
+(
+  'SUPER STRETCH TAPERED TAILORED TROUSER',
+  'Work clothes don’t have to be boring, and these work trousers are a secure style. Slightly more formal attire, these are tailored, high waisted, and tapered at the ankle. Choose between button or zip-up detail, these are smart pants that are sharply tailored, serving some serious attitude. Always a practical piece to have in your wardrobe, throw these on and prepare to impress in any professional setting or scenario.',
+  20.00, 
+  25.00,
+  0,
+  FALSE,
+  5,
+  3, 
+  NULL 
+)
+ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO images (image_url, product_id) VALUES
+('https://media.boohoo.com/i/boohoo/fzz77463_black_xl/female-black-super-stretch-tapered-tailored-trouser/?w=900&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 3),
+('https://media.boohoo.com/i/boohoo/fzz77463_black_xl_1/female-black-super-stretch-tapered-tailored-trouser', 3),
+('https://media.boohoo.com/i/boohoo/fzz77463_black_xl_2/female-black-super-stretch-tapered-tailored-trouser', 3),
+('https://media.boohoo.com/i/boohoo/fzz77463_black_xl_3/female-black-super-stretch-tapered-tailored-trouser', 3)
+ON CONFLICT (image_url, product_id) DO NOTHING; 
+
+UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 3 LIMIT 1) WHERE id = 3;
+
+INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
+(3, 1, 7), 
+(3, 2, 4), 
+(3, 3, 0), 
+(3, 4, 0), 
+(3, 5, 1), 
+(3, 6, 0)
+ON CONFLICT (product_id, size_id) DO NOTHING;  
