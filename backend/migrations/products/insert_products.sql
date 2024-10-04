@@ -117,3 +117,48 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (3, 5, 1), 
 (3, 6, 0)
 ON CONFLICT (product_id, size_id) DO NOTHING;  
+
+-- Forth product
+
+INSERT INTO products (
+  title, 
+  description, 
+  price_new, 
+  price_old, 
+  quantity, 
+  available, 
+  category_id, 
+  color_id, 
+  thumbnail
+)
+VALUES 
+(
+  'BUTTON UP FESTIVAL MAC',
+  'Got a festival coming up? Practical, statement making, and perfect for dancing in, be prepared to take on whatever the weather decides to throw at you with our festival jackets. Get your rave on in a waterproof festival rain mac or bomber, or switch it up for a festival parka with a tassel trim, or a shredded denim jacket with floral embroidery.',
+  19.80, 
+  22.00,
+  0,
+  FALSE,
+  3,
+  4, 
+  NULL 
+)
+ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO images (image_url, product_id) VALUES
+('https://media.boohoo.com/i/boohoo/gzz91994_stone_xl/female-stone-button-up-festival-mac-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 4),
+('https://media.boohoo.com/i/boohoo/gzz91994_stone_xl_1/female-stone-button-up-festival-mac-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 4),
+('https://media.boohoo.com/i/boohoo/gzz91994_stone_xl_2/female-stone-button-up-festival-mac-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 4),
+('https://media.boohoo.com/i/boohoo/gzz91994_stone_xl_3/female-stone-button-up-festival-mac-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 4)
+ON CONFLICT (image_url, product_id) DO NOTHING; 
+
+UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 4 LIMIT 1) WHERE id = 4;
+
+INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
+(4, 1, 2), 
+(4, 2, 1), 
+(4, 3, 3), 
+(4, 4, 2), 
+(4, 5, 4), 
+(4, 6, 8)
+ON CONFLICT (product_id, size_id) DO NOTHING;  
