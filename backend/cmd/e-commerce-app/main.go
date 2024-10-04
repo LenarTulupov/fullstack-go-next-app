@@ -65,6 +65,8 @@ func main() {
     executeSchema("products", "create_images.sql")
     executeSchema("products", "create_product_sizes.sql")
     // Дабаление данных в таблицы
+    executeSQL("products", "insert_categories.sql")
+    executeSQL("products", "insert_colors.sql")
     executeSQL("products", "insert_products.sql")
 
     // Настройка роутера
