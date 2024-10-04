@@ -10,3 +10,5 @@ export interface ICard {
   alt: string;
   sizes: ISize[];
 }
+
+

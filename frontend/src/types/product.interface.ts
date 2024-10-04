@@ -2,7 +2,7 @@ import { ISize } from "./sizes.interface";
 
 export interface IProduct {
   id: number;
-  image: string;
+  images: IImages[];
   price_new: string;
   price_old: string;
   title: string;
@@ -21,6 +21,11 @@ interface IProductColorImages {
 
 interface IImagePath {
   image_path: string;
+}
+
+export interface IImages {
+  id: number;
+  image_url: string;
 }
 
 
