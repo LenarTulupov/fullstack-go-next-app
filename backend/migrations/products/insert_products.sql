@@ -88,6 +88,7 @@ INSERT INTO products (
   quantity, 
   available, 
   category_id, 
+  subcategory_id,
   color_id, 
   thumbnail
 )
@@ -134,6 +135,7 @@ INSERT INTO products (
   quantity, 
   available, 
   category_id, 
+  subcategory_id,
   color_id, 
   thumbnail
 )
