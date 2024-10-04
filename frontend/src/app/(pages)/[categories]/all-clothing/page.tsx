@@ -39,6 +39,7 @@ export default function Page() {
             return (
               <Card
                 key={product.id}
+                id={product.id}
                 title={product.title}
                 src={product.images[0].image_url}
                 alt={product.title}
