@@ -67,6 +67,7 @@ func main() {
     // Дабаление данных в таблицы
     executeSQL("products", "insert_categories.sql")
     executeSQL("products", "insert_colors.sql")
+    executeSQL("products", "insert_sizes.sql")
     executeSQL("products", "insert_products.sql")
 
     // Настройка роутера
