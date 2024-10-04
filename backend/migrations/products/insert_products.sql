@@ -27,7 +27,7 @@ VALUES
 ),
 (
   'SUPER STRETCH TAPERED TAILORED TROUSER',
-  'Another color option for the SUPER STRETCH TAPERED TAILORED TROUSER, offering the same fit and style.',
+  'Work clothes don’t have to be boring, and these work trousers are a secure style. Slightly more formal attire, these are tailored, high waisted, and tapered at the ankle. Choose between button or zip-up detail, these are smart pants that are sharply tailored, serving some serious attitude. Always a practical piece to have in your wardrobe, throw these on and prepare to impress in any professional setting or scenario.',
   20.00, 
   25.00,
   0,
