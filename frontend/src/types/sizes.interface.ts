@@ -3,4 +3,5 @@ export interface ISize {
   abbreviation: string;
   name?: string;
   description?: string;
+  available?: boolean;
 }
