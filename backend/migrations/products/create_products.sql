@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS products (
     price_old DECIMAL(10, 2),
     quantity INT NOT NULL,
     available BOOLEAN NOT NULL,
-    category_id INT REFERENCES categories(id) ON DELETE SET NULL,
     subcategory_id INT,
     color_id INT REFERENCES colors(id),
     thumbnail VARCHAR(255),

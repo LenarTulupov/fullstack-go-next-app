@@ -1,7 +1,4 @@
 INSERT INTO colors (name) 
-VALUES ('beige'), ('blue'), ('black') 
+VALUES ('beige'), ('blue'), ('black'), ('stone'), ('green') 
 ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO colors (name) 
-VALUES ('stone') 
-ON CONFLICT (name) DO NOTHING;

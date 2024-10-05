@@ -10,7 +10,6 @@ INSERT INTO products (
   price_old, 
   quantity, 
   available, 
-  category_id, 
   subcategory_id,
   color_id, 
   thumbnail
@@ -23,7 +22,6 @@ VALUES
   25.00,
   0,
   FALSE,
-  NULL, -- Это ID категории '...'
   1,
   1, 
   NULL -- Временно NULL, мы обновим позже
@@ -35,7 +33,6 @@ VALUES
   25.00,
   0,
   FALSE,
-  NULL, -- Это также ID категории 'trousers'
   1,
   2, 
   NULL -- Временно NULL, мы обновим позже
@@ -86,7 +83,6 @@ INSERT INTO products (
   price_old, 
   quantity, 
   available, 
-  category_id, 
   subcategory_id,
   color_id, 
   thumbnail
@@ -99,7 +95,6 @@ VALUES
   25.00,
   0,
   FALSE,
-  NULL,
   1,
   3, 
   NULL 
@@ -133,7 +128,6 @@ INSERT INTO products (
   price_old, 
   quantity, 
   available, 
-  category_id, 
   subcategory_id,
   color_id, 
   thumbnail
@@ -146,12 +140,14 @@ VALUES
   22.00,
   0,
   FALSE,
-  3,
   2,
   4, 
   NULL 
 )
 ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO product_categories (product_id, category_id) 
+VALUES (4, 3);
 
 INSERT INTO images (image_url, product_id) VALUES
 ('https://media.boohoo.com/i/boohoo/gzz91994_stone_xl/female-stone-button-up-festival-mac-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 4),
@@ -169,4 +165,52 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (4, 4, 2), 
 (4, 5, 4), 
 (4, 6, 8)
+ON CONFLICT (product_id, size_id) DO NOTHING;  
+
+-- Fifth product
+
+INSERT INTO products (
+  title, 
+  description, 
+  price_new, 
+  price_old, 
+  quantity, 
+  available, 
+  subcategory_id,
+  color_id, 
+  thumbnail
+)
+VALUES 
+(
+  'SHIRRED TRIANGLE BIKINI TOP',
+  'You`ll have all eyes on you this summer in this triangle bikini. Getting its name from the two triangle-shaped pieces of fabric that form each cup, this style is a classic silhouette that`s flattering for all sizes. Look on point in knot-tie triangle bikini tops or bring the heat in a mesh detail styles. This one would look fire with matching bottoms, fine gold jewellery, heeled wedges and an oversized beach bag. It`s poolside glam that you`ll never want to take off.',
+  3.00, 
+  12.00,
+  0,
+  FALSE,
+  3,
+  5, 
+  NULL 
+)
+ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO product_categories (product_id, category_id) 
+VALUES (5, 2), (5, 3);
+
+INSERT INTO images (image_url, product_id) VALUES
+('https://media.boohoo.com/i/boohoo/gzz02901_green_xl/female-green-shirred-triangle-bikini-top-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 5),
+('https://media.boohoo.com/i/boohoo/gzz02901_green_xl_1/female-shirred-triangle-bikini-top-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 5),
+('https://media.boohoo.com/i/boohoo/gzz02901_green_xl_2/female-shirred-triangle-bikini-top-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 5),
+('https://media.boohoo.com/i/boohoo/gzz02901_green_xl_3/female-shirred-triangle-bikini-top-?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 5)
+ON CONFLICT (image_url, product_id) DO NOTHING; 
+
+UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 5 LIMIT 1) WHERE id = 5;
+
+INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
+(5, 1, 17), 
+(5, 2, 19), 
+(5, 3, 45), 
+(5, 4, 20), 
+(5, 5, 11), 
+(5, 6, 9)
 ON CONFLICT (product_id, size_id) DO NOTHING;  

@@ -2,9 +2,9 @@ package repository
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"api/pkg/models/product"
-	"encoding/json"
 )
 
 type ProductRepository interface {
@@ -22,32 +22,33 @@ func NewProductRepository(db *sql.DB) ProductRepository {
 
 func (r *productRepository) GetAll() ([]models.Product, error) {
 	query := `
-		SELECT 
-			p.id AS product_id,
-			p.title, 
-			p.description, 
-			p.price_new, 
-			p.price_old, 
-			p.category_id, 
-			cat.name AS category, 
-			p.subcategory_id,
-			subcat.name AS subcategory,
-			p.color_id, 
-			cl.name AS color, 
-			p.thumbnail,
-			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
-			FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
-			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity))
-			FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
-		FROM products p
-		LEFT JOIN categories cat ON p.category_id = cat.id
-		LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
-		LEFT JOIN colors cl ON p.color_id = cl.id
-		LEFT JOIN images img ON p.id = img.product_id
-		LEFT JOIN product_sizes ps ON p.id = ps.product_id
-		LEFT JOIN sizes s ON ps.size_id = s.id
-		GROUP BY p.id, cat.name, subcat.name, cl.name
-		ORDER BY p.id
+	SELECT 
+		p.id AS product_id,
+		p.title, 
+		p.description, 
+		p.price_new, 
+		p.price_old, 
+		p.subcategory_id,
+		subcat.name AS subcategory,
+		p.color_id, 
+		cl.name AS color, 
+		p.thumbnail,
+		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
+		FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
+		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
+		FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes,
+		COALESCE(JSON_AGG(DISTINCT cat.name)
+		FILTER (WHERE cat.id IS NOT NULL), '{}') AS categories
+	FROM products p
+	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
+	LEFT JOIN colors cl ON p.color_id = cl.id
+	LEFT JOIN images img ON p.id = img.product_id
+	LEFT JOIN product_sizes ps ON p.id = ps.product_id
+	LEFT JOIN sizes s ON ps.size_id = s.id
+	LEFT JOIN product_categories pc ON p.id = pc.product_id
+	LEFT JOIN categories cat ON pc.category_id = cat.id
+	GROUP BY p.id, subcat.name, cl.name
+	ORDER BY p.id
 	`
 
 	rows, err := r.db.Query(query)
@@ -61,19 +62,18 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 	for rows.Next() {
 		var product models.Product
-		var imagesJSON, sizesJSON string
+		var imagesJSON, sizesJSON, categoriesJSON string
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.CategoryID, &product.Category, &product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
-			&imagesJSON, &sizesJSON,
+			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
+			&imagesJSON, &sizesJSON, &categoriesJSON,
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
 
-		// Парсим JSON строки в структуры
 		product.Images, err = parseImages(imagesJSON)
 		if err != nil {
 			log.Printf("Error parsing images: %v", err)
@@ -86,25 +86,22 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			return nil, err
 		}
 
-		// Подсчитываем общее количество и доступность
+		json.Unmarshal([]byte(categoriesJSON), &product.Categories)
+
 		totalQuantity := 0
 		hasAvailableSize := false
 
 		for i := range product.Sizes {
 			size := &product.Sizes[i]
-
-			// Логика доступности на уровне размера
 			if size.Quantity > 0 {
 				size.Available = true
 				hasAvailableSize = true
 			} else {
 				size.Available = false
 			}
-
 			totalQuantity += size.Quantity
 		}
 
-		// Доступность продукта
 		product.Quantity = totalQuantity
 		product.Available = hasAvailableSize
 
@@ -114,13 +111,14 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	return products, nil
 }
 
-// Парсинг JSON строк в слайсы структур
+// parseImages парсит JSON строку в слайс моделей Image
 func parseImages(jsonData string) ([]models.Image, error) {
 	var images []models.Image
 	err := json.Unmarshal([]byte(jsonData), &images)
 	return images, err
 }
 
+// parseSizes парсит JSON строку в слайс моделей Size
 func parseSizes(jsonData string) ([]models.Size, error) {
 	var sizes []models.Size
 	err := json.Unmarshal([]byte(jsonData), &sizes)
@@ -128,7 +126,6 @@ func parseSizes(jsonData string) ([]models.Size, error) {
 }
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
-	// Оставляем как есть, можно добавить агрегацию если нужно
 	var product models.Product
 	var images []models.Image
 
@@ -139,13 +136,15 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			p.description, 
 			p.price_new, 
 			p.price_old, 
-			p.category_id, 
+			p.subcategory_id,
+			subcat.name AS subcategory,
 			p.color_id, 
+			cl.name AS color, 
 			p.thumbnail,
 			img.id, 
 			img.image_url
 		FROM products p
-		LEFT JOIN categories cat ON p.category_id = cat.id
+		LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 		LEFT JOIN colors cl ON p.color_id = cl.id
 		LEFT JOIN images img ON p.id = img.product_id
 		WHERE p.id = $1
@@ -163,7 +162,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.CategoryID, &product.Category, &product.ColorID, &product.Color, &product.Thumbnail,
+			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imgID, &imgURL,
 		)
 		if err != nil {

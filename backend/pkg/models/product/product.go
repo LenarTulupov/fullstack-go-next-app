@@ -12,7 +12,7 @@ type Product struct {
     PriceOld       float64   `json:"price_old,omitempty"`
     Quantity       int       `json:"quantity"`
     Available      bool      `json:"available"`
-    Category       *string    `json:"category,omitempty"`
+    Categories     []string  `json:"categories"`
     Subcategory    string    `json:"subcategory"`
     Color          string    `json:"color"`
     Sizes          []Size    `json:"sizes"`
