@@ -214,3 +214,51 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (5, 5, 11), 
 (5, 6, 9)
 ON CONFLICT (product_id, size_id) DO NOTHING;  
+
+-- Sixth product
+
+INSERT INTO products (
+  title, 
+  description, 
+  price_new, 
+  price_old, 
+  quantity, 
+  available, 
+  subcategory_id,
+  color_id, 
+  thumbnail
+)
+VALUES 
+(
+  '3 PACK LEOPARD PAISLEY TIE BIKINI KIMONO SET',
+  'Protect your skin from the sun with this beach cover up from our latest beachwear collection. Designed to keep your skin out of the sun on those super hot beach days, our cover ups for the beach strike the perfect balance between practicality and style. Need style inspo? Team with a matching bikini and sandals for beach club plans. Golden hour awaits...just add a beach bag and sunglasses and you`re good to go!',
+  33.50, 
+  35.00,
+  0,
+  FALSE,
+  3,
+  6, 
+  NULL 
+)
+ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO product_categories (product_id, category_id) 
+VALUES (6, 2), (6, 3);
+
+INSERT INTO images (image_url, product_id) VALUES
+('https://media.boohoo.com/i/boohoo/gzz19581_pink_xl/female-pink-3-pack-leopard-paisley-tie-bikini-kimono-set?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 6),
+('https://media.boohoo.com/i/boohoo/gzz19581_pink_xl_1/female-pink-3-pack-leopard-paisley-tie-bikini-kimono-set?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 6),
+('https://media.boohoo.com/i/boohoo/gzz19581_pink_xl_2/female-pink-3-pack-leopard-paisley-tie-bikini-kimono-set?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 6),
+('https://media.boohoo.com/i/boohoo/gzz19581_pink_xl_3/female-pink-3-pack-leopard-paisley-tie-bikini-kimono-set?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 6)
+ON CONFLICT (image_url, product_id) DO NOTHING; 
+
+UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 6 LIMIT 1) WHERE id = 6;
+
+INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
+(6, 1, 3), 
+(6, 2, 2), 
+(6, 3, 0), 
+(6, 4, 0), 
+(6, 5, 1), 
+(6, 6, 9)
+ON CONFLICT (product_id, size_id) DO NOTHING;  
