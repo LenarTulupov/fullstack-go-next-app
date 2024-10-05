@@ -53,6 +53,7 @@ export default function Card({
       {isAddToCartClick &&
         <PopupItems
           items={sizes}
+          handleAddToCartClick={handleAddToCartClick}
         />
       }
     </div>

@@ -11,6 +11,10 @@
   &:hover {
     background-color: var(--black-hover);
   }
+  &:disabled {
+    color: #b0b1af;
+    background-color: #f4f4f4;
+  }
 }
 
 .white {

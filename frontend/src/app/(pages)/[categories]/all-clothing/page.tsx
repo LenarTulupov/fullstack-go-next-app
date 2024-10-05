@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { productsArray, setProducts } from "@/store/products/productsSlice";
 import Container from "@/components/ui/container/container";
