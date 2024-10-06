@@ -58,8 +58,8 @@
 }
 @media(max-width: 480px) {
   .items-wrapper {
-    // flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    gap: 10px !important;
+
   }
 }
