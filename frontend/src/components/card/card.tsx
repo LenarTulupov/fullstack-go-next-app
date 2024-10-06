@@ -10,6 +10,7 @@ import Tooltip from "../ui/tooltip/tooltip";
 import PopupItems from "../popup-items/poput-items";
 import { useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
+import Color from "../ui/color/color";
 
 export default function Card({
   id,
@@ -18,7 +19,8 @@ export default function Card({
   title,
   sizes,
   price_new,
-  price_old }: ICard) {
+  price_old,
+  color }: ICard) {
   const [isAddToCartClick, setIsAddToCartClick] = useState<boolean>(false);
 
   const handleAddToCartClick = () => {
@@ -30,13 +32,16 @@ export default function Card({
       <Link href={`/product/${id}`} className={styles.card__link}>
         <CardImage src={src} alt={alt} />
       </Link>
-      <Tooltip position="bottom" content="Add product to cart">
-        <FavoriteButton className={styles['card__favorite-button']} />
-      </Tooltip>
+      <div className={styles['tooltip-wrapper']}>
+        <Tooltip position="bottom" content="Add product to cart">
+          <FavoriteButton className={styles['card__favorite-button']} />
+        </Tooltip>
+      </div>
       <div className={styles['card__product-info']}>
         <Link href={`/product/${id}`}>
           <Title>{title}</Title>
         </Link>
+        <Color color={color}/>
         <div className={styles.prices}>
           <Price className={styles.prices__old} price={price_old} />
           <Price price={price_new} />

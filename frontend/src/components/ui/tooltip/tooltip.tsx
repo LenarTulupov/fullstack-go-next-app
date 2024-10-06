@@ -8,10 +8,10 @@ interface ITooltip {
   className?: string;
 }
 
-export default function Tooltip({ 
-  children, 
-  position, 
-  content, 
+export default function Tooltip({
+  children,
+  position,
+  content,
   className }: ITooltip) {
   const [isVisible, setIsVisible] = useState(false);
 

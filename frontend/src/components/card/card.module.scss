@@ -1,19 +1,14 @@
 .card {
   position: relative;
   min-height: 500px;
-  &__favorite-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
   &__product-info {
-    // display: grid;
-    // grid-template-rows: repeat(4, auto);
-
-    // padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    min-height: 170px;
   }
 }
-
 .prices {
   display: flex;
   justify-content: space-between;
@@ -40,4 +35,9 @@
 .card__button_active {
   background-color: #fff;
   color: black;
+}
+.tooltip-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }

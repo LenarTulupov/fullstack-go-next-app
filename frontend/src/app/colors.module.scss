@@ -1,0 +1,14 @@
+$colors: (
+  beige: #e1d9d1,
+  blue: #2d396b,
+  black: #000000,
+  stone: #D5D3CF,
+  green: #E1EACF,
+  pink: #ffc0cb
+);
+
+@each $name, $value in $colors {
+  .color-#{$name} {
+    background-color: $value;
+  }
+}

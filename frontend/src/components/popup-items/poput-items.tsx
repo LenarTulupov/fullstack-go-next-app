@@ -10,10 +10,13 @@ interface IPopupItems {
   handleAddToCartClick: () => void;
 }
 
-export default function PopupItems({ items, handleAddToCartClick, isAddToCartClick }: IPopupItems) {
-  console.log(isAddToCartClick)
+export default function PopupItems({
+  items, handleAddToCartClick, isAddToCartClick }: IPopupItems) {
   return (
-    <div className={`${styles['popup-items']} ${isAddToCartClick ? styles.open : ''}`}>
+    <div className={`
+      ${styles['popup-items']} 
+      ${isAddToCartClick ? styles.open : ''}
+    `}>
       <div className={styles['popup-items__content']}>
         <div className={styles['flex-col']}>
           <Title weight='bold'>

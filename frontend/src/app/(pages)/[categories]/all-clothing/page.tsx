@@ -45,6 +45,7 @@ export default function Page() {
                 price_new={product.price_new}
                 price_old={product.price_old}
                 sizes={product.sizes}
+                color={product.color}
               />
             )
           })}

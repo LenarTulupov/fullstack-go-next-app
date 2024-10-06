@@ -8,6 +8,7 @@ export interface IProduct {
   title: string;
   product_colors: IProductColorImages[];
   sizes: ISize[];
+  color: string;
 };
 
 interface IProductColor {

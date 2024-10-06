@@ -9,6 +9,7 @@ export interface ICard {
   src: string;
   alt: string;
   sizes: ISize[];
+  color: string;
 }
 
 
