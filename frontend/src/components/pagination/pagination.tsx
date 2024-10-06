@@ -34,6 +34,7 @@ export default function Pagination({ products }: IPagination) {
               sizes={product.sizes}
               src={imageUrl}
               alt={product.title}
+              color={product.color}
             />
           )
         })}
