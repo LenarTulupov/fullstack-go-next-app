@@ -6,27 +6,30 @@ import CloseButton from '../ui/close-button/close-button';
 
 interface IPopupItems {
   items: ISize[];
+  isAddToCartClick: boolean;
   handleAddToCartClick: () => void;
 }
 
-export default function PopupItems({ items, handleAddToCartClick }: IPopupItems) {
+export default function PopupItems({ items, handleAddToCartClick, isAddToCartClick }: IPopupItems) {
+  console.log(isAddToCartClick)
   return (
-    <div className={styles['popup-items']}>
+    <div className={`${styles['popup-items']} ${isAddToCartClick ? styles.open : ''}`}>
       <div className={styles['popup-items__content']}>
         <div className={styles['flex-col']}>
           <Title weight='bold'>
             Choose the size
           </Title>
-          <CloseButton onClick={handleAddToCartClick}/>
+          <CloseButton onClick={handleAddToCartClick} />
         </div>
         <div className={styles['items-wrapper']}>
           {items.map((item) => {
-            const activeClass = item.available 
-            ? styles['button_available'] 
-            : styles['button_unavailable']
             return (
-              <Button key={item.id} className={activeClass} disabled={!item.available}>
-                 {item.abbreviation}
+              <Button
+                key={item.id}
+                onClick={handleAddToCartClick}
+                disabled={!item.available}
+              >
+                {item.abbreviation}
               </Button>
             )
           })}

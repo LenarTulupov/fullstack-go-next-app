@@ -2,6 +2,10 @@
   border-radius: var(--border-radius);
   outline: none;
   border: none;
+  cursor: pointer;
+  &:disabled {
+    cursor: default;
+  }
 }
 
 .black {

@@ -50,12 +50,11 @@ export default function Card({
           <span>Add To Cart</span>
         </Button>
       </div>
-      {isAddToCartClick &&
-        <PopupItems
-          items={sizes}
-          handleAddToCartClick={handleAddToCartClick}
-        />
-      }
+      <PopupItems
+        items={sizes}
+        handleAddToCartClick={handleAddToCartClick}
+        isAddToCartClick={isAddToCartClick}
+      />
     </div>
   )
 };

@@ -8,6 +8,7 @@
   border: none;
   outline: none;
   transition: transform .3s;
+  cursor: pointer;
   &:hover {
     transform: rotate(-180deg);
     background-color: var(--black-hover);
