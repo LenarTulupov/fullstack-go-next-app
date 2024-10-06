@@ -9,6 +9,7 @@ export interface IProduct {
   product_colors: IProductColorImages[];
   sizes: ISize[];
   color: string;
+  thumbnail: string;
 };
 
 interface IProductColor {

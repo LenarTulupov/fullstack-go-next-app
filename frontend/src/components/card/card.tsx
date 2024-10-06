@@ -20,7 +20,8 @@ export default function Card({
   sizes,
   price_new,
   price_old,
-  color }: ICard) {
+  color,
+  handleFavorite }: ICard) {
   const [isAddToCartClick, setIsAddToCartClick] = useState<boolean>(false);
 
   const handleAddToCartClick = () => {
@@ -34,7 +35,9 @@ export default function Card({
       </Link>
       <div className={styles['tooltip-wrapper']}>
         <Tooltip position="bottom" content="Add product to cart">
-          <FavoriteButton className={styles['card__favorite-button']} />
+          <FavoriteButton 
+            onClick={handleFavorite}
+            className={styles['card__favorite-button']} />
         </Tooltip>
       </div>
       <div className={styles['card__product-info']}>

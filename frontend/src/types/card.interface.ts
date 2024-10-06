@@ -1,3 +1,4 @@
+import { IProduct } from "./product.interface";
 import { ISize } from "./sizes.interface";
 
 export interface ICard {
@@ -10,6 +11,7 @@ export interface ICard {
   alt: string;
   sizes: ISize[];
   color: string;
+  handleFavorite: () => void;
 }
 
 

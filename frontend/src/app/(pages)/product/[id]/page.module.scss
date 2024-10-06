@@ -1,0 +1,19 @@
+.product__content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.images {
+  display: flex;
+  gap: 10px;
+  &__all {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100px;
+    height: auto;
+  }
+  &__main {
+    width: 420px;
+  }
+}

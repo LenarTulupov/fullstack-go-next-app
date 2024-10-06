@@ -2,11 +2,18 @@ import styles from './favorite-button.module.scss'
 
 interface IFavoriteButton {
   className?: string;
+  onClick: () => void;
 }
 
-export default function FavoriteButton({ className }: IFavoriteButton ) {
+export default function FavoriteButton({ className, onClick }: IFavoriteButton ) {
   return (
-    <button className={`${styles['favorite-button']} ${className || ''}`}>
+    <button 
+      className={`
+        ${styles['favorite-button']} 
+        ${className || ''}
+      `}
+      onClick={onClick}
+    >
       <svg
         width="18"
         height="18"

@@ -127,7 +127,8 @@ func parseSizes(jsonData string) ([]models.Size, error) {
 
 func (r *productRepository) GetByID(id int) (models.Product, error) {
 	var product models.Product
-	var images []models.Image
+	var imagesJSON string
+	var sizesJSON string 
 
 	query := `
 		SELECT 
@@ -141,14 +142,20 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			p.color_id, 
 			cl.name AS color, 
 			p.thumbnail,
-			img.id, 
-			img.image_url
+			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
+				FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
+			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
+				FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes
 		FROM products p
 		LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 		LEFT JOIN colors cl ON p.color_id = cl.id
 		LEFT JOIN images img ON p.id = img.product_id
+		LEFT JOIN product_sizes ps ON p.id = ps.product_id
+		LEFT JOIN sizes s ON ps.size_id = s.id
 		WHERE p.id = $1
+		GROUP BY p.id, subcat.name, cl.name
 	`
+
 	rows, err := r.db.Query(query, id)
 	if err != nil {
 		log.Printf("Error querying product by ID: %v", err)
@@ -156,26 +163,48 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	}
 	defer rows.Close()
 
-	for rows.Next() {
-		var imgID sql.NullInt32
-		var imgURL sql.NullString
-
+	if rows.Next() {
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
-			&imgID, &imgURL,
+			&imagesJSON, 
+			&sizesJSON,
 		)
 		if err != nil {
 			log.Printf("Error scanning row: %v", err)
 			return product, err
 		}
 
-		if imgID.Valid {
-			images = append(images, models.Image{ID: int(imgID.Int32), ImageURL: imgURL.String})
+		// Парсим данные изображений
+		product.Images, err = parseImages(imagesJSON) 
+		if err != nil {
+			log.Printf("Error parsing images: %v", err)
+			return product, err
+		}
+
+		// Парсим данные размеров
+		product.Sizes, err = parseSizes(sizesJSON)
+		if err != nil {
+			log.Printf("Error parsing sizes: %v", err)
+			return product, err
+		}
+
+		// Подсчитываем количество доступных размеров
+		product.Quantity = 0
+		product.Available = false
+
+		for i := range product.Sizes {
+			size := &product.Sizes[i]
+			if size.Quantity > 0 {
+				size.Available = true
+				product.Available = true
+			} else {
+				size.Available = false
+			}
+			product.Quantity += size.Quantity
 		}
 	}
 
-	product.Images = images
-
 	return product, nil
 }
+

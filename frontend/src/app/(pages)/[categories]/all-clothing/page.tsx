@@ -8,10 +8,24 @@ import Container from "@/components/ui/container/container";
 import ProductsGrid from "@/components/ui/products-grid/products-grid";
 import styles from './page.module.scss'
 import Card from "@/components/card/card";
+import { addFavorite, removeFavorite, selectFavoriteProducts } from "@/store/favorite-button/favoriteButtonSlice";
+import { IProduct } from "@/types/product.interface";
 
 export default function Page() {
   const dispatch = useDispatch();
   const products = useSelector(productsArray);
+  const favoriteProducts = useSelector(selectFavoriteProducts);
+
+  const handleAddToFavorite = (product: IProduct) => {
+    const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
+
+    if (isFavorite) {
+      dispatch(removeFavorite(product.id));
+    } else {
+      dispatch(addFavorite(product));
+    }
+  };
+
 
   useEffect(() => {
     async function fetchProducts() {
@@ -35,6 +49,8 @@ export default function Page() {
       <Container>
         <ProductsGrid>
           {products.map((product) => {
+             const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
+             console.log(isFavorite)
             return (
               <Card
                 key={product.id}
@@ -46,6 +62,7 @@ export default function Page() {
                 price_old={product.price_old}
                 sizes={product.sizes}
                 color={product.color}
+                handleFavorite={() => handleAddToFavorite(product)}
               />
             )
           })}
