@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { productsArray, setProducts } from "@/store/products/productsSlice";
 import Container from "@/components/ui/container/container";
-// import Pagination from "@/components/pagination/pagination";
 import ProductsGrid from "@/components/ui/products-grid/products-grid";
 import styles from './page.module.scss'
 import Card from "@/components/card/card";
@@ -49,25 +48,26 @@ export default function Page() {
       <Container>
         <ProductsGrid>
           {products.map((product) => {
-             const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
-             console.log(isFavorite)
+            const isFavorite = favoriteProducts.some(
+              favProduct => favProduct.id === product.id);
+            console.log(isFavorite)
             return (
               <Card
                 key={product.id}
                 id={product.id}
                 title={product.title}
-                src={product.images[0].image_url}
+                images={product.images}
                 alt={product.title}
                 price_new={product.price_new}
                 price_old={product.price_old}
                 sizes={product.sizes}
                 color={product.color}
                 handleFavorite={() => handleAddToFavorite(product)}
+                description={product.description}
               />
             )
           })}
         </ProductsGrid>
-        {/* <Pagination products={products} /> */}
       </Container>
     </div>
   )

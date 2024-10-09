@@ -2,7 +2,7 @@ import { ISize } from "./sizes.interface";
 
 export interface IProduct {
   id: number;
-  images: IImages[];
+  images: IImages[] ;
   price_new: string;
   price_old: string;
   title: string;
@@ -10,6 +10,7 @@ export interface IProduct {
   sizes: ISize[];
   color: string;
   thumbnail: string;
+  description: string;
 };
 
 interface IProductColor {

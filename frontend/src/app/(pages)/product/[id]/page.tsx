@@ -8,15 +8,25 @@ import styles from './page.module.scss';
 import Container from '@/components/ui/container/container';
 import Image from 'next/image';
 import Title from '@/components/ui/title/title';
-import Sizes from '@/components/sizes/sizes';
-
-
+import FavoriteButton from '@/components/ui/favorite-button/favorite-button';
+import Price from '@/components/ui/price/price';
+import Color from '@/components/ui/color/color';
+import Button from '@/components/ui/button/button';
+import { IoCloseOutline } from 'react-icons/io5';
+import Accordion from '@/components/ui/accordion/accordion';
+import AccordionList from '@/components/ui/accordion/accordion-list';
+import AccordionListItem from '@/components/ui/accordion/accordion-list-item';
 
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const products = useSelector(productsArray);
   const [loading, setLoading] = useState(true);
+  const [isAccordionOpened, setIsAccordionOpened] = useState<boolean>(false);
+
+  const handleAccordion = () => {
+    setIsAccordionOpened(p => !p);
+  }
 
   const product = products.find((product) => product.id === Number(id));
 
@@ -64,10 +74,10 @@ export default function Product() {
             ${styles.images}
           `}>
             <div className={styles.images__all}>
-              {product.images.map((image) => {
-                return (
+              {Array.isArray(product.images) ? (
+                product.images.map((image: { image_url: string }) => (
                   <Image
-                    key={product.id}
+                    key={image.image_url}
                     alt={product.title}
                     src={image.image_url}
                     width={0}
@@ -75,8 +85,10 @@ export default function Product() {
                     layout="responsive"
                     priority
                   />
-                )
-              })}
+                ))
+              ) : (
+                <p>No images available</p>
+              )}
             </div>
             <div className={styles.images__main}>
               <Image
@@ -98,9 +110,51 @@ export default function Product() {
             </Title>
             <div className={styles.description__color}>
               Color: <span>{product.color}</span>
+              <Color color={product.color} />
             </div>
-            {/* <Sizes sizes={product.sizes}/> */}
+            {product.sizes.map((size) => (
+
+              <Button key={size.id} disabled={!size.available}>
+                {/* <Sizes sizes={product.sizes} /> */}
+                {size.abbreviation}
+              </Button>
+            ))}
+            {/* <FavoriteButton /> */}
+            <div className={styles.description__prices}>
+              <Price price={product.price_new} />
+              <Price price={product.price_old} />
+            </div>
+            <button className={styles['description__size-button']}>
+              <Image
+                src={'/size.svg'}
+                alt="size"
+                width={100}
+                height={0}
+                layout='responsive'
+              />
+              <span>Size Chart</span>
+            </button>
+            <Button>Add To Cart</Button>
+            <Accordion
+              title={<Title>Description</Title>}
+              image={<IoCloseOutline />}
+              onClick={handleAccordion}
+            >
+              {isAccordionOpened &&
+                <AccordionList isAccordionOpened={isAccordionOpened}>
+                  <AccordionListItem>
+                    {product.description}
+                  </AccordionListItem>
+                </AccordionList>
+              }
+            </Accordion>
           </div>
+        </div>
+        <div>
+          <Title>
+            recommended
+          </Title>
+
         </div>
       </Container>
     </div>

@@ -9,6 +9,40 @@
     min-height: 170px;
   }
 }
+.image-wrapper {
+  position: relative;
+  &:hover .quick-view,
+  .quick-view:hover {
+    opacity: 1;
+    bottom: 10px;
+    pointer-events: auto;
+  }
+}
+
+.quick-view {
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  background-color: var(--black);
+  transform: translateX(-50%);
+  width: 55%;
+  text-align: center;
+  opacity: 0;
+  transition: bottom 0.5s ease, opacity 0.3s ease, background-color .3s ease;
+  &:hover {
+    background-color: var(--black-hover);
+  }
+  button {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  
+  &_opened {
+    opacity: 1;
+    bottom: 10px;
+  }
+}
+
 .prices {
   display: flex;
   justify-content: space-between;

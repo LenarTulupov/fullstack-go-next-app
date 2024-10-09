@@ -1,4 +1,4 @@
-import { IProduct } from "./product.interface";
+import { IImages } from "./product.interface";
 import { ISize } from "./sizes.interface";
 
 export interface ICard {
@@ -7,11 +7,12 @@ export interface ICard {
   title: string;
   price_new: string;
   price_old: string;
-  src: string;
+  images: IImages[];
   alt: string;
   sizes: ISize[];
   color: string;
   handleFavorite: () => void;
+  description: string;
 }
 
 

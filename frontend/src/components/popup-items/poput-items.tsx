@@ -25,17 +25,19 @@ export default function PopupItems({
           <CloseButton onClick={handleAddToCartClick} />
         </div>
         <div className={styles['items-wrapper']}>
-          {items.map((item) => {
-            return (
-              <Button
-                key={item.id}
-                onClick={handleAddToCartClick}
-                disabled={!item.available}
-              >
-                {item.abbreviation}
-              </Button>
-            )
-          })}
+          {items
+            .filter(item => item.available)
+            .map(item => {
+              return (
+                <Button
+                  key={item.id}
+                  onClick={handleAddToCartClick}
+                  disabled={!item.available}
+                >
+                  {item.abbreviation}
+                </Button>
+              )
+            })}
         </div>
       </div>
     </div>
