@@ -36,20 +36,22 @@ export default function Pagination({ products }: IPagination) {
       <div className={styles.pagination__products}>
 
         {currentProducts.map((product) => {
-          const imageUrl =
-            product.product_colors[0].product_color_images[0].image_path;
+          const isFavorite = favoriteProducts.some(
+            favProduct => favProduct.id === product.id);
+          console.log(isFavorite)
           return (
             <Card
               key={product.id}
               id={product.id}
               title={product.title}
+              images={product.images}
+              alt={product.title}
               price_new={product.price_new}
               price_old={product.price_old}
               sizes={product.sizes}
-              src={imageUrl}
-              alt={product.title}
               color={product.color}
               handleFavorite={() => handleAddToFavorite(product)}
+              description={product.description}
             />
           )
         })}
