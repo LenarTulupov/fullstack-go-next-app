@@ -1,9 +1,22 @@
 .favorite-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  height: 100%;
   background-color: transparent;
-  border: none;
+  padding: 0 9px;
   cursor: pointer;
+  border: none;
+  transition: background-color .1s ease-in-out;
   svg {
     width: 20px;
     height: 20px;
+  }
+}
+.border {
+  border: 1px solid var(--gray) !important;
+  &:hover {
+    background-color: rgba(251, 251, 251, 0.617);
   }
 }

@@ -1,3 +1,18 @@
+.product {
+  &__sizes {
+    display: flex;
+    gap: 10px;
+  }
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    :first-child {
+      flex: 1;
+    }
+  }
+}
+
 .product__content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -18,12 +33,14 @@
   }
 }
 .description {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &__size-button {
     background: transparent;
     border: none;
     display: flex;
     width: 30px;
-    
   }
 }
 .description__prices {

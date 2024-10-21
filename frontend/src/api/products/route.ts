@@ -1,17 +1,15 @@
-import { NextResponse } from 'next/server';
-
-export async function GET() {
+export async function fetchProducts() {
   try {
-    const res = await fetch('https://fullstack-go-next-app.onrender.com/products');
+    const res = await fetch('https://backend-bbpq.onrender.com/products');
     
     if (!res.ok) {
-      throw new Error('Failed to fetch products');
+      throw new Error('Failed to fetch products' + res.statusText);
     }
-    
+
     const data = await res.json();
-    return NextResponse.json(data);
+    return data; 
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+    console.error("Error in fetchProducts:", error);
+    throw error;
   }
 }

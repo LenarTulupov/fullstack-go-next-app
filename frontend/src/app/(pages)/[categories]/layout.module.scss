@@ -1,16 +1,48 @@
 .layout-category {
+  .list-center {
+    &__item {
+      background-color: transparent;
+      border: none;
+      padding: 10px 24px;
+      font-family: var(--font-inter);
+      font-size: 16px;
+      cursor: pointer;
+      &:hover {
+        background-color: var(--gray);
+      }
+    }
+  }
+  .list-end {
+    &__select {
+      background-color: transparent;
+      border: none;
+      padding: 10px 24px;
+      font-family: var(--font-inter);
+      font-size: 16px;
+      cursor: pointer;
+      &:hover {
+        background-color: var(--gray);
+      }
+      &:focus {
+        box-shadow: none;
+        outline: none;
+      }
+    }
+  }
   &__wrapper {
     border-bottom: 1px solid var(--gray);
   }
   &__list {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: var(--header-height);
     &-center {
       display: flex;
       justify-content: center;
       flex-grow: 1;
       gap: 30px;
+      
       .layout-category__item {
         background: transparent;
         border: none;

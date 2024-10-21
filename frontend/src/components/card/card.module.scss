@@ -6,7 +6,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 10px;
-    min-height: 170px;
+    min-height: 210px;
   }
 }
 .image-wrapper {
@@ -35,6 +35,7 @@
   button {
     font-size: 14px;
     text-transform: uppercase;
+    font-weight: 400;
   }
   
   &_opened {
@@ -48,6 +49,9 @@
   justify-content: space-between;
   &__old {
     text-decoration: line-through;
+  }
+  &_active {
+    color: var(--accent-color) !important;
   }
 }
 

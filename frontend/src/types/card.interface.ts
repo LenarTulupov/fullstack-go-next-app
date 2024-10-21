@@ -13,6 +13,8 @@ export interface ICard {
   color: string;
   handleFavorite: () => void;
   description: string;
+  onClick?: () => void;
+  handleAddedToCart?: () => void;
 }
 
 

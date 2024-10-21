@@ -8,10 +8,10 @@ export default function Logo() {
       <Image
         src={logo}
         alt='logo'
-        width={100}
-        height={30}
-        layout='intrinsic'
+        fill
         priority
+        className={styles['logo-image']}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
       />
     </div>
   )

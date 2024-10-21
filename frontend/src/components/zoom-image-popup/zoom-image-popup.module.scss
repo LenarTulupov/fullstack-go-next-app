@@ -1,0 +1,17 @@
+.zoom-wrapper {
+  width: 100%; 
+  height: 624px; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom-in;
+}
+
+.zoom-image {
+  opacity: 0;
+}
+
+.zoom-button {
+  display: none; 
+}

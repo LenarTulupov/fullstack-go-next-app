@@ -1,0 +1,18 @@
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--gray);
+  &__wrapper {
+    padding: 10px 0 10px 295px;
+    width: 100%;
+    background-color: #fff;
+    &-list {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}

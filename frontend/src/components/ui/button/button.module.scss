@@ -3,6 +3,9 @@
   outline: none;
   border: none;
   cursor: pointer;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 15px;
   &:disabled {
     cursor: default;
   }

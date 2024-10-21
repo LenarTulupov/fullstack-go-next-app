@@ -1,0 +1,68 @@
+.card-skeleton {
+  &__image, 
+  .info-section__title-row, 
+  .info-section__color, 
+  .info-section__prices-old, 
+  .info-section__prices-new, 
+  .info-section__button {
+    background: linear-gradient(100deg, #f0f0f0 25%, #f7f7f7 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 3s infinite ease-in-out;
+  }
+
+  &__image {
+    height: 400px;
+  }
+
+  .info-section {
+    padding: 10px;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__title {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 3px;
+      height: 38.67px;
+
+      &-row {
+        height: 19.33px;
+        width: 100%;
+        border-radius: var(--border-radius);
+      }
+    }
+
+    &__color {
+      width: 24px;
+      height: 24px;
+    }
+
+    &__prices {
+      display: flex;
+      justify-content: space-between;
+
+      &-old, &-new {
+        height: 23.33px;
+        width: 55.91px;
+        border-radius: var(--border-radius);
+      }
+    }
+
+    &__button {
+      height: 40px;
+      border-radius: var(--border-radius);
+    }
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}

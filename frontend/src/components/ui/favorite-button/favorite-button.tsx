@@ -3,13 +3,15 @@ import styles from './favorite-button.module.scss'
 interface IFavoriteButton {
   className?: string;
   onClick: () => void;
+  border: boolean;
 }
 
-export default function FavoriteButton({ className, onClick }: IFavoriteButton ) {
+export default function FavoriteButton({ className, onClick, border = true }: IFavoriteButton ) {
   return (
     <button 
       className={`
         ${styles['favorite-button']} 
+        ${border ? styles.border : ''}
         ${className || ''}
       `}
       onClick={onClick}

@@ -11,7 +11,8 @@
   "dependencies": {
     "next": "14.2.11",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-medium-image-zoom": "^5.2.10"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^2.2.7",

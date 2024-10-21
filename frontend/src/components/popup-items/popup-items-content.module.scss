@@ -1,0 +1,13 @@
+.popup-items-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  &__title {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__wrapper {
+    display: flex;
+    gap: 5px;
+  }
+}

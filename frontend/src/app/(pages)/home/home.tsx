@@ -28,6 +28,7 @@ export default function Home() {
                   alt="banner"
                   fill
                   objectFit='cover'
+                  priority
                 />
               </div>
             </Link>

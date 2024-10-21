@@ -1,7 +1,13 @@
-.accordion__toggle {
-  background-color: transparent;
-  border: none;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+.accordion {
+  border-top: 1px solid var(--gray);
+  border-bottom: 1px solid var(--gray);
+  padding: 10px 0;
+  &__toggle {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: 700;
+  }
 }

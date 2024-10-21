@@ -12,7 +12,6 @@ export default function Color({ color }: IColor) {
     console.warn(`Color "${color}" is not defined in styles.`);
     return null;
   }
-  console.log(color)
   return (
     <div className={`${styles.color} ${selectedClass}`}/>
   )

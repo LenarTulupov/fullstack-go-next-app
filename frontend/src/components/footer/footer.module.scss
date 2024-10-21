@@ -1,0 +1,27 @@
+.footer {
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 100px;
+  }
+  &__logo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__menu {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 100px;
+    flex: 1;
+    &-header {
+      margin-bottom: 20px;
+    }
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
