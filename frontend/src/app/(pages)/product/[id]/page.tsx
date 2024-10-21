@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { productsArray, productsData, setProducts } from '@/store/products/productsSlice';
+import { productsData, setProducts } from '@/store/products/productsSlice';
 import styles from './page.module.scss';
 import Container from '@/components/ui/container/container';
 import Title from '@/components/ui/title/title';
@@ -58,11 +58,11 @@ export default function Product() {
   return (
     <div className={styles.product}>
       <Container>
-        <ProductContent
+        {/* <ProductContent
           product={product}
           isPopupPageOpened={isPopupPageOpened}
           popup={true}
-        />
+        /> */}
         <div>
           <Title>
             recommended

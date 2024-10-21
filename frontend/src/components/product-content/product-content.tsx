@@ -116,7 +116,7 @@ export default function ProductContent({ product, handleSizeChartPopup }: IProdu
           </div>
           <div className={styles.buttons}>
             <Button>Add To Cart</Button>
-            <FavoriteButton />
+            {/* <FavoriteButton /> */}
           </div>
         </div>
       </div>
