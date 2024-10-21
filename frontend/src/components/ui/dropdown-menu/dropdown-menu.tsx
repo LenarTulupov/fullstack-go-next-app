@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import styles from './dropdown-menu.module.scss';
 import { createPortal } from 'react-dom';
-import Container from '../container/container';
 import { useSelector } from 'react-redux';
 import { productsData } from '@/store/products/productsSlice';
 
@@ -21,8 +20,8 @@ export default function DropdownMenu({ onMouseEnter, onMouseLeave }: IDropdownMe
     >
       <div className={styles['dropdown-menu__wrapper']}>
         <ul className={styles['dropdown-menu__wrapper-list']}>
-          {uniqueSubcategories.map((subcategory) => (
-            <li>
+          {uniqueSubcategories.map((subcategory, index) => (
+            <li key={index}>
               <Link href={`/categories/${subcategory}`}>
                 {subcategory.slice(0,1).toUpperCase() + subcategory.slice(1)}
               </Link>
