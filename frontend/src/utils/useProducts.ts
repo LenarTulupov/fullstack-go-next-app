@@ -13,8 +13,8 @@ export default function useProducts() {
   const { data, error, isLoading } = useQuery<IProduct[], Error>({
     queryKey: ["products"],
     queryFn: fetchProducts,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 7 * 24 * 60 * 60 * 1000,
+    gcTime: 14 * 24 * 60 * 60 * 1000,
   });
 
   useEffect(() => {
