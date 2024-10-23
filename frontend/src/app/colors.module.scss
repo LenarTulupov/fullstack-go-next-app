@@ -4,7 +4,8 @@ $colors: (
   black: #000000,
   stone: #D5D3CF,
   green: #E1EACF,
-  pink: #ffc0cb
+  pink: #ffc0cb,
+  white: #F6F4F0
 );
 
 @each $name, $value in $colors {

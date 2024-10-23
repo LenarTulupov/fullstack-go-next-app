@@ -57,6 +57,8 @@ export default function FilterProductCategory({ filterFunction, sortFunction }: 
     filteredProducts = [...filteredProducts].sort(sortFunction);
   }
 
+  console.log(filteredProducts)
+
   return (
     <div>
       <ProductsGrid>
