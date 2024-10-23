@@ -20,7 +20,7 @@ type Product struct {
     Thumbnail      string    `json:"thumbnail,omitempty"`
     ColorID        int       `json:"color_id"`
     CategoryID     *int       `json:"category_id,omitempty"`
-    SubcategoryID  int       `json:"subcategory_id"`
+    SubcategoryID  *int       `json:"subcategory_id"`
     CreatedAt      time.Time `json:"created_at"`
     UpdatedAt      time.Time `json:"updated_at"`
 }

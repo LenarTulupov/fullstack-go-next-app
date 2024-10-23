@@ -271,7 +271,8 @@ INSERT INTO products (
   price_new, 
   price_old, 
   quantity, 
-  available, 
+  available,
+  subcategory_id, 
   color_id, 
   thumbnail
 )
@@ -283,6 +284,7 @@ VALUES
   28.00,
   0,
   FALSE,
+  NULL,
   7, 
   NULL 
 )
