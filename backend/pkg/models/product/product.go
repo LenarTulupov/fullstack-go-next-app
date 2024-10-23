@@ -13,7 +13,7 @@ type Product struct {
     Quantity       int       `json:"quantity"`
     Available      bool      `json:"available"`
     Categories     []string  `json:"categories"`
-    Subcategory    string    `json:"subcategory"`
+    Subcategory    *string    `json:"subcategory"`
     Color          string    `json:"color"`
     Sizes          []Size    `json:"sizes"`
     Images         []Image   `json:"images"`
