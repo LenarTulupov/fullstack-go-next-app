@@ -4,6 +4,7 @@
   import productPopupStateReducer from './productPopup/productPopupSlice'
   import sizesPopupStateReducer from './sizesPopup/sizesPopupSlice'
   import productsReducer from './products/productsSlice'
+  import selectedProductReducer from './selectedProduct/selectedProductSlice'
 
   export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@
       favorite: favoriteReducer,
       productPopupState: productPopupStateReducer,
       sizesPopupState: sizesPopupStateReducer,
+      selectedProduct: selectedProductReducer,
     },
   });
 

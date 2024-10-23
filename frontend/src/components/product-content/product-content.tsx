@@ -4,7 +4,7 @@ import Color from '../ui/color/color';
 import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
-import FavoriteButton from '../ui/favorite-button/favorite-button';
+// import FavoriteButton from '../ui/favorite-button/favorite-button';
 import { useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
@@ -14,9 +14,13 @@ import styles from './product-content.module.scss';
 interface IProductContent {
   product: IProduct;
   handleSizeChartPopup: () => void;
+  closeButton: boolean;
 }
 
-export default function ProductContent({ product, handleSizeChartPopup }: IProductContent) {
+export default function ProductContent({ 
+  product, 
+  // handleSizeChartPopup, 
+  closeButton }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
@@ -71,7 +75,7 @@ export default function ProductContent({ product, handleSizeChartPopup }: IProdu
             <Title className={styles['title-main']}>
               {product.title}
             </Title>
-            <CloseButton onClick={handleProductPopupToggle} />
+            {closeButton ? <CloseButton onClick={handleProductPopupToggle} /> : null}
           </div>
           <div className={styles.description__color}>
             <div>Color: <span>{product.color}</span></div>
@@ -97,7 +101,7 @@ export default function ProductContent({ product, handleSizeChartPopup }: IProdu
           </div>
           <button
             className={styles['description__size-button']}
-            onClick={handleSizeChartPopup}
+            // onClick={handleSizeChartPopup}
           >
             <Image
               src={'/size.svg'}

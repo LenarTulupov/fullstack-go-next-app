@@ -12,6 +12,8 @@ export interface IProduct {
   thumbnail: string;
   description: string;
   subcategory: string;
+  categories: string[];
+  created_at: string;
 };
 
 interface IProductColor {

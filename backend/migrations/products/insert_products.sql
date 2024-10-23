@@ -262,3 +262,49 @@ INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
 (6, 5, 1), 
 (6, 6, 9)
 ON CONFLICT (product_id, size_id) DO NOTHING;  
+
+-- Seventh product
+
+INSERT INTO products (
+  title, 
+  description, 
+  price_new, 
+  price_old, 
+  quantity, 
+  available, 
+  color_id, 
+  thumbnail
+)
+VALUES 
+(
+  'DEEP V NECK MINI DRESS',
+  'Looking for the perfect casual dress to wear every day? This on-trend piece from our day dresses collection is just for you. A day dress is your go-to style for versatility and easy wearing, just pair it with trainers to achieve the perfect casual look. With its relaxed silhouette and floaty style, day dresses mean you stay comfortable all day, no matter what your plans.',
+  25.20, 
+  28.00,
+  0,
+  FALSE,
+  7, 
+  NULL 
+)
+ON CONFLICT (title, color_id) DO NOTHING;
+
+INSERT INTO product_categories (product_id, category_id) 
+VALUES (7, 2), (7, 3), (7, 4);
+
+INSERT INTO images (image_url, product_id) VALUES
+('https://media.boohoo.com/i/boohoo/gzz97114_white_xl/female-white-deep-v-neck-mini-dress?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 7),
+('https://media.boohoo.com/i/boohoo/gzz97114_white_xl_1/female-white-deep-v-neck-mini-dress?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 7),
+('https://media.boohoo.com/i/boohoo/gzz97114_white_xl_2/female-white-deep-v-neck-mini-dress?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 7),
+('https://media.boohoo.com/i/boohoo/gzz97114_white_xl_3/female-white-deep-v-neck-mini-dress?w=675&qlt=default&fmt.jp2.qlt=70&fmt=auto&sm=fit', 7)
+ON CONFLICT (image_url, product_id) DO NOTHING; 
+
+UPDATE products SET thumbnail = (SELECT image_url FROM images WHERE product_id = 7 LIMIT 1) WHERE id = 7;
+
+INSERT INTO product_sizes (product_id, size_id, quantity) VALUES
+(7, 1, 0), 
+(7, 2, 2), 
+(7, 3, 1), 
+(7, 4, 5), 
+(7, 5, 0), 
+(7, 6, 1)
+ON CONFLICT (product_id, size_id) DO NOTHING;  

@@ -15,6 +15,11 @@ export default function Product() {
   const products = useSelector(productsData);
   const [loading, setLoading] = useState(true);
   const [isPopupPageOpened, setIsPopupPageOpened] = useState<boolean>(false);
+  const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+  const handleSizeChartPopup = () => {
+    setIsSizeChartPopupOpened(p => !p);
+  }
+
 
   const handlePopupPageOpened = () => {
     setIsPopupPageOpened(p => !p);
@@ -58,11 +63,11 @@ export default function Product() {
   return (
     <div className={styles.product}>
       <Container>
-        {/* <ProductContent
+        <ProductContent
           product={product}
-          isPopupPageOpened={isPopupPageOpened}
-          popup={true}
-        /> */}
+          handleSizeChartPopup={handleSizeChartPopup}
+          closeButton={false}
+        />
         <div>
           <Title>
             recommended

@@ -10,23 +10,16 @@ import { MouseEvent, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 import Color from "../ui/color/color";
 import useProductPopup from "@/hooks/useProductPopup";
-import useSizesPopup from "@/hooks/useSizesPopup";
 import styles from './card.module.scss'
 
 export default function Card({
-  id,
-  images,
-  alt,
-  title,
-  price_new,
-  price_old,
-  color,
+  product,
   handleFavorite,
   onClick,
   handleAddedToCart }: ICard) {
+  const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const { handleProductPopupToggle } = useProductPopup();
-  // const { handleSizesPopup } = useSizesPopup();
 
   const firstImage = images[0].image_url;
   const secondImage = images[1].image_url;
@@ -49,7 +42,7 @@ export default function Card({
           <CardImage
             handleImageHover={handleImageHover}
             src={whichImage}
-            alt={alt}
+            alt={title}
             isImageHovered={isImageHovered}
             id={id}
             priority={isPriority}
