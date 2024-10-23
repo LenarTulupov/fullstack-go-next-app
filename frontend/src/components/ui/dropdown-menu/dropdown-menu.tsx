@@ -11,7 +11,12 @@ interface IDropdownMenu {
 
 export default function DropdownMenu({ onMouseEnter, onMouseLeave }: IDropdownMenu) {
   const products = useSelector(productsData);
-  const uniqueSubcategories = Array.from(new Set(products.map(product => product.subcategory)))
+  const uniqueSubcategories = Array.from(
+    new Set(products
+      .filter(product => product.subcategory)
+      .map(product => product.subcategory)
+    )
+  );
   return createPortal(
     <div
       className={styles['dropdown-menu']}
@@ -23,7 +28,7 @@ export default function DropdownMenu({ onMouseEnter, onMouseLeave }: IDropdownMe
           {uniqueSubcategories.map((subcategory, index) => (
             <li key={index}>
               <Link href={`/categories/${subcategory}`}>
-                {subcategory.slice(0,1).toUpperCase() + subcategory.slice(1)}
+                {subcategory.slice(0, 1).toUpperCase() + subcategory.slice(1)}
               </Link>
             </li>
           ))}
