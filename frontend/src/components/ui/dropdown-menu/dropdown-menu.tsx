@@ -1,22 +1,23 @@
 import Link from 'next/link';
 import styles from './dropdown-menu.module.scss';
 import { createPortal } from 'react-dom';
-import { useSelector } from 'react-redux';
-import { productsData } from '@/store/products/productsSlice';
+import useProducts from '@/utils/useProducts';
 
 interface IDropdownMenu {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
 
-export default function DropdownMenu({ onMouseEnter, onMouseLeave }: IDropdownMenu) {
-  const products = useSelector(productsData);
+export default function DropdownMenu(
+  { onMouseEnter, onMouseLeave }: IDropdownMenu) {
+  const { products } = useProducts();
   const uniqueSubcategories = Array.from(
     new Set(products
       .filter(product => product.subcategory)
       .map(product => product.subcategory)
     )
   );
+
   return createPortal(
     <div
       className={styles['dropdown-menu']}
@@ -36,5 +37,5 @@ export default function DropdownMenu({ onMouseEnter, onMouseLeave }: IDropdownMe
       </div>
     </div>,
     document.body
-  )
+  );
 };
