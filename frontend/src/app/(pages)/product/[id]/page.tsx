@@ -16,6 +16,7 @@ export default function Product() {
   const [loading, setLoading] = useState(true);
   const [isPopupPageOpened, setIsPopupPageOpened] = useState<boolean>(false);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
   }

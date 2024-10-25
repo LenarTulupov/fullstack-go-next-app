@@ -21,7 +21,7 @@ export default function Home() {
           <Carousel
             dots={false}
             infinite={true}
-            speed={3000}
+            speed={2000}
             autoplay
             autoplaySpeed={10000}
             effect='fade'

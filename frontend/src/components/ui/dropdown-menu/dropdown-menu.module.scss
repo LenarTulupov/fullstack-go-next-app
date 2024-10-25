@@ -14,5 +14,11 @@
       flex-direction: column;
       gap: 10px;
     }
+    &-item {
+      transition: color .3s ease-in-out;
+      &:hover {
+        color: var(--accent-color);
+      }
+    }
   }
 }

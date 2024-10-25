@@ -126,7 +126,7 @@ export default function Navbar() {
                 ref={searchBarFocus}
               />
             </div>
-            <div className={styles['search-bar__suggested-items']}>
+            {/* <div className={styles['search-bar__suggested-items']}>
               <div>often searched for</div>
               <div className={styles['suggested-items__list']}>
                 {oftenSearchedFor.map((item) => (
@@ -135,7 +135,7 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </Container>

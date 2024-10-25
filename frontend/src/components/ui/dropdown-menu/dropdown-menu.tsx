@@ -27,7 +27,7 @@ export default function DropdownMenu(
       <div className={styles['dropdown-menu__wrapper']}>
         <ul className={styles['dropdown-menu__wrapper-list']}>
           {uniqueSubcategories.map((subcategory, index) => (
-            <li key={index}>
+            <li key={index} className={styles['dropdown-menu__wrapper-item']}>
               <Link href={`/categories/${subcategory}`}>
                 {subcategory.slice(0, 1).toUpperCase() + subcategory.slice(1)}
               </Link>

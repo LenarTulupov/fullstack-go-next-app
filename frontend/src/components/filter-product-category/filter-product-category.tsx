@@ -27,7 +27,7 @@ export default function FilterProductCategory(
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const favoriteProducts = useSelector(selectFavoriteProducts);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
-  const { isProductPopupOpened } = useProductPopup();
+  const { isProductPopupOpened, handleProductPopupToggle } = useProductPopup();
 
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
@@ -40,6 +40,11 @@ export default function FilterProductCategory(
   const handleAddedToCart = () => { 
     setIsAddedToCart(p => !p);
   }
+
+  const handleClosePopup = () => {
+    setSelectedProduct(null);
+    handleProductPopupToggle();
+  };
 
   if (error) return <div>Error fetching products</div>;
 
@@ -87,6 +92,7 @@ export default function FilterProductCategory(
             product={selectedProduct}
             handleSizeChartPopup={handleSizeChartPopup}
             closeButton
+            onClose={handleClosePopup}
           />
         </Popup>
       )}

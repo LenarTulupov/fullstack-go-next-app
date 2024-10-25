@@ -15,12 +15,14 @@ interface IProductContent {
   product: IProduct;
   handleSizeChartPopup: () => void;
   closeButton: boolean;
+  onClose?: () => void;
 }
 
 export default function ProductContent({ 
   product, 
-  // handleSizeChartPopup, 
-  closeButton }: IProductContent) {
+  handleSizeChartPopup, 
+  closeButton, 
+  onClose }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
@@ -75,7 +77,7 @@ export default function ProductContent({
             <Title className={styles['title-main']}>
               {product.title}
             </Title>
-            {closeButton ? <CloseButton onClick={handleProductPopupToggle} /> : null}
+            {closeButton ? <CloseButton onClick={onClose} /> : null}
           </div>
           <div className={styles.description__color}>
             <div>Color: <span>{product.color}</span></div>
@@ -101,7 +103,7 @@ export default function ProductContent({
           </div>
           <button
             className={styles['description__size-button']}
-            // onClick={handleSizeChartPopup}
+            onClick={handleSizeChartPopup}
           >
             <Image
               src={'/size.svg'}
