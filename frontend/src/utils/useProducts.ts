@@ -15,6 +15,7 @@ export default function useProducts() {
     queryFn: fetchProducts,
     staleTime: 7 * 24 * 60 * 60 * 1000,
     gcTime: 14 * 24 * 60 * 60 * 1000,
+    enabled: products.length === 0,
   });
 
   useEffect(() => {

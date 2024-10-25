@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { addFavorite, removeFavorite, selectFavoriteProducts } from "@/store/favorite-button/favoriteButtonSlice";
 import { IProduct } from "@/types/product.interface";
@@ -11,6 +11,7 @@ import ProductContent from "../product-content/product-content";
 import SizeChartContent from "../size-chart-content/size-chart-content";
 import PopupItemsContent from "../popup-items/poput-items-content";
 import Card from "../card/card";
+import { setProducts } from "@/store/products/productsSlice";
 
 
 interface IFilterProductCategory {
@@ -18,7 +19,8 @@ interface IFilterProductCategory {
   sortFunction?: (a: IProduct, b: IProduct) => number;
 }
 
-export default function FilterProductCategory({ filterFunction, sortFunction }: IFilterProductCategory) {
+export default function FilterProductCategory(
+  { filterFunction, sortFunction }: IFilterProductCategory) {
   const dispatch = useDispatch();
   const { products, error, isLoading } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);

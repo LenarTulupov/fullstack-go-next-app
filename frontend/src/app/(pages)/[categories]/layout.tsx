@@ -16,13 +16,14 @@ import PopupItemsContent from "@/components/popup-items/poput-items-content";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './layout.module.scss'
 
-export default function LayoutCategory({ children }: { children: ReactNode}) {
+export default function LayoutCategory({ children }: { children: ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
   const { products } = useProducts();
   const { isProductPopupOpened } = useProductPopup();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
+  const [isSortOpened, setIsSortOpened] = useState<boolean>(false);
 
   const handleSelectedProduct = (product: IProduct) => {
     setSelectedProduct(product);
@@ -34,6 +35,10 @@ export default function LayoutCategory({ children }: { children: ReactNode}) {
 
   const handleAddedToCart = () => {
     setIsAddedToCart(p => !p);
+  }
+
+  const handleSort = () => {
+    setIsSortOpened(p => !p);
   }
 
   useEffect(() => {
@@ -65,18 +70,26 @@ export default function LayoutCategory({ children }: { children: ReactNode}) {
               ${styles['layout-category__list-end']} 
               ${styles['list-end']}
             `}>
-              <select name="" id="" className={styles['list-end__select']}>
+              <label 
+                htmlFor="sort" 
+                onClick={handleSort}
+                className={styles['list-end__label']}
+              >
                 Sort
-                {optionsList.map((option) => (
-                  <option
-                    key={option}
-                    value=""
-                    className={styles['list-end__option']}
-                  >
-                    {option}
-                  </option>
-                ))}
-              </select>
+              </label>
+              {isSortOpened &&
+                <select id="sort" className={styles['list-end__select']}>
+                  {optionsList.map((option) => (
+                    <option
+                      key={option}
+                      value={option}
+                      className={styles['list-end__option']}
+                    >
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              }
             </div>
           </div>
         </Container>
