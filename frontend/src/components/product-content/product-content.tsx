@@ -5,11 +5,13 @@ import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
 // import FavoriteButton from '../ui/favorite-button/favorite-button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
 import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
+import Loader from '../ui/loader/loader';
+import LittleImageSkeleton from './little-image-skeleton/little-image-skeleton';
 
 interface IProductContent {
   product: IProduct;
@@ -26,12 +28,27 @@ export default function ProductContent({
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
+  // const [loading, setLoading] = useState<boolean>(true);
+
+  const [loadedImages, setLoadedImages] = useState<boolean[]>(Array(product.images.length).fill(false));
 
   const { handleProductPopupToggle } = useProductPopup();
 
   const handleImageMain = (image: string) => {
     setIsManeImage(image);
   }
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages((prev) => {
+      const newLoaded = [...prev];
+      newLoaded[index] = true;
+      return newLoaded;
+    });
+  };
+
+  // useEffect(() => {
+  //   setLoading(false);
+  // }, [])
 
   return (
     <>
@@ -41,26 +58,29 @@ export default function ProductContent({
           ${styles.images}
           `}>
           <div className={styles.images__all}>
-            {Array.isArray(product.images) ? (
-              product.images.map((image: { image_url: string }) => (
-                <Image
-                  key={image.image_url}
-                  alt={product.title}
-                  src={image.image_url}
-                  className={isManeImage === image.image_url
-                    ? styles['images__all_active']
-                    : ''
-                  }
-                  width={0}
-                  height={0}
-                  layout="responsive"
-                  priority
-                  onClick={() => handleImageMain(image.image_url)}
-                />
-              ))
-            ) : (
-              <p>No images available</p>
-            )}
+          {Array.isArray(product.images) ? (
+            product.images.map((image, index) => (
+              <div key={image.image_url}>
+                {!loadedImages[index] ? (
+                  <LittleImageSkeleton />
+                ) : (
+                  <Image
+                    alt={product.title}
+                    src={image.image_url}
+                    className={isManeImage === image.image_url ? styles['images__all_active'] : ''}
+                    width={0}
+                    height={0}
+                    layout="responsive"
+                    priority
+                    onClick={() => handleImageMain(image.image_url)}
+                    onLoadingComplete={() => handleImageLoad(index)}
+                  />
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No images available</p>
+          )}
           </div>
           <div className={styles.images__main}>
             <ZoomImagePopup
