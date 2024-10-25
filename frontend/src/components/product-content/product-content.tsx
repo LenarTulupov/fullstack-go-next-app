@@ -5,12 +5,11 @@ import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
 // import FavoriteButton from '../ui/favorite-button/favorite-button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
 import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
-import Loader from '../ui/loader/loader';
 import LittleImageSkeleton from './little-image-skeleton/little-image-skeleton';
 
 interface IProductContent {
@@ -20,17 +19,17 @@ interface IProductContent {
   onClose?: () => void;
 }
 
-export default function ProductContent({ 
-  product, 
-  handleSizeChartPopup, 
-  closeButton, 
+export default function ProductContent({
+  product,
+  handleSizeChartPopup,
+  closeButton,
   onClose }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
-  // const [loading, setLoading] = useState<boolean>(true);
-
-  const [loadedImages, setLoadedImages] = useState<boolean[]>(Array(product.images.length).fill(false));
+  const [loadingStates, setLoadingStates] = useState<boolean[]>(
+    new Array(product.images.length).fill(true)
+  );
 
   const { handleProductPopupToggle } = useProductPopup();
 
@@ -39,31 +38,26 @@ export default function ProductContent({
   }
 
   const handleImageLoad = (index: number) => {
-    setLoadedImages((prev) => {
-      const newLoaded = [...prev];
-      newLoaded[index] = true;
-      return newLoaded;
+    setLoadingStates((prev) => {
+      const newLoadingStates = [...prev];
+      newLoadingStates[index] = false; 
+      return newLoadingStates;
     });
   };
-
-  // useEffect(() => {
-  //   setLoading(false);
-  // }, [])
+  
 
   return (
     <>
       <div className={styles.product__content}>
         <div className={`
           ${styles['product__content-images']} 
-          ${styles.images}
-          `}>
+          ${styles.images}`
+        }>
           <div className={styles.images__all}>
           {Array.isArray(product.images) ? (
-            product.images.map((image, index) => (
-              <div key={image.image_url}>
-                {!loadedImages[index] ? (
-                  <LittleImageSkeleton />
-                ) : (
+              product.images.map((image: { image_url: string }, index: number) => (
+                <div key={image.image_url} className={styles.imageWrapper}>
+                  {loadingStates[index] && <LittleImageSkeleton />} 
                   <Image
                     alt={product.title}
                     src={image.image_url}
@@ -73,14 +67,13 @@ export default function ProductContent({
                     layout="responsive"
                     priority
                     onClick={() => handleImageMain(image.image_url)}
-                    onLoadingComplete={() => handleImageLoad(index)}
+                    onLoad={() => handleImageLoad(index)} 
                   />
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No images available</p>
-          )}
+                </div>
+              ))
+            ) : (
+              <p>No images available</p>
+            )}
           </div>
           <div className={styles.images__main}>
             <ZoomImagePopup
@@ -91,8 +84,8 @@ export default function ProductContent({
         </div>
         <div className={`
           ${styles['product__content-description']} 
-          ${styles.description}
-          `}>
+          ${styles.description}`
+        }>
           <div className={styles['title-block']}>
             <Title className={styles['title-main']}>
               {product.title}
