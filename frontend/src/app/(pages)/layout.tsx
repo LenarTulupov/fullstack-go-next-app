@@ -21,9 +21,8 @@ export default function PagesLayout({ children }: IPagesLayout) {
 
   return (
     <div>
-      {isLoading ? createPortal(
-        <Loader  className={styles.loader}/>,
-        document.body
+      {isLoading ? (
+        <Loader />
       ) : (
         <>
           <Header />

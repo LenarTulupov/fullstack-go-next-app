@@ -2,10 +2,3 @@
   position: relative;
   height: calc(100vh - var(--header-height));
 }
-.loader {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}

@@ -19,9 +19,8 @@ export default function Home() {
   return (
     <div className={styles.home}>
       <div className={styles['carousel-wrapper']}>
-        {isLoading ? createPortal(
-          <Loader className={styles.loader}/>,
-          document.body
+        {isLoading ? (
+          <Loader/>
         ) : (
           <Carousel
             dots={false}

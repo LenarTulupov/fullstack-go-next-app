@@ -2,6 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
   gap: 5px;
   &__animation {
     width: 20px;
