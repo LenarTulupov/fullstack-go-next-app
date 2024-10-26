@@ -31,9 +31,8 @@ export default function Home() {
                 <Image
                   src={banner}
                   alt="banner"
-                  width={0}
-                  height={0}
-                  layout="responsive"
+                  width={1800}
+                  height={900}
                   priority={index === 0}
                   onLoadingComplete={() => handleImageLoad(banner)}
                 />
