@@ -1,41 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Carousel } from 'antd'
 import { bannerImagesLarge } from '@/constants/banners-images'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from './home.module.scss'
+import { useEffect, useState } from 'react'
 import Loader from '@/components/ui/loader/loader'
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const imagePromises = bannerImagesLarge.map((src) => {
-      return new Promise((resolve, reject) => {
-        const img = new globalThis.Image();
-        img.src = src;
-        img.onload = resolve; 
-        img.onerror = reject;
-      });
-    });
-
-    Promise.all(imagePromises)
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Ошибка загрузки изображения:", error);
-        setIsLoading(false); 
-      });
-  }, []);
+    setIsLoading(false);
+  }, [])
 
   return (
     <div className={styles.home}>
       <div className={styles['carousel-wrapper']}>
         {isLoading ? (
-          <Loader />
+          <Loader/>
         ) : (
           <Carousel
             dots={false}
@@ -55,9 +39,12 @@ export default function Home() {
                   <Image
                     src={banner}
                     alt="banner"
-                    fill
-                    objectFit='cover'
-                    priority={index === 0} 
+                    width={0}
+                    height={0}
+                    layout='responsive'
+                    // fill
+                    // objectFit='cover'
+                    priority
                   />
                 </div>
               </Link>
@@ -66,5 +53,5 @@ export default function Home() {
         )}
       </div>
     </div>
-  );
+  )
 }
