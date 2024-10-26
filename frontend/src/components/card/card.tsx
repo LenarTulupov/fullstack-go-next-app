@@ -11,6 +11,8 @@ import { MdShoppingCart } from "react-icons/md";
 import Color from "../ui/color/color";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './card.module.scss'
+import Loader from "../ui/loader/loader";
+import CardLoader from "../ui/card-image/card-loader";
 
 export default function Card({
   product,
@@ -20,6 +22,7 @@ export default function Card({
   const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const { handleProductPopupToggle } = useProductPopup();
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
 
   const firstImage = images[0].image_url;
   const secondImage = images[1].image_url;
@@ -35,10 +38,15 @@ export default function Card({
     }
   }
 
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
+
   return (
     <div className={styles.card} onClick={onClick}>
       <div className={styles['image-wrapper']}>
         <Link href={`/product/${id}`} className={styles.card__link}>
+          {isImageLoading && <CardLoader />}
           <CardImage
             handleImageHover={handleImageHover}
             src={whichImage}
@@ -46,6 +54,7 @@ export default function Card({
             isImageHovered={isImageHovered}
             id={id}
             priority={isPriority}
+            onLoad={handleImageLoad}
           />
         </Link>
         <div className={`

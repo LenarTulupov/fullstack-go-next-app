@@ -7,7 +7,6 @@ import Link from 'next/link'
 import styles from './home.module.scss'
 import { useEffect, useState } from 'react'
 import Loader from '@/components/ui/loader/loader'
-import { createPortal } from 'react-dom'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);

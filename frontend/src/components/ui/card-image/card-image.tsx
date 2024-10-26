@@ -10,10 +10,11 @@ interface ICardImage {
   isImageHovered: boolean;
   id: number;
   priority?: boolean;
+  onLoad: () => void;
 }
 
 export default function CardImage(
-  { src, alt, className, handleImageHover, isImageHovered, id, priority = false }: ICardImage) {
+  { src, alt, className, handleImageHover, isImageHovered, id, priority = false, onLoad }: ICardImage) {
   return (
     <div
       className={styles.wrapper}
@@ -34,6 +35,7 @@ export default function CardImage(
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
           priority={priority}
           className={styles.image}
+          onLoad={onLoad}
         />
       </div>
     </div>
