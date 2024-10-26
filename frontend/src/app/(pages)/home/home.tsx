@@ -9,16 +9,29 @@ import { useEffect, useState } from 'react'
 import Loader from '@/components/ui/loader/loader'
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [])
+    const loadImages = async () => {
+      const imageLoaders = bannerImagesLarge.map(
+        (src) =>
+          new Promise((resolve, reject) => {
+            const img = new window.Image()
+            img.src = src
+            img.onload = resolve
+            img.onerror = reject
+          })
+      )
+      await Promise.all(imageLoaders)
+      setLoading(false) 
+    }
 
+    loadImages()
+  }, [])
   return (
     <div className={styles.home}>
       <div className={styles['carousel-wrapper']}>
-        {isLoading ? (
+      {loading ? (
           <Loader/>
         ) : (
           <Carousel
@@ -27,12 +40,12 @@ export default function Home() {
             speed={2000}
             autoplay
             autoplaySpeed={10000}
-            effect='fade'
+            effect="fade"
           >
             {bannerImagesLarge.map((banner, index) => (
               <Link
                 key={index}
-                href='/category/trends'
+                href="/category/trends"
                 className={styles['image-link']}
               >
                 <div className={styles['image-wrapper']}>
@@ -41,9 +54,7 @@ export default function Home() {
                     alt="banner"
                     width={0}
                     height={0}
-                    layout='responsive'
-                    // fill
-                    // objectFit='cover'
+                    layout="responsive"
                     priority
                   />
                 </div>
