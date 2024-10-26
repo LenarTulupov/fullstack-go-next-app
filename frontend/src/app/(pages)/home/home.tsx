@@ -55,7 +55,7 @@ export default function Home() {
                     width={0}
                     height={0}
                     layout="responsive"
-                    priority
+                    priority={index === 0}
                   />
                 </div>
               </Link>
