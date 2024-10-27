@@ -9,7 +9,11 @@ import (
 
 func CORSMiddleware() gin.HandlerFunc {
 	config := cors.Config{
-		AllowOrigins:     []string{"https://frontend-ouox.onrender.com", "http://localhost:3000"},
+		AllowOrigins:     []string{
+			"https://frontend-ouox.onrender.com",
+			"http://localhost:3000",
+			"https://fullstack-go-next-app-69lv.vercel.app"
+		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
