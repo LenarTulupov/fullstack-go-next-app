@@ -12,7 +12,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		AllowOrigins:     []string{
 			"https://frontend-ouox.onrender.com",
 			"http://localhost:3000",
-			"https://frontend-hsx4mz8e4-lenartulupovs-projects.vercel.app",
+			"frontend-five-inky-90.vercel.app",
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
