@@ -10,7 +10,6 @@ import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
 import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
-import LittleImageSkeleton from './little-image-skeleton/little-image-skeleton';
 
 interface IProductContent {
   product: IProduct;
@@ -19,16 +18,13 @@ interface IProductContent {
   onClose?: () => void;
 }
 
-export default function ProductContent({
-  product,
-  handleSizeChartPopup,
-  closeButton,
+export default function ProductContent({ 
+  product, 
+  handleSizeChartPopup, 
+  closeButton, 
   onClose }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
-  );
-  const [loadingStates, setLoadingStates] = useState<boolean[]>(
-    new Array(product.images.length).fill(true)
   );
 
   const { handleProductPopupToggle } = useProductPopup();
@@ -37,39 +33,30 @@ export default function ProductContent({
     setIsManeImage(image);
   }
 
-  const handleImageLoad = (index: number) => {
-    setLoadingStates((prev) => {
-      const newLoadingStates = [...prev];
-      newLoadingStates[index] = false; 
-      return newLoadingStates;
-    });
-  };
-  
-
   return (
     <>
       <div className={styles.product__content}>
         <div className={`
           ${styles['product__content-images']} 
-          ${styles.images}`
-        }>
+          ${styles.images}
+          `}>
           <div className={styles.images__all}>
-          {Array.isArray(product.images) ? (
-              product.images.map((image: { image_url: string }, index: number) => (
-                <div key={image.image_url} className={styles.imageWrapper}>
-                  {loadingStates[index] && <LittleImageSkeleton />} 
-                  <Image
-                    alt={product.title}
-                    src={image.image_url}
-                    className={isManeImage === image.image_url ? styles['images__all_active'] : ''}
-                    width={0}
-                    height={0}
-                    layout="responsive"
-                    priority
-                    onClick={() => handleImageMain(image.image_url)}
-                    onLoad={() => handleImageLoad(index)} 
-                  />
-                </div>
+            {Array.isArray(product.images) ? (
+              product.images.map((image: { image_url: string }) => (
+                <Image
+                  key={image.image_url}
+                  alt={product.title}
+                  src={image.image_url}
+                  className={isManeImage === image.image_url
+                    ? styles['images__all_active']
+                    : ''
+                  }
+                  width={0}
+                  height={0}
+                  layout="responsive"
+                  priority
+                  onClick={() => handleImageMain(image.image_url)}
+                />
               ))
             ) : (
               <p>No images available</p>
@@ -84,8 +71,8 @@ export default function ProductContent({
         </div>
         <div className={`
           ${styles['product__content-description']} 
-          ${styles.description}`
-        }>
+          ${styles.description}
+          `}>
           <div className={styles['title-block']}>
             <Title className={styles['title-main']}>
               {product.title}
