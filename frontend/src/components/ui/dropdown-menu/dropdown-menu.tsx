@@ -10,13 +10,15 @@ interface IDropdownMenu {
 
 export default function DropdownMenu(
   { onMouseEnter, onMouseLeave }: IDropdownMenu) {
-  const { products } = useProducts();
-  const uniqueSubcategories = Array.from(
-    new Set(products
-      .filter(product => product.subcategory)
-      .map(product => product.subcategory)
-    )
-  );
+  // const { products } = useProducts();
+  // const uniqueSubcategories = Array.from(
+  //   new Set(products
+  //     .filter(product => product.subcategory)
+  //     .map(product => product.subcategory)
+  //   )
+  // );
+
+  const subcategories = ['Trousers', 'Jackets', 'Bikinis'];
 
   return createPortal(
     <div
@@ -26,10 +28,10 @@ export default function DropdownMenu(
     >
       <div className={styles['dropdown-menu__wrapper']}>
         <ul className={styles['dropdown-menu__wrapper-list']}>
-          {uniqueSubcategories.map((subcategory, index) => (
+          {subcategories.map((subcategory, index) => (
             <li key={index} className={styles['dropdown-menu__wrapper-item']}>
-              <Link href={`/categories/${subcategory}`}>
-                {subcategory.slice(0, 1).toUpperCase() + subcategory.slice(1)}
+              <Link href={`/categories/${subcategory.toLowerCase()}`}>
+                {subcategory}
               </Link>
             </li>
           ))}
