@@ -1,4 +1,4 @@
-import { forwardRef, Ref } from 'react';
+import { ChangeEvent, forwardRef, KeyboardEvent, Ref } from 'react';
 import CloseButton from '../ui/close-button/close-button';
 import SearchImage from '../ui/search-image/search-image';
 import styles from './search-bar.module.scss'
@@ -6,11 +6,18 @@ import styles from './search-bar.module.scss'
 interface ISearchBar {
   onClick: () => void;
   className?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 function SearchBar ({ 
   onClick, 
-  className }: ISearchBar, ref: Ref<HTMLInputElement>) {
+  className,
+  value,
+  onChange,
+  onKeyDown }: ISearchBar, ref: Ref<HTMLInputElement>) {
+    console.log(value)
   return (
     <div className={`${styles['search-bar']} ${className || ''}`}>
       <div className={styles['search-bar__block']}>
@@ -18,8 +25,11 @@ function SearchBar ({
         <input
           ref={ref}
           type="text"
+          value={value}
+          onChange={onChange}
           placeholder='What are you looking for?'
           className={styles['search-bar__input']}
+          onKeyDown={onKeyDown}
         />
         <CloseButton onClick={onClick} />
       </div>

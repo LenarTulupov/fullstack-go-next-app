@@ -1,27 +1,81 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { navItems } from '@/constants/nav-items';
+import { useSearchBarValue, useSetSearchBarValue } from '@/hooks/useSearchBarValue';
+import { IProduct } from '@/types/product.interface';
+import { IoIosArrowDown } from "react-icons/io";
 import Container from '../ui/container/container';
 import SearchImage from '../ui/search-image/search-image';
 import LogoImage from '../ui/logo/logo';
 import SearchBar from '../search-bar/search-bar';
-import { navItems } from '@/constants/nav-items';
 import Tooltip from '../ui/tooltip/tooltip';
-import { IoIosArrowDown } from "react-icons/io";
 import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
+import useProducts from '@/utils/useProducts';
+import Card from '../card/card';
+import ProductsGrid from '../ui/products-grid/products-grid';
+import Title from '../ui/title/title';
+import Button from '../ui/button/button';
 import styles from './navbar.module.scss';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
   const searchBarFocus = useRef<HTMLInputElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
+  // const [searchBarValue, setSearchBarValue] = useState<string>('');
+  const searchBarValue = useSearchBarValue();
+  const setSearchBarValue = useSetSearchBarValue();
+  const [showFilteredProducts, setShowFilteredProducts] = useState<boolean>(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleSearchBar = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchBarValue(e.target.value);
+  }
+
+  const { products } = useProducts();
+
+  const filteredProducts = products.filter((product: IProduct) => {
+    const searchTerms = searchBarValue
+      .toLowerCase()
+      .split(' ')
+      .filter(term => term);
+
+    return searchTerms.every((term) => {
+      return (
+        product.title.toLowerCase().includes(term)
+      )
+    });
+  });
 
   const oftenSearchedFor = ['dresses', 'summer'];
 
   const handleSearch = () => {
-    setIsSearchClicked((prev) => !prev);
+    setIsSearchClicked((prev) => {
+      if (prev) {
+        setSearchBarValue('')
+        setShowFilteredProducts(false);
+      }
+      return !prev;
+    })
   };
+
+  const clearInputValue = () => {
+    setSearchBarValue('');
+  }
+
+  const handleShowFilteredProducts = () => {
+    setShowFilteredProducts(true);
+    router.push(`/search?name=${encodeURIComponent(searchBarValue)}`)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleShowFilteredProducts();
+    }
+  }
 
   useEffect(() => {
     if (isSearchClicked && searchBarFocus.current) {
@@ -39,8 +93,8 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <Container className={styles.navbar__container}>
-        {!isSearchClicked ? (
+      {!isSearchClicked ? (
+        <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
             <Link href='/'>
               <LogoImage />
@@ -84,13 +138,12 @@ export default function Navbar() {
                     content='search panel'
                     className={styles['navbar__item-tooltip']}
                   >
-                    <Link
-                      href='/search'
-                      className={styles['navbar__link-search']}
+                    <button
+                      className={styles['navbar__button-search']}
                       onClick={handleSearch}
                     >
                       <SearchImage />
-                    </Link>
+                    </button>
                   </Tooltip>
                 </li>
                 <li className={styles.navbar__item}>
@@ -117,28 +170,59 @@ export default function Navbar() {
               </ul>
             </div>
           </div>
-        ) : (
-          <>
-            <div className={styles['search-bar-container']}>
-              <SearchBar
-                className={styles['search-bar']}
-                onClick={handleSearch}
-                ref={searchBarFocus}
-              />
+        </Container>
+      ) : (
+        <>
+          <Container className={styles['search-bar__container']}>
+            <SearchBar
+              className={styles['search-bar']}
+              onClick={clearInputValue}
+              value={searchBarValue}
+              onChange={handleSearchBar}
+              ref={searchBarFocus}
+              onKeyDown={handleKeyDown}
+            />
+            <Button onClick={handleShowFilteredProducts}>
+              Search
+            </Button>
+            <Button variant='white' onClick={handleSearch}>
+              Close
+            </Button>
+          </Container>
+          {pathname !== '/search' && (
+            <div className={styles['search-bar__products-wrapper']}>
+              <Container className={styles['search-bar__products-container']}>
+                <Title className={styles['search-bar__products-title']}>
+                  Popular Products
+                </Title>
+                <ProductsGrid>
+                  {!showFilteredProducts
+                    ? products
+                      .filter((product) =>
+                        product.categories?.includes('trends')
+                      )
+                      .slice(0, 5)
+                      .map((product) => (
+                        <Card
+                          key={product.id}
+                          product={product}
+                        />
+                      ))
+                    : filteredProducts.map((product) => (
+                      <Card
+                        key={product.id}
+                        product={product}
+                      />
+                    ))}
+                </ProductsGrid>
+                <Button className={styles['search-bar__products-button']}>
+                  Show All
+                </Button>
+              </Container>
             </div>
-            {/* <div className={styles['search-bar__suggested-items']}>
-              <div>often searched for</div>
-              <div className={styles['suggested-items__list']}>
-                {oftenSearchedFor.map((item) => (
-                  <Link key={item} href={`/${item}`}>
-                    <div>{item}</div>
-                  </Link>
-                ))}
-              </div>
-            </div> */}
-          </>
-        )}
-      </Container>
-    </nav >
+          )}
+        </>
+      )}
+    </nav>
   )
 }

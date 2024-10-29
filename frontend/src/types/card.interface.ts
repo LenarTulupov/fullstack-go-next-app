@@ -12,7 +12,7 @@ export interface ICard {
   // color: string;
   // description: string;
   product: IProduct;
-  handleFavorite: () => void;
+  handleFavorite?: () => void;
   onClick?: () => void;
   handleAddedToCart?: () => void;
 }

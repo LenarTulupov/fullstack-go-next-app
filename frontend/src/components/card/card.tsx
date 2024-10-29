@@ -1,3 +1,5 @@
+'use client'
+
 import { ICard } from "@/types/card.interface";
 import Button from "../ui/button/button";
 import Title from "../ui/title/title";
@@ -11,7 +13,6 @@ import { MdShoppingCart } from "react-icons/md";
 import Color from "../ui/color/color";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './card.module.scss'
-import Loader from "../ui/loader/loader";
 import CardLoader from "../ui/card-image/card-loader";
 
 export default function Card({
@@ -67,7 +68,7 @@ export default function Card({
       <div className={styles['tooltip-wrapper']}>
         <Tooltip position="bottom" content="Add product to cart">
           <FavoriteButton
-            onClick={handleFavorite}
+            onClick={handleFavorite ?? (() => {})}
             className={styles['card__favorite-button']}
             border={false}
           />
