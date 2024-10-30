@@ -24,10 +24,6 @@ export default function useProducts() {
     }
   }, [data, dispatch]);
 
-  if (isLoading) {
-    console.log("Loading products...");
-  }
-
   if (error) {
     console.error("Error fetching products:", error);
   }

@@ -5,11 +5,15 @@ import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
 // import FavoriteButton from '../ui/favorite-button/favorite-button';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
 import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
+import FavoriteButton from '../ui/favorite-button/favorite-button';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleFavorite, isFavorite } from '@/store/favorites/favoritesSlice';
+import { RootState } from '@/store/store';
 
 interface IProductContent {
   product: IProduct;
@@ -26,12 +30,23 @@ export default function ProductContent({
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
-
   const { handleProductPopupToggle } = useProductPopup();
+  const dispatch = useDispatch();
+
+  const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    dispatch(toggleFavorite(product));
+  }
+
+  const id  = product.id;
+
+  const isProductFavorite = useSelector((state: RootState) => isFavorite(state, id));
 
   const handleImageMain = (image: string) => {
     setIsManeImage(image);
   }
+
+  console.log(isProductFavorite)
 
   return (
     <>
@@ -122,7 +137,11 @@ export default function ProductContent({
           </div>
           <div className={styles.buttons}>
             <Button>Add To Cart</Button>
-            {/* <FavoriteButton /> */}
+            <FavoriteButton 
+              onClick={handleToggleFavorite}
+              isFavorite={isProductFavorite}
+              border
+            />
           </div>
         </div>
       </div>

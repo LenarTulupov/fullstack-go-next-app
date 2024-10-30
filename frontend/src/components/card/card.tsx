@@ -14,6 +14,9 @@ import Color from "../ui/color/color";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './card.module.scss'
 import CardLoader from "../ui/card-image/card-loader";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite, isFavorite } from "@/store/favorites/favoritesSlice";
+import { RootState } from "@/store/store";
 
 export default function Card({
   product,
@@ -24,6 +27,9 @@ export default function Card({
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const { handleProductPopupToggle } = useProductPopup();
   const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
+  const dispatch = useDispatch();
+
+  const isProductFavorite = useSelector((state: RootState) => isFavorite(state, id));
 
   const firstImage = images[0].image_url;
   const secondImage = images[1].image_url;
@@ -42,6 +48,11 @@ export default function Card({
   const handleImageLoad = () => {
     setIsImageLoading(false);
   };
+
+  const handleToggleFavorite = (event: MouseEvent) => {
+    event.stopPropagation();
+    dispatch(toggleFavorite(product));
+  }
 
   return (
     <div className={styles.card} onClick={onClick}>
@@ -66,11 +77,12 @@ export default function Card({
         </div>
       </div>
       <div className={styles['tooltip-wrapper']}>
-        <Tooltip position="bottom" content="Add product to cart">
+        <Tooltip position="bottom" content="Add product to favorite">
           <FavoriteButton
-            onClick={handleFavorite ?? (() => {})}
+            onClick={handleToggleFavorite}
             className={styles['card__favorite-button']}
             border={false}
+            isFavorite={isProductFavorite}
           />
         </Tooltip>
       </div>

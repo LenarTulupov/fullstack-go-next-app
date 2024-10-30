@@ -6,6 +6,7 @@ import sizesPopupStateReducer from './sizesPopup/sizesPopupSlice'
 import productsReducer from './products/productsSlice'
 import selectedProductReducer from './selectedProduct/selectedProductSlice'
 import searchBarValueStateReducer from './search-bar-input-value/searchBarInputValueSlice'
+import favoritesStateReducer from './favorites/favoritesSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     sizesPopupState: sizesPopupStateReducer,
     selectedProduct: selectedProductReducer,
     searchBarInputValueState: searchBarValueStateReducer,
+    favoritesState: favoritesStateReducer,
   },
 });
 

@@ -13,6 +13,12 @@
     width: 20px;
     height: 20px;
   }
+  &_active {
+    svg path {
+      fill: #c30000 !important;
+      stroke: #c30000 !important;
+    }
+  }
 }
 .border {
   border: 1px solid var(--gray) !important;

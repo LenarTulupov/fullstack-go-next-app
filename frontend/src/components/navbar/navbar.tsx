@@ -20,6 +20,8 @@ import Title from '../ui/title/title';
 import Button from '../ui/button/button';
 import styles from './navbar.module.scss';
 import CardSkeleton from '../ui/card-skeleton/card-skeleton';
+import { useSelector } from 'react-redux';
+import { selectFavorites } from '@/store/favorites/favoritesSlice';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -31,6 +33,7 @@ export default function Navbar() {
   const [showFilteredProducts, setShowFilteredProducts] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+  const favorites = useSelector(selectFavorites);
 
   const handleSearchBar = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchBarValue(e.target.value);
@@ -160,7 +163,7 @@ export default function Navbar() {
                     href='/favorite'
                     className={styles['navbar__link']}
                   >
-                    Favorite<span>0</span>
+                    Favorite<span>{favorites.length}</span>
                   </Link>
                 </li>
                 <li className={styles.navbar__item}>

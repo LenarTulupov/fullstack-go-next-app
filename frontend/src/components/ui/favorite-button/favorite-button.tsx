@@ -1,16 +1,20 @@
+import { MouseEvent } from 'react';
 import styles from './favorite-button.module.scss'
 
 interface IFavoriteButton {
   className?: string;
-  onClick: () => void;
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   border: boolean;
+  isFavorite: boolean;
 }
 
-export default function FavoriteButton({ className, onClick, border = true }: IFavoriteButton ) {
+export default function FavoriteButton({ 
+  className, onClick, border = true, isFavorite 
+}: IFavoriteButton ) {
   return (
     <button 
       className={`
-        ${styles['favorite-button']} 
+        ${`${styles['favorite-button']} ${isFavorite ? styles['favorite-button_active'] : ''}`} 
         ${border ? styles.border : ''}
         ${className || ''}
       `}

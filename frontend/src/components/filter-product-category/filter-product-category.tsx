@@ -14,6 +14,7 @@ import Card from "../card/card";
 import { setProducts } from "@/store/products/productsSlice";
 
 
+
 interface IFilterProductCategory {
   filterFunction: (product: IProduct) => boolean;
   sortFunction?: (a: IProduct, b: IProduct) => number;
@@ -63,8 +64,6 @@ export default function FilterProductCategory(
   if(sortFunction) {
     filteredProducts = [...filteredProducts].sort(sortFunction);
   }
-
-  console.log(filteredProducts)
 
   return (
     <div>
