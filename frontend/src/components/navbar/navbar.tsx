@@ -19,6 +19,7 @@ import ProductsGrid from '../ui/products-grid/products-grid';
 import Title from '../ui/title/title';
 import Button from '../ui/button/button';
 import styles from './navbar.module.scss';
+import CardSkeleton from '../ui/card-skeleton/card-skeleton';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -35,7 +36,7 @@ export default function Navbar() {
     setSearchBarValue(e.target.value);
   }
 
-  const { products } = useProducts();
+  const { products, isLoading } = useProducts();
 
   const filteredProducts = products.filter((product: IProduct) => {
     const searchTerms = searchBarValue
@@ -197,17 +198,21 @@ export default function Navbar() {
                 </Title>
                 <ProductsGrid>
                   {!showFilteredProducts
-                    ? products
-                      .filter((product) =>
-                        product.categories?.includes('trends')
-                      )
-                      .slice(0, 5)
-                      .map((product) => (
-                        <Card
-                          key={product.id}
-                          product={product}
-                        />
+                    ? isLoading
+                      ? Array.from({ length: 5 }).map((_, index) => (
+                        <CardSkeleton key={index} />
                       ))
+                      : products
+                        .filter((product) =>
+                          product.categories?.includes('trends')
+                        )
+                        .slice(0, 5)
+                        .map((product) => (
+                          <Card
+                            key={product.id}
+                            product={product}
+                          />
+                        ))
                     : filteredProducts.map((product) => (
                       <Card
                         key={product.id}
