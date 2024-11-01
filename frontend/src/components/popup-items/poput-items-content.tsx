@@ -8,7 +8,7 @@ interface IPopupItemsContent {
   items: ISize[];
   // handleAddToCartClick: () => void;
   handleAddToCartClick: (size: ISize) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function PopupItemsContent({
