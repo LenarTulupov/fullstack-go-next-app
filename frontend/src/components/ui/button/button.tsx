@@ -8,6 +8,8 @@ export default function Button({
   variant = 'black',
   size = 'md',
   disabled = false,
+  weight = 'bold',
+  radius = 'main',
   type="button" }: IButton) {
   return (
     <button
@@ -15,7 +17,9 @@ export default function Button({
       className={`
         ${styles.button} 
         ${styles[variant]} 
+        ${styles[weight]}
         ${styles[size]} 
+        ${styles[radius]}
         ${className || ''}
       `}
       disabled={disabled}

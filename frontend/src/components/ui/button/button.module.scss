@@ -33,6 +33,21 @@
   }
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.regular {
+  font-weight: 400;
+}
+
+.main {
+  border-radius: var(--border-radius);
+}
+.none {
+  border-radius: 0 !important;
+}
+
 .sm {
   padding: 5px 10px;
 }

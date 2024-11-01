@@ -6,18 +6,20 @@ import styles from './popup-items-content.module.scss'
 
 interface IPopupItemsContent {
   items: ISize[];
-  handleAddToCartClick: () => void;
+  // handleAddToCartClick: () => void;
+  handleAddToCartClick: (size: ISize) => void;
+  onClose: () => void;
 }
 
 export default function PopupItemsContent({
-  items, handleAddToCartClick }: IPopupItemsContent) {
+  items, handleAddToCartClick, onClose }: IPopupItemsContent) {
   return (
     <div className={styles['popup-items-content']}>
       <div className={styles['popup-items-content__title']}>
         <Title weight='bold'>
           Choose the size
         </Title>
-        <CloseButton onClick={handleAddToCartClick} />
+        <CloseButton onClick={onClose} />
       </div>
       <div className={styles['popup-items-content__wrapper']}>
         {items
@@ -26,7 +28,7 @@ export default function PopupItemsContent({
             return (
               <Button
                 key={item.id}
-                onClick={handleAddToCartClick}
+                onClick={() => handleAddToCartClick(item)}
                 disabled={!item.available}
               >
                 {item.abbreviation}

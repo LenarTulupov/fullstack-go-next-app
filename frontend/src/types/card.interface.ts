@@ -14,7 +14,7 @@ export interface ICard {
   product: IProduct;
   handleFavorite?: () => void;
   onClick?: () => void;
-  handleAddedToCart?: () => void;
+  handleSizeSelectPopup?: () => void;
 }
 
 

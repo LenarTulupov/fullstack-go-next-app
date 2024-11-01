@@ -19,7 +19,9 @@ export const favoritesSlice = createSlice({
       const exists = state.favorites.some(item => item.id === product.id);
 
       if(exists) {
-        state.favorites = state.favorites.filter(item => item.id !== product.id);
+        state.favorites = state.favorites.filter(
+          item => item.id !== product.id
+        );
       } else {
         state.favorites.push(product);
       }

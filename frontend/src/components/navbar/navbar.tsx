@@ -22,6 +22,8 @@ import styles from './navbar.module.scss';
 import CardSkeleton from '../ui/card-skeleton/card-skeleton';
 import { useSelector } from 'react-redux';
 import { selectFavorites } from '@/store/favorites/favoritesSlice';
+import { selectCart } from '@/store/cart/cartSlice';
+import useCart from '@/hooks/useCart';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -34,12 +36,15 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const favorites = useSelector(selectFavorites);
+  const cart = useSelector(selectCart);
+  console.log(cart)
 
   const handleSearchBar = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchBarValue(e.target.value);
   }
 
   const { products, isLoading } = useProducts();
+  const { handleCartSidebarToggle } = useCart();
 
   const filteredProducts = products.filter((product: IProduct) => {
     const searchTerms = searchBarValue
@@ -167,8 +172,11 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li className={styles.navbar__item}>
-                  <button className={styles['navbar__item-button']}>
-                    Cart<span>0</span>
+                  <button 
+                    className={styles['navbar__item-button']}
+                    onClick={handleCartSidebarToggle}
+                  >
+                    Cart<span>{cart.length}</span>
                   </button>
                 </li>
               </ul>

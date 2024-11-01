@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { addFavorite, removeFavorite, selectFavoriteProducts } from "@/store/favorite-button/favoriteButtonSlice";
 import { IProduct } from "@/types/product.interface";
 import useProductPopup from "@/hooks/useProductPopup";
 import useProducts from "@/utils/useProducts";
@@ -11,7 +10,11 @@ import ProductContent from "../product-content/product-content";
 import SizeChartContent from "../size-chart-content/size-chart-content";
 import PopupItemsContent from "../popup-items/poput-items-content";
 import Card from "../card/card";
-import { setProducts } from "@/store/products/productsSlice";
+import { addToCart } from "@/store/cart/cartSlice";
+import { ISize } from "@/types/sizes.interface";
+import Sidebar from "../ui/sidebar/sidebar";
+import useCart from "@/hooks/useCart";
+import CartContent from "../cart-content/cart-content";
 
 
 
@@ -26,9 +29,10 @@ export default function FilterProductCategory(
   const { products, error, isLoading } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
-  const favoriteProducts = useSelector(selectFavoriteProducts);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const { isProductPopupOpened, handleProductPopupToggle } = useProductPopup();
+
+  const { isCartSidebarOpened } = useCart();
 
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
@@ -38,8 +42,14 @@ export default function FilterProductCategory(
     setSelectedProduct(product);
   }
 
-  const handleAddedToCart = () => { 
-    setIsAddedToCart(p => !p);
+  // const handleAddedToCart = () => { 
+  //   setIsAddedToCart(p => !p);
+  // }
+  const handleAddedToCart = (size: ISize) => {
+    if (selectedProduct) {
+      dispatch(addToCart({ product: selectedProduct, size }))
+    }
+    setIsAddedToCart(false);
   }
 
   const handleClosePopup = () => {
@@ -47,21 +57,16 @@ export default function FilterProductCategory(
     handleProductPopupToggle();
   };
 
-  if (error) return <div>Error fetching products</div>;
-
-  const handleAddToFavorite = (product: IProduct) => {
-    const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
-
-    if (isFavorite) {
-      dispatch(removeFavorite(product.id));
-    } else {
-      dispatch(addFavorite(product));
-    }
+  const handleSizeSelectPopup = (product: IProduct) => {
+    setSelectedProduct(product);
+    setIsAddedToCart(true);
   };
+
+  if (error) return <div>Error fetching products</div>;
 
   let filteredProducts = products.filter(filterFunction);
 
-  if(sortFunction) {
+  if (sortFunction) {
     filteredProducts = [...filteredProducts].sort(sortFunction);
   }
 
@@ -70,20 +75,20 @@ export default function FilterProductCategory(
       <ProductsGrid>
         {isLoading
           ? Array.from({ length: 10 }).map((_, index) => (
-              <CardSkeleton key={index} />
-            ))
+            <CardSkeleton key={index} />
+          ))
           : filteredProducts.map((product) => {
-              const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
-              return (
-                <Card
-                  key={product.id}
-                  product={product}
-                  handleFavorite={() => handleAddToFavorite(product)}
-                  onClick={() => handleSelectedProduct(product)}
-                  handleAddedToCart={handleAddedToCart}
-                />
-              );
-            })}
+            return (
+              <Card
+                key={product.id}
+                product={product}
+                // handleFavorite={() => handleAddToFavorite(product)}
+                onClick={() => handleSelectedProduct(product)}
+                handleAddedToCart={handleAddedToCart}
+                handleSizeSelectPopup={handleSizeSelectPopup}
+              />
+            );
+          })}
       </ProductsGrid>
       {selectedProduct && (
         <Popup isPopupOpened={isProductPopupOpened} nested>
@@ -104,10 +109,16 @@ export default function FilterProductCategory(
         <Popup isPopupOpened={isAddedToCart} nested>
           <PopupItemsContent
             items={selectedProduct.sizes}
-            handleAddToCartClick={handleAddedToCart}
+            handleAddToCartClick={(size: ISize) => handleAddedToCart(size)}
+            onClose={() => setIsAddedToCart(false)}
           />
         </Popup>
       )}
+      {isCartSidebarOpened &&
+        <Sidebar>
+          <CartContent />
+        </Sidebar>
+      }
     </div>
   )
 };

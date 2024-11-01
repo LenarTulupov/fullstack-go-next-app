@@ -1,0 +1,27 @@
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 10px;
+  &__discount {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__subtotal {
+    display: flex;
+  }
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    &-link {
+      background-color: var(--gray);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+  }
+}

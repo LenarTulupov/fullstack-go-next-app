@@ -20,9 +20,10 @@ import { RootState } from "@/store/store";
 
 export default function Card({
   product,
-  handleFavorite,
+  // handleFavorite,
   onClick,
-  handleAddedToCart }: ICard) {
+  // handleAddedToCart,
+  handleSizeSelectPopup}: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const { handleProductPopupToggle } = useProductPopup();
@@ -97,7 +98,7 @@ export default function Card({
         </div>
         <Button
           variant='black'
-          onClick={handleAddedToCart}
+          onClick={handleSizeSelectPopup}
           className={styles.card__button}
         >
           <MdShoppingCart className={styles['card__button-icon']} />
