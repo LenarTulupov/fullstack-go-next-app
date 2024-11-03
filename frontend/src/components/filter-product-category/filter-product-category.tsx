@@ -84,8 +84,8 @@ export default function FilterProductCategory(
                 product={product}
                 // handleFavorite={() => handleAddToFavorite(product)}
                 onClick={() => handleSelectedProduct(product)}
-                handleAddedToCart={handleAddedToCart}
-                handleSizeSelectPopup={handleSizeSelectPopup}
+                // handleAddedToCart={handleAddedToCart}
+                handleSizeSelectPopup={() => handleSizeSelectPopup(product)}
               />
             );
           })}
