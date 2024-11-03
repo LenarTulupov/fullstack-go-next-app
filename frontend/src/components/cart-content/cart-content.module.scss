@@ -3,6 +3,12 @@
   &__cards-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 10px;  
+    max-height: 400px;
+    overflow-y: auto;
   }
+}
+
+.empty-message {
+  padding: 10px;
 }

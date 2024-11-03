@@ -114,11 +114,9 @@ export default function FilterProductCategory(
           />
         </Popup>
       )}
-      {isCartSidebarOpened &&
-        <Sidebar>
-          <CartContent />
-        </Sidebar>
-      }
+      <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
+        <CartContent />
+      </Sidebar>
     </div>
   )
 };

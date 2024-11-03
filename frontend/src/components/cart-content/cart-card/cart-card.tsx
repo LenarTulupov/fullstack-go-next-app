@@ -21,9 +21,10 @@ export default function CartCard({ product }: ICartCard) {
   const selectedColor = colors[`color-${product.product.color}`];
 
   if (!selectedColor) {
-    console.warn(`Color "${product.product.color}" is not defined in styles.`);
+    console.log(`Color "${product.product.color}" is not defined in styles.`);
     return null;
   }
+
   return (
     <div className={styles['cart-card']}>
       <Link href={`/product/${product.product.id}`}>
@@ -44,7 +45,7 @@ export default function CartCard({ product }: ICartCard) {
         <div className={`
           ${styles['cart-card__product-info']} 
           ${styles['product-info']}
-        `}>
+          `}>
           <div className={`
             ${styles['product-info__color']} 
             ${selectedColor}`}
