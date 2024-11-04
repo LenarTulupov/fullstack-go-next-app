@@ -3,12 +3,14 @@
   flex-direction: column;
   gap: 30px;
   padding: 10px;
+  border-top: 1px solid var(--gray);
   &__discount {
     display: flex;
     justify-content: space-between;
   }
   &__subtotal {
     display: flex;
+    justify-content: space-between;
   }
   &__buttons {
     display: grid;
