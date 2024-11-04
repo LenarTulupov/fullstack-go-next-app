@@ -6,18 +6,20 @@ import colors from '@/app/colors.module.scss'
 import styles from './cart-card.module.scss';
 import Link from 'next/link';
 import { IProduct } from '@/types/product.interface';
+import { removeFromCart } from '@/store/cart/cartSlice';
+import { useDispatch } from 'react-redux';
+import { ISize } from '@/types/sizes.interface';
 
 interface ICartCard {
   product: {
     quantity: number;
-    size: {
-      name?: string;
-    }
-    product: IProduct
+    size: ISize;
+    product: IProduct;
   }
 }
 
 export default function CartCard({ product }: ICartCard) {
+  const dispatch = useDispatch();
   const selectedColor = colors[`color-${product.product.color}`];
 
   if (!selectedColor) {
@@ -25,9 +27,16 @@ export default function CartCard({ product }: ICartCard) {
     return null;
   }
 
+  const handleRemoveFromCart = () => {
+    dispatch(removeFromCart({ product: product.product, size: product.size}))
+  }
+
   return (
     <div className={styles['cart-card']}>
-      <Link href={`/product/${product.product.id}`}>
+      <Link 
+        href={`/product/${product.product.id}`} 
+        className={styles['cart-card__link-image']}
+      >
         <Image
           src={product.product.images[0].image_url}
           alt={product.product.title}
@@ -40,7 +49,7 @@ export default function CartCard({ product }: ICartCard) {
           <Link href={`/product/${product.product.id}`}>
             <div>{product.product.title}</div>
           </Link>
-          <CloseButton />
+          <CloseButton onClick={handleRemoveFromCart}/>
         </div>
         <div className={`
           ${styles['cart-card__product-info']} 

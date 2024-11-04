@@ -20,9 +20,20 @@
   right: -100%;
   background-color: #fff;
   height: 100%;
+  border-left: 1px solid var(--gray);
   transition: right 0.5s ease-in-out;
   &_opened {
     right: 0;
     transition: right 0.5s ease-in-out;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    left: -20.5px;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background-color: #fff;
+    
   }
 }

@@ -46,8 +46,6 @@ export default function ProductContent({
     setIsManeImage(image);
   }
 
-  console.log(isProductFavorite)
-
   return (
     <>
       <div className={styles.product__content}>

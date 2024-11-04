@@ -9,13 +9,17 @@ import { selectCart } from '@/store/cart/cartSlice';
 import styles from './cart-content.module.scss';
 import EmptyMessage from '../ui/empty-message/empty-message';
 import { TbShoppingCartPlus } from "react-icons/tb";
+import { usePathname } from 'next/navigation';
 
 export default function CartContent() {
   const cart = useSelector(selectCart);
+  const pathname = usePathname();
+
+  const isCartPage = pathname === '/cart';
   return (
     <div className={styles['cart-content']}>
-      <CartHeader />
-      {cart.length === 0 ? (
+      {!isCartPage && <CartHeader />}
+      {!isCartPage && cart.length === 0 ? (
         <EmptyMessage
           className={styles['empty-message']}
           message='Your cart is empty'
@@ -31,10 +35,10 @@ export default function CartContent() {
               />
             ))}
           </div>
-          <CartFooter />
+          {!isCartPage &&<CartFooter />}
         </>
       )}
-      <CartPromoSubfooter />
+      {!isCartPage && <CartPromoSubfooter />}
     </div>
   )
 };
