@@ -1,10 +1,7 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { ReactNode, useState } from "react";
 import { IProduct } from "@/types/product.interface";
-import { setFilters } from "@/store/filters/filtersSlice";
-import { AppDispatch } from "@/store/store";
 import { optionsList } from "@/constants/filter-items";
 import { layoutItems } from "@/constants/layout-items";
 import Container from "@/components/ui/container/container";
@@ -15,15 +12,17 @@ import SizeChartContent from "@/components/size-chart-content/size-chart-content
 import PopupItemsContent from "@/components/popup-items/poput-items-content";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './layout.module.scss'
+import Dropdown from "@/components/ui/dropdown/dropdown";
 
 export default function LayoutCategory({ children }: { children: ReactNode }) {
-  const dispatch = useDispatch<AppDispatch>();
   const { products } = useProducts();
   const { isProductPopupOpened } = useProductPopup();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSortOpened, setIsSortOpened] = useState<boolean>(false);
+
+  const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const handleSelectedProduct = (product: IProduct) => {
     setSelectedProduct(product);
@@ -41,11 +40,9 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
     setIsSortOpened(p => !p);
   }
 
-  useEffect(() => {
-    if (products.length) {
-      dispatch(setFilters(products))
-    }
-  }, [dispatch, products]);
+  const handleItemClick = (item: string) => {
+    setActiveItem((p) => p === item ? null : item);
+  }
 
   return (
     <div className={styles['layout-category']}>
@@ -60,7 +57,11 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
                 const itemWithFirstUpperLetter =
                   item.at(0)?.toUpperCase() + item.slice(1);
                 return (
-                  <button key={item} className={styles['list-center__item']}>
+                  <button 
+                    key={item} 
+                    className={styles['list-center__item']}
+                    onClick={() => handleItemClick(item)}
+                  >
                     {itemWithFirstUpperLetter}
                   </button>
                 )
@@ -96,7 +97,9 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
       </div>
       <Container>
         <div className={styles['layout-category__selected-items']}>
-
+        {activeItem && (
+            <Dropdown item={activeItem} />
+          )}
         </div>
         {children}
       </Container>

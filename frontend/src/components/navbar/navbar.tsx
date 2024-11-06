@@ -29,7 +29,6 @@ export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
   const searchBarFocus = useRef<HTMLInputElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
-  // const [searchBarValue, setSearchBarValue] = useState<string>('');
   const searchBarValue = useSearchBarValue();
   const setSearchBarValue = useSetSearchBarValue();
   const [showFilteredProducts, setShowFilteredProducts] = useState<boolean>(false);
@@ -57,8 +56,6 @@ export default function Navbar() {
       )
     });
   });
-
-  const oftenSearchedFor = ['dresses', 'summer'];
 
   const handleSearch = () => {
     setIsSearchClicked((prev) => {
@@ -116,7 +113,7 @@ export default function Navbar() {
                       key={index}
                       className={styles.navbar__item}
                       onMouseEnter={() =>
-                        hasDropdown && handleDropdownMouseEnter(index)
+                        hasDropdown ? handleDropdownMouseEnter(index) : handleDropdownMouseLeave()
                       }
                     >
                       <Link href={item.href} className={styles.navbar__link}>
@@ -129,7 +126,7 @@ export default function Navbar() {
                       </Link>
                       {isDropdownOpen === index && hasDropdown && (
                         <DropdownMenu
-                          onMouseEnter={() => { }}
+                          onMouseEnter={() => {}}
                           onMouseLeave={handleDropdownMouseLeave}
                         />
                       )}

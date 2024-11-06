@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit'
-import filtersReducer from './filters/filtersSlice'
 import productPopupStateReducer from './productPopup/productPopupSlice'
 import sizesPopupStateReducer from './sizesPopup/sizesPopupSlice'
 import productsReducer from './products/productsSlice'
@@ -12,7 +11,6 @@ import cartSidebarStateReducer from './cart/cartSidebarState'
 export const store = configureStore({
   reducer: {
     products: productsReducer,
-    filters: filtersReducer,
     productPopupState: productPopupStateReducer,
     sizesPopupState: sizesPopupStateReducer,
     selectedProduct: selectedProductReducer,

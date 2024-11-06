@@ -1,0 +1,31 @@
+.dropdown {
+  position: absolute;
+  top: calc(var(--header-height) * 2);
+  left: 0;
+  padding: 20px 0;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid var(--gray);
+  z-index: 10;
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  &__item {
+    display: flex;
+    text-transform: uppercase;
+    align-items: center;
+    &-radio {
+      width: 16px;
+      height: 16px;
+    }
+    &-checkbox {
+      width: 16px;
+      height: 16px;
+    }
+    &-label {
+      padding: 0 10px 0;
+    }
+  }
+}

@@ -25,6 +25,7 @@ export default function PopupItemsContent({
         {items
           .filter(item => item.available)
           .map(item => {
+            console.log(item.abbreviation)
             return (
               <Button
                 key={item.id}

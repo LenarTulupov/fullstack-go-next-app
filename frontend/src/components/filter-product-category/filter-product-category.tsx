@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { IProduct } from "@/types/product.interface";
 import useProductPopup from "@/hooks/useProductPopup";
 import useProducts from "@/utils/useProducts";
@@ -69,6 +69,7 @@ export default function FilterProductCategory(
   if (sortFunction) {
     filteredProducts = [...filteredProducts].sort(sortFunction);
   }
+
 
   return (
     <div>
