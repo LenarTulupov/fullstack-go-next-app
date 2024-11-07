@@ -20,28 +20,35 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSortOpened, setIsSortOpened] = useState<boolean>(false);
-
+  const [selectedSortOption, setSelectedSortOption] = useState<string>("recommend");  // По умолчанию "recommend"
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const handleSelectedProduct = (product: IProduct) => {
     setSelectedProduct(product);
-  }
+  };
 
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
-  }
+  };
 
   const handleAddedToCart = () => {
     setIsAddedToCart(p => !p);
-  }
+  };
 
   const handleSort = () => {
-    setIsSortOpened(p => !p);
-  }
+    setActiveItem(null);
+    setIsSortOpened((prev) => !prev);
+  };
+
+  const handleSortOptionClick = (option: string) => {
+    setSelectedSortOption(option);
+    setIsSortOpened(false);
+  };
 
   const handleItemClick = (item: string) => {
-    setActiveItem((p) => p === item ? null : item);
-  }
+    setIsSortOpened(false);
+    setActiveItem((prev) => (prev === item ? null : item));
+  };
 
   return (
     <div className={styles['layout-category']}>
@@ -56,49 +63,52 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
                 const itemWithFirstUpperLetter =
                   item.at(0)?.toUpperCase() + item.slice(1);
                 return (
-                  <button 
-                    key={item} 
+                  <button
+                    key={item}
                     className={styles['list-center__item']}
                     onClick={() => handleItemClick(item)}
                   >
                     {itemWithFirstUpperLetter}
                   </button>
-                )
+                );
               })}
             </div>
             <div className={`
               ${styles['layout-category__list-end']} 
               ${styles['list-end']}
             `}>
-              <label 
-                htmlFor="sort" 
+              <label
+                htmlFor="sort"
                 onClick={handleSort}
                 className={styles['list-end__label']}
               >
                 Sort
               </label>
-              {isSortOpened &&
-                <select id="sort" className={styles['list-end__select']}>
+              {isSortOpened && (
+                <div className={styles['list-end__select']}>
                   {optionsList.map((option) => (
-                    <option
+                    <div
                       key={option}
-                      value={option}
-                      className={styles['list-end__option']}
+                      className={`
+                        ${styles['list-end__option']} 
+                        ${selectedSortOption === option
+                          ? styles['selected']
+                          : ''}
+                      `}
+                      onClick={() => handleSortOptionClick(option)}
                     >
                       {option}
-                    </option>
+                    </div>
                   ))}
-                </select>
-              }
+                </div>
+              )}
             </div>
           </div>
         </Container>
       </div>
       <Container>
         <div className={styles['layout-category__selected-items']}>
-        {activeItem && (
-            <Dropdown item={activeItem} />
-          )}
+          {activeItem && <Dropdown item={activeItem} />}
         </div>
         {children}
       </Container>
@@ -127,5 +137,5 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
         </Popup>
       )}
     </div>
-  )
+  );
 };
