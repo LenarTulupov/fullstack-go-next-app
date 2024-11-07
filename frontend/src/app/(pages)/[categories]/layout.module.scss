@@ -61,6 +61,18 @@
     background-color: var(--gray);
     border-radius: var(--border-radius);
   }
+  &-reset {
+    background-color: var(--black) !important;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--black-hover);
+    }
+  }
 }
 
 .selected-sort {

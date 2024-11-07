@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { IProduct } from "@/types/product.interface";
 import { filterItems, optionsList } from "@/constants/filter-items";
 import Container from "@/components/ui/container/container";
@@ -10,11 +10,12 @@ import ProductContent from "@/components/product-content/product-content";
 import SizeChartContent from "@/components/size-chart-content/size-chart-content";
 import PopupItemsContent from "@/components/popup-items/poput-items-content";
 import useProductPopup from "@/hooks/useProductPopup";
-import styles from './layout.module.scss'
 import Dropdown from "@/components/ui/dropdown/dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import { setSelectedSortOption } from "@/store/selectedSortOption/selectedSortOptionSlice";
+import { resetAllFilters } from "@/store/resetFilter/resetFilterSlice";
+import styles from './layout.module.scss'
 
 export default function LayoutCategory({ children }: { children: ReactNode }) {
   const { products } = useProducts();
@@ -23,10 +24,22 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSortOpened, setIsSortOpened] = useState<boolean>(false);
-  // const [selectedSortOption, setSelectedSortOption] = useState<string>("recommend");  // По умолчанию "recommend"
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const dispatch = useDispatch();
-  const selectedSortOption = useSelector((state: RootState) => state.selectedSortOption.selectedSortOption)
+  const [filtersApplied, setFiltersApplied] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedSortOption = useSelector((state: RootState) =>
+    state.selectedSortOption.selectedSortOption);
+  const selectedPrice = useSelector((state: RootState) =>
+    state.priceFilter.selectedPrice);
+  const selectedSizes = useSelector((state: RootState) =>
+    state.sizeFilter.selectedSizes);
+  const selectedColors = useSelector((state: RootState) =>
+    state.colorFilter.selectedColors);
+
+  const handleResetFilters = () => {
+    dispatch(resetAllFilters());
+    setFiltersApplied(false);
+  };
 
   const handleSelectedProduct = (product: IProduct) => {
     setSelectedProduct(product);
@@ -45,11 +58,6 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
     setIsSortOpened((prev) => !prev);
   };
 
-  // const handleSortOptionClick = (option: string) => {
-  //   setSelectedSortOption(option);
-  //   setIsSortOpened(false);
-  // };
-
   const handleSortOptionClick = (option: string) => {
     dispatch(setSelectedSortOption(option));
     setIsSortOpened(false);
@@ -59,6 +67,13 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
     setIsSortOpened(false);
     setActiveItem((prev) => (prev === item ? null : item));
   };
+
+  useEffect(() => {
+    const isFiltered =
+      selectedSortOption !== "recommend" ||
+      (activeItem !== null && (selectedSizes.length > 0 || selectedColors.length > 0 || selectedPrice !== null));
+    setFiltersApplied(isFiltered);
+  }, [selectedSortOption, activeItem, selectedSizes, selectedColors, selectedPrice]);
 
   return (
     <div className={styles['layout-category']}>
@@ -82,6 +97,14 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
                   </button>
                 );
               })}
+              {filtersApplied && (
+                <button
+                  className={styles['list-center__item-reset']}
+                  onClick={handleResetFilters}
+                >
+                  Reset
+                </button>
+              )}
             </div>
             <div className={`
               ${styles['layout-category__list-end']} 

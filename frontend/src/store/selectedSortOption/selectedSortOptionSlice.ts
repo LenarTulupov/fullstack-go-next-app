@@ -14,9 +14,12 @@ export const selectedSortOptionSlice = createSlice({
   reducers: {
     setSelectedSortOption: (state, action: PayloadAction<string>) => {
       state.selectedSortOption = action.payload;
+    },
+    clearSelectedSortOption: (state) => {
+      state.selectedSortOption = initialState.selectedSortOption;
     }
   }
 });
 
-export const { setSelectedSortOption } = selectedSortOptionSlice.actions;
+export const { setSelectedSortOption, clearSelectedSortOption } = selectedSortOptionSlice.actions;
 export default selectedSortOptionSlice.reducer;
