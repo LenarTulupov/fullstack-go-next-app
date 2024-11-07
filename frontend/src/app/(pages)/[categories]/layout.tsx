@@ -12,6 +12,9 @@ import PopupItemsContent from "@/components/popup-items/poput-items-content";
 import useProductPopup from "@/hooks/useProductPopup";
 import styles from './layout.module.scss'
 import Dropdown from "@/components/ui/dropdown/dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setSelectedSortOption } from "@/store/selectedSortOption/selectedSortOptionSlice";
 
 export default function LayoutCategory({ children }: { children: ReactNode }) {
   const { products } = useProducts();
@@ -20,8 +23,10 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSortOpened, setIsSortOpened] = useState<boolean>(false);
-  const [selectedSortOption, setSelectedSortOption] = useState<string>("recommend");  // По умолчанию "recommend"
+  // const [selectedSortOption, setSelectedSortOption] = useState<string>("recommend");  // По умолчанию "recommend"
   const [activeItem, setActiveItem] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const selectedSortOption = useSelector((state: RootState) => state.selectedSortOption.selectedSortOption)
 
   const handleSelectedProduct = (product: IProduct) => {
     setSelectedProduct(product);
@@ -40,8 +45,13 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
     setIsSortOpened((prev) => !prev);
   };
 
+  // const handleSortOptionClick = (option: string) => {
+  //   setSelectedSortOption(option);
+  //   setIsSortOpened(false);
+  // };
+
   const handleSortOptionClick = (option: string) => {
-    setSelectedSortOption(option);
+    dispatch(setSelectedSortOption(option));
     setIsSortOpened(false);
   };
 

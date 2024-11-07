@@ -1,4 +1,3 @@
-// store/colorFilterSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ColorFilterState {
@@ -16,10 +15,8 @@ const colorFilterSlice = createSlice({
     toggleColor(state, action: PayloadAction<string>) {
       const color = action.payload;
       if (state.selectedColors.includes(color)) {
-        // Если цвет уже выбран, удаляем его
         state.selectedColors = state.selectedColors.filter(c => c !== color);
       } else {
-        // Если цвет не выбран, добавляем его
         state.selectedColors.push(color);
       }
     },

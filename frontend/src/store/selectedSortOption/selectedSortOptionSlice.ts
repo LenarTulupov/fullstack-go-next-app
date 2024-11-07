@@ -1,0 +1,22 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface ISelectedSortOptionState {
+  selectedSortOption: string;
+}
+
+const initialState: ISelectedSortOptionState = {
+  selectedSortOption: 'recommend',
+} 
+
+export const selectedSortOptionSlice = createSlice({
+  name: 'selectedSortOption',
+  initialState,
+  reducers: {
+    setSelectedSortOption: (state, action: PayloadAction<string>) => {
+      state.selectedSortOption = action.payload;
+    }
+  }
+});
+
+export const { setSelectedSortOption } = selectedSortOptionSlice.actions;
+export default selectedSortOptionSlice.reducer;

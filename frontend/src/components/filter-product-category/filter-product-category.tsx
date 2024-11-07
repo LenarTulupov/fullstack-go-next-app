@@ -34,6 +34,12 @@ export default function FilterProductCategory(
   const selectedSizes = useSelector((state: RootState) => state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) => state.colorFilter.selectedColors);
   const selectedPrice = useSelector((state: RootState) => state.priceFilter.selectedPrice);
+  const selectedSortOption = useSelector(
+    (state: RootState) => state.selectedSortOption.selectedSortOption
+  );
+
+  console.log(selectedSortOption)
+
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
   }
@@ -77,6 +83,13 @@ export default function FilterProductCategory(
         parseFloat(product.price_new) <= parsePriceRange(selectedPrice).max
       ))
     );
+
+    if (selectedSortOption === 'low to high') {
+      filteredProducts = filteredProducts.sort((a, b) => parseFloat(a.price_new) - parseFloat(b.price_new));
+    } else if (selectedSortOption === 'high to low') {
+      filteredProducts = filteredProducts.sort((a, b) => parseFloat(b.price_new) - parseFloat(a.price_new));
+    }
+
 
   if (sortFunction) {
     filteredProducts = [...filteredProducts].sort(sortFunction);

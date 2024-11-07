@@ -1,4 +1,3 @@
-// store/sizeFilterSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SizeFilterState {
@@ -16,10 +15,8 @@ const sizeFilterSlice = createSlice({
     toggleSize(state, action: PayloadAction<string>) {
       const size = action.payload;
       if (state.selectedSizes.includes(size)) {
-        // Если размер уже выбран, удаляем его
         state.selectedSizes = state.selectedSizes.filter(s => s !== size);
       } else {
-        // Если размер не выбран, добавляем его
         state.selectedSizes.push(size);
       }
     },
