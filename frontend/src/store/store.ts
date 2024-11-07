@@ -7,6 +7,8 @@ import searchBarValueStateReducer from './search-bar-input-value/searchBarInputV
 import favoritesStateReducer from './favorites/favoritesSlice'
 import cartStateReducer from './cart/cartSlice'
 import cartSidebarStateReducer from './cart/cartSidebarState'
+import sizeFilterReducer from './sizeFilter/sizeFilterSlice'
+import colorFilterReducer from './colorFilter/colorFilterSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     favoritesState: favoritesStateReducer,
     cartState: cartStateReducer,
     cartSidebarState: cartSidebarStateReducer,
+    sizeFilter: sizeFilterReducer,
+    colorFilter: colorFilterReducer,
   },
 });
 

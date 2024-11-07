@@ -15,6 +15,7 @@ import { ISize } from "@/types/sizes.interface";
 import Sidebar from "../ui/sidebar/sidebar";
 import useCart from "@/hooks/useCart";
 import CartContent from "../cart-content/cart-content";
+import { RootState } from "@/store/store";
 
 
 
@@ -31,8 +32,11 @@ export default function FilterProductCategory(
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const { isProductPopupOpened, handleProductPopupToggle } = useProductPopup();
-
   const { isCartSidebarOpened } = useCart();
+  const selectedSizes = useSelector((state: RootState) => state.sizeFilter.selectedSizes);
+  const selectedColors = useSelector((state: RootState) => state.colorFilter.selectedColors);
+
+  console.log(products)
 
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
@@ -64,12 +68,22 @@ export default function FilterProductCategory(
 
   if (error) return <div>Error fetching products</div>;
 
-  let filteredProducts = products.filter(filterFunction);
+  let filteredProducts = products
+    .filter(filterFunction)
+    .filter(product =>
+      (selectedSizes.length === 0 ||
+        product.sizes.some(size =>
+          size.name
+          && selectedSizes.includes(size.name.toLowerCase())
+          && size.available
+        )) &&
+      (selectedColors.length === 0 ||
+        selectedColors.includes(product.color.toLowerCase()))
+    );
 
   if (sortFunction) {
     filteredProducts = [...filteredProducts].sort(sortFunction);
   }
-
 
   return (
     <div>

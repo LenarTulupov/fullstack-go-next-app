@@ -2,8 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import { IProduct } from "@/types/product.interface";
-import { optionsList } from "@/constants/filter-items";
-import { layoutItems } from "@/constants/layout-items";
+import { filterItems, optionsList } from "@/constants/filter-items";
 import Container from "@/components/ui/container/container";
 import useProducts from "@/utils/useProducts";
 import Popup from "@/components/ui/popup/popup";
@@ -53,7 +52,7 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
               ${styles['layout-category__list-center']} 
               ${styles['list-center']}
             `}>
-              {layoutItems.map((item) => {
+              {filterItems.map((item) => {
                 const itemWithFirstUpperLetter =
                   item.at(0)?.toUpperCase() + item.slice(1);
                 return (
