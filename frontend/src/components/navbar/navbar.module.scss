@@ -15,6 +15,9 @@
   &__item {
     display: flex;
     align-items: center;
+    &-dropdown {
+      background-color: black;
+    }
     &-search {
       display: flex;
       align-items: center;
@@ -39,12 +42,17 @@
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
+    &:hover .navbar__link-arrow {
+      transform: rotate(-180deg);
+    }
     &-search {
       padding: 0;
     }
     .navbar__link-arrow {
       font-size: 18px;
       color: var(--accent-color);
+      transform: rotate(0deg);
+      transition: transform .2s ease-in-out;
     }
   }
   &__button {

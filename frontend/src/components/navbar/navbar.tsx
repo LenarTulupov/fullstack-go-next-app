@@ -119,9 +119,7 @@ export default function Navbar() {
                       <Link href={item.href} className={styles.navbar__link}>
                         {item.title}
                         {hasDropdown && (
-                          <IoIosArrowDown
-                            className={styles['navbar__link-arrow']}
-                          />
+                          <IoIosArrowDown className={styles['navbar__link-arrow']}/>
                         )}
                       </Link>
                       {isDropdownOpen === index && hasDropdown && (
