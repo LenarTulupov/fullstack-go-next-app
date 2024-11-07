@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { IProduct } from "@/types/product.interface";
 import useProductPopup from "@/hooks/useProductPopup";
 import useProducts from "@/utils/useProducts";
@@ -17,8 +17,6 @@ import useCart from "@/hooks/useCart";
 import CartContent from "../cart-content/cart-content";
 import { RootState } from "@/store/store";
 
-
-
 interface IFilterProductCategory {
   filterFunction: (product: IProduct) => boolean;
   sortFunction?: (a: IProduct, b: IProduct) => number;
@@ -35,9 +33,7 @@ export default function FilterProductCategory(
   const { isCartSidebarOpened } = useCart();
   const selectedSizes = useSelector((state: RootState) => state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) => state.colorFilter.selectedColors);
-
-  console.log(products)
-
+  const selectedPrice = useSelector((state: RootState) => state.priceFilter.selectedPrice);
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
   }
@@ -46,12 +42,9 @@ export default function FilterProductCategory(
     setSelectedProduct(product);
   }
 
-  // const handleAddedToCart = () => { 
-  //   setIsAddedToCart(p => !p);
-  // }
   const handleAddedToCart = (size: ISize) => {
     if (selectedProduct) {
-      dispatch(addToCart({ product: selectedProduct, size }))
+      dispatch(addToCart({ product: selectedProduct, size }));
     }
     setIsAddedToCart(false);
   }
@@ -68,17 +61,21 @@ export default function FilterProductCategory(
 
   if (error) return <div>Error fetching products</div>;
 
+  const parsePriceRange = (priceRange: string) => {
+    const [min, max] = priceRange.split(' - ').map(Number);
+    return { min, max };
+  };
+
   let filteredProducts = products
     .filter(filterFunction)
     .filter(product =>
-      (selectedSizes.length === 0 ||
-        product.sizes.some(size =>
-          size.name
-          && selectedSizes.includes(size.name.toLowerCase())
-          && size.available
-        )) &&
-      (selectedColors.length === 0 ||
-        selectedColors.includes(product.color.toLowerCase()))
+      (selectedSizes.length === 0 || product.sizes.some(size =>
+        size.name && selectedSizes.includes(size.name.toLowerCase()) && size.available)) &&
+      (selectedColors.length === 0 || selectedColors.includes(product.color.toLowerCase())) &&
+      (!selectedPrice || (
+        parseFloat(product.price_new) >= parsePriceRange(selectedPrice).min &&
+        parseFloat(product.price_new) <= parsePriceRange(selectedPrice).max
+      ))
     );
 
   if (sortFunction) {
@@ -89,21 +86,15 @@ export default function FilterProductCategory(
     <div>
       <ProductsGrid>
         {isLoading
-          ? Array.from({ length: 10 }).map((_, index) => (
-            <CardSkeleton key={index} />
-          ))
-          : filteredProducts.map((product) => {
-            return (
-              <Card
-                key={product.id}
-                product={product}
-                // handleFavorite={() => handleAddToFavorite(product)}
-                onClick={() => handleSelectedProduct(product)}
-                // handleAddedToCart={handleAddedToCart}
-                handleSizeSelectPopup={() => handleSizeSelectPopup(product)}
-              />
-            );
-          })}
+          ? Array.from({ length: 10 }).map((_, index) => <CardSkeleton key={index} />)
+          : filteredProducts.map((product) => (
+            <Card
+              key={product.id}
+              product={product}
+              onClick={() => handleSelectedProduct(product)}
+              handleSizeSelectPopup={() => handleSizeSelectPopup(product)}
+            />
+          ))}
       </ProductsGrid>
       {selectedProduct && (
         <Popup isPopupOpened={isProductPopupOpened} nested>
@@ -133,5 +124,5 @@ export default function FilterProductCategory(
         <CartContent />
       </Sidebar>
     </div>
-  )
-};
+  );
+}

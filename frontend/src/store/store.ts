@@ -9,6 +9,7 @@ import cartStateReducer from './cart/cartSlice'
 import cartSidebarStateReducer from './cart/cartSidebarState'
 import sizeFilterReducer from './sizeFilter/sizeFilterSlice'
 import colorFilterReducer from './colorFilter/colorFilterSlice'
+import priceFilterReducer from './priceFilter/priceFilterSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     cartSidebarState: cartSidebarStateReducer,
     sizeFilter: sizeFilterReducer,
     colorFilter: colorFilterReducer,
+    priceFilter: priceFilterReducer,
   },
 });
 

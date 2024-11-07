@@ -8,6 +8,7 @@ import { toggleSize } from '@/store/sizeFilter/sizeFilterSlice';
 import { toggleColor } from '@/store/colorFilter/colorFilterSlice';
 import { RootState } from '@/store/store';
 import styles from './dropdown.module.scss';
+import { setPrice } from '@/store/priceFilter/priceFilterSlice';
 
 interface IDropdown {
   item: string;
@@ -19,6 +20,8 @@ export default function Dropdown({ item }: IDropdown) {
     state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) =>
     state.colorFilter.selectedColors);
+  const selectedPrice = useSelector((state: RootState) =>
+    state.priceFilter.selectedPrice)
 
   const handleSizeSelect = (size: string) => {
     dispatch(toggleSize(size));
@@ -27,6 +30,10 @@ export default function Dropdown({ item }: IDropdown) {
   const handleColorSelect = (color: string) => {
     dispatch(toggleColor(color));
   };
+
+  const handlePriceSelect = (price: string) => {
+    dispatch(setPrice(price));
+  }
 
   const items = item === 'color'
     ? colors
@@ -43,6 +50,12 @@ export default function Dropdown({ item }: IDropdown) {
     }
   };
 
+  const handleRadioChange = (value: string) => () => {
+    if (item === 'price') {
+      handlePriceSelect(value);
+    }
+  }
+
   return (
     <div className={styles.dropdown}>
       <Container>
@@ -54,7 +67,9 @@ export default function Dropdown({ item }: IDropdown) {
                 ? selectedSizes.includes(itemValue)
                 : item === 'color'
                   ? selectedColors.includes(itemValue)
-                  : false;
+                  : item === 'price'
+                    ? selectedPrice === itemValue
+                    : false;
 
             return (
               <li key={uniqueId} className={styles.dropdown__item}>
@@ -62,6 +77,8 @@ export default function Dropdown({ item }: IDropdown) {
                   <Radio
                     id={uniqueId}
                     className={styles['dropdown__item-radio']}
+                    onChange={handleRadioChange(itemValue)}
+                    checked={isChecked}
                   />
                 ) : (
                   <Checkbox
