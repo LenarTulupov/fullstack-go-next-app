@@ -1,10 +1,10 @@
 import { fetchProducts } from "@/api/products/route";
 import { setProducts } from "@/store/products/productsSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { IProduct } from "@/types/product.interface";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { IProduct } from "./products";
 
 export default function useProducts() {
   const dispatch = useDispatch<AppDispatch>();

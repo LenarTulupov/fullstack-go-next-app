@@ -5,11 +5,14 @@ import { bannerImagesLarge } from '@/constants/banners-images'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from './home.module.scss'
+import useProducts from '@/utils/useProducts'
 
 export default function Home() {
   const handleImageLoad = (url: string) => {
     console.log(`Image loaded: ${url}`)
   }
+  const { products } = useProducts();
+  console.log(products)
   return (
     <div className={styles.home}>
       <div className={styles['carousel-wrapper']}>
