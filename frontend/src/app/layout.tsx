@@ -21,6 +21,7 @@ export default function RootLayout({
         <StoreProvider>
           <Providers>
             {children}
+            <div id="dropdown-root" />
           </Providers>
         </StoreProvider>
       </body>

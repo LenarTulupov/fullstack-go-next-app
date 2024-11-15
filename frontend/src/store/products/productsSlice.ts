@@ -1,9 +1,9 @@
+import { IProduct } from "@/types/product.interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { IProduct } from "@/utils/products";
 
 interface IProductState {
-  products: /* IProduct[] */ IProduct[];
+  products: IProduct[];
 }
 
 const initialState: IProductState = {

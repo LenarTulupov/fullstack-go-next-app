@@ -4,7 +4,11 @@ export const navItems: INavItems[] = [
   { 
     title: 'All Clothing', 
     href: '/category/all-clothing',
-    subItems: []
+    subItems: [
+      { title: 'Trousers', href: '/category/trousers' },
+      { title: 'Jackets', href: '/category/jackets' },
+      { title: 'Bikinis', href: '/category/bikinis' }
+    ]
   },
   {
     title: 'New In', 
