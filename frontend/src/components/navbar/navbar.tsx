@@ -101,7 +101,7 @@ export default function Navbar() {
   useEffect(() => {
     if (activeDropdown !== null && itemRef.current) {
       const rect = itemRef.current.getBoundingClientRect();
-      setDropdownPosition({ top: rect.bottom + 8, left: rect.left });
+      setDropdownPosition({ top: rect.bottom + 8, left: rect.left + 24 });
     }
   }, [activeDropdown]);
 

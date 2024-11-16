@@ -38,8 +38,6 @@ export default function FilterProductCategory(
     (state: RootState) => state.selectedSortOption.selectedSortOption
   );
 
-  console.log(selectedSortOption)
-
   const handleSizeChartPopup = () => {
     setIsSizeChartPopupOpened(p => !p);
   }

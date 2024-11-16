@@ -32,6 +32,7 @@
     &:hover {
       background-color: var(--gray);
       border-radius: var(--border-radius);
+      // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     // &_active {
     //   .navbar__link {
@@ -56,7 +57,7 @@
     .navbar__link-arrow {
       font-size: 18px;
       color: var(--accent-color);
-      transition: transform .3s ease-in-out;
+      transition: transform 0.3s ease-in-out;
     }
     &-hover-zone {
       position: absolute;
@@ -100,7 +101,8 @@
   z-index: 1;
   padding: 20px 0;
   border-bottom: 1px solid var(--gray);
-  box-shadow: 0px 12px 5px -15px #111;
+  // box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.1);
 }
 .search-bar__products-title {
   margin-bottom: 10px;
