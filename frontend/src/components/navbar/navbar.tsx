@@ -67,7 +67,7 @@ export default function Navbar() {
         product.color.toLowerCase().includes(term) ||
         product.subcategory?.toLowerCase().includes(term) ||
         product.categories?.some(category => category.toLowerCase().includes(term)) ||
-        product.sizes?.some(size => 
+        product.sizes?.some(size =>
           size.name && size.available === true && size.name.toLowerCase().includes(term))
       )
     });
@@ -106,7 +106,7 @@ export default function Navbar() {
   }, [isSearchClicked]);
 
   useEffect(() => {
-    if(pathname !== '/search') {
+    if (pathname !== '/search') {
       setIsSearchClicked(false)
     }
   }, [pathname]);
@@ -142,11 +142,6 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={styles.navbar__link}
-                      onClick={(e) => {
-                        if(activeDropdown === index) {
-                          e.preventDefault();
-                        }
-                      }}
                     >
                       {item.title}
                       {item.subItems && item.subItems.length > 0 && (
@@ -159,6 +154,11 @@ export default function Navbar() {
                           <div className={styles['navbar__link-hover-zone']} />
                           {dropdownPosition && (
                             <DropdownMenu
+                              onClick={(e) => {
+                                if (activeDropdown === index) {
+                                  e.preventDefault();
+                                }
+                              }}
                               items={item.subItems}
                               position={dropdownPosition}
                               onClose={() => setActiveDropdown(null)}

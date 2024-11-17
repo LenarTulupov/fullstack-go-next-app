@@ -8,9 +8,10 @@ interface IDropdownMenu {
   items: INavItems[];
   position: { top: number; left: number };
   onClose: () => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export default function DropdownMenu({ items, position, onClose }: IDropdownMenu) {
+export default function DropdownMenu({ items, position, onClose, onClick }: IDropdownMenu) {
   const dropdownRoot = typeof document !== "undefined"
     ? document.getElementById('dropdown-root')
     : null;
@@ -38,6 +39,7 @@ export default function DropdownMenu({ items, position, onClose }: IDropdownMenu
       }}
       onMouseEnter={() => { }}
       onMouseLeave={onClose}
+      onClick={onClick}
     >
       <ul className={styles['dropdown-menu__list']}>
         {items.map((item, index) => (
