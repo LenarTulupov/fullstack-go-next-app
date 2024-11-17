@@ -73,8 +73,6 @@ export default function Navbar() {
     });
   });
 
-  console.log(products)
-
   const handleSearch = () => {
     setIsSearchClicked((prev) => {
       if (prev) {

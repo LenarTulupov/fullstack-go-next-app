@@ -71,7 +71,9 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   useEffect(() => {
     const isFiltered =
       selectedSortOption !== "recommend" ||
-      (activeItem !== null && (selectedSizes.length > 0 || selectedColors.length > 0 || selectedPrice !== null));
+      (activeItem !== null 
+        && (selectedSizes.length > 0 
+        || selectedColors.length > 0 || selectedPrice !== null));
     setFiltersApplied(isFiltered);
   }, [selectedSortOption, activeItem, selectedSizes, selectedColors, selectedPrice]);
 

@@ -30,7 +30,7 @@ export default function FilterProductCategory(
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const { isProductPopupOpened, handleProductPopupToggle } = useProductPopup();
-  const { isCartSidebarOpened } = useCart();
+  // const { isCartSidebarOpened } = useCart();
   const selectedSizes = useSelector((state: RootState) => state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) => state.colorFilter.selectedColors);
   const selectedPrice = useSelector((state: RootState) => state.priceFilter.selectedPrice);
@@ -131,9 +131,9 @@ export default function FilterProductCategory(
           />
         </Popup>
       )}
-      <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
+      {/* <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
         <CartContent />
-      </Sidebar>
+      </Sidebar> */}
     </div>
   );
 }
