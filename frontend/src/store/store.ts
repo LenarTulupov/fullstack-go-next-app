@@ -11,6 +11,7 @@ import sizeFilterReducer from './sizeFilter/sizeFilterSlice'
 import colorFilterReducer from './colorFilter/colorFilterSlice'
 import priceFilterReducer from './priceFilter/priceFilterSlice'
 import selectedSortOptionReducer from './selectedSortOption/selectedSortOptionSlice'
+import searchProductsReducer from './searchProducts/searchProductsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     colorFilter: colorFilterReducer,
     priceFilter: priceFilterReducer,
     selectedSortOption: selectedSortOptionReducer,
+    searchProducts: searchProductsReducer,
   },
 });
 

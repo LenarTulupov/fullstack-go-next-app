@@ -3,28 +3,14 @@
 import Container from "@/components/ui/container/container";
 import styles from './page.module.scss'
 import Card from "@/components/card/card";
-import { useSearchBarValue } from "@/hooks/useSearchBarValue";
-import useProducts from "@/utils/useProducts";
-import { IProduct } from "@/types/product.interface";
 import ProductsGrid from "@/components/ui/products-grid/products-grid";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function Search() {
-  const searchBarValue = useSearchBarValue();
-
-  const { products } = useProducts();
-
-  const filteredProducts = products.filter((product: IProduct) => {
-    const searchTerms = searchBarValue
-      .toLowerCase()
-      .split(' ')
-      .filter(term => term);
-
-    return searchTerms.every((term) => {
-      return (
-        product.title.toLowerCase().includes(term)
-      )
-    });
-  });
+  const filteredProducts = useSelector(
+    (state: RootState) => state.searchProducts.filteredProducts
+  );
   return (
     <div className={styles.search}>
       <Container>

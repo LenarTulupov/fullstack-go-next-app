@@ -18,12 +18,13 @@ import ProductsGrid from '../ui/products-grid/products-grid';
 import Title from '../ui/title/title';
 import Button from '../ui/button/button';
 import CardSkeleton from '../ui/card-skeleton/card-skeleton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectFavorites } from '@/store/favorites/favoritesSlice';
 import useCart from '@/hooks/useCart';
 import CartService from '@/services/cart.service';
 import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
 import styles from './navbar.module.scss';
+import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -40,6 +41,7 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
   const itemRef = useRef<HTMLLIElement | null>(null);
+  const dispatch = useDispatch();
 
   const handleMouseEnter = (index: number) => {
     setActiveDropdown(index)
@@ -53,7 +55,6 @@ export default function Navbar() {
     setSearchBarValue(e.target.value);
   }
 
-
   const filteredProducts = products.filter((product: IProduct) => {
     const searchTerms = searchBarValue
       .toLowerCase()
@@ -62,10 +63,17 @@ export default function Navbar() {
 
     return searchTerms.every((term) => {
       return (
-        product.title.toLowerCase().includes(term)
+        product.title.toLowerCase().includes(term) ||
+        product.color.toLowerCase().includes(term) ||
+        product.subcategory?.toLowerCase().includes(term) ||
+        product.categories?.some(category => category.toLowerCase().includes(term)) ||
+        product.sizes?.some(size => 
+          size.name && size.available === true && size.name.toLowerCase().includes(term))
       )
     });
   });
+
+  console.log(products)
 
   const handleSearch = () => {
     setIsSearchClicked((prev) => {
@@ -82,7 +90,8 @@ export default function Navbar() {
   }
 
   const handleShowFilteredProducts = () => {
-    setShowFilteredProducts(true);
+    // setShowFilteredProducts(true);
+    dispatch(setFilteredProducts(filteredProducts));
     router.push(`/search?name=${encodeURIComponent(searchBarValue)}`)
   }
 
@@ -238,12 +247,15 @@ export default function Navbar() {
                             product={product}
                           />
                         ))
-                    : filteredProducts.map((product) => (
-                      <Card
-                        key={product.id}
-                        product={product}
-                      />
-                    ))}
+                    : filteredProducts.map((product) => {
+                      console.log(filteredProducts)
+                      return (
+                        <Card
+                          key={product.id}
+                          product={product}
+                        />
+                      )
+                    })}
                 </ProductsGrid>
                 <Button className={styles['search-bar__products-button']}>
                   Show All
