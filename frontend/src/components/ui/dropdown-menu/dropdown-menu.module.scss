@@ -13,9 +13,13 @@
     gap: 20px;
   }
   &__item {
+    display: flex;
+  }
+  &__link {
     transition: color 0.3s ease-in-out;
     padding: 10px;
     border-radius: var(--border-radius);
+    width: 100%;
     cursor: pointer;
     &:hover {
       background-color: var(--gray);

@@ -108,6 +108,12 @@ export default function Navbar() {
   }, [isSearchClicked]);
 
   useEffect(() => {
+    if(pathname !== '/search') {
+      setIsSearchClicked(false)
+    }
+  }, [pathname]);
+
+  useEffect(() => {
     if (activeDropdown !== null && itemRef.current) {
       const rect = itemRef.current.getBoundingClientRect();
       setDropdownPosition({ top: rect.bottom + 8, left: rect.left + 24 });

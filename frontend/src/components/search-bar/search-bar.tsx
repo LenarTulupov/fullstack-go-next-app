@@ -17,7 +17,6 @@ function SearchBar ({
   value,
   onChange,
   onKeyDown }: ISearchBar, ref: Ref<HTMLInputElement>) {
-    console.log(value)
   return (
     <div className={`${styles['search-bar']} ${className || ''}`}>
       <div className={styles['search-bar__block']}>

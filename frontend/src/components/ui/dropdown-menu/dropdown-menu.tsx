@@ -11,7 +11,9 @@ interface IDropdownMenu {
 }
 
 export default function DropdownMenu({ items, position, onClose }: IDropdownMenu) {
-  const dropdownRoot = typeof document !== "undefined" ? document.getElementById('dropdown-root') : null;
+  const dropdownRoot = typeof document !== "undefined"
+    ? document.getElementById('dropdown-root')
+    : null;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -23,24 +25,24 @@ export default function DropdownMenu({ items, position, onClose }: IDropdownMenu
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose, dropdownRoot]);
 
-  if(!dropdownRoot) {
+  if (!dropdownRoot) {
     return null;
   }
   return createPortal(
-    <div 
+    <div
       className={styles['dropdown-menu']}
       style={{
         position: 'absolute',
         top: position.top,
         left: `calc(${position.left}px - 30px)`,
       }}
-      onMouseEnter={() => {}}
+      onMouseEnter={() => { }}
       onMouseLeave={onClose}
     >
       <ul className={styles['dropdown-menu__list']}>
         {items.map((item, index) => (
           <li key={index} className={styles['dropdown-menu__item']}>
-            <Link href={item.href}>
+            <Link href={item.href} className={styles['dropdown-menu__link']}>
               {item.title}
             </Link>
           </li>
