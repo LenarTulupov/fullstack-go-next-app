@@ -142,6 +142,11 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={styles.navbar__link}
+                      onClick={(e) => {
+                        if(activeDropdown === index) {
+                          e.preventDefault();
+                        }
+                      }}
                     >
                       {item.title}
                       {item.subItems && item.subItems.length > 0 && (

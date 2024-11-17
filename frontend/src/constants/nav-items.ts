@@ -18,9 +18,7 @@ export const navItems: INavItems[] = [
   {
     title: 'Trends',  
     href: '/category/trends',
-    subItems: [{ title: 'Trousers', href: '/category/trousers' },
-      { title: 'Jackets', href: '/category/jackets' },
-      { title: 'Bikinis', href: '/category/bikinis' }]
+    subItems: []
   },
   {
     title: 'Dresses', 
@@ -30,8 +28,6 @@ export const navItems: INavItems[] = [
   {
     title: 'Summer', 
     href: '/category/summer',
-    subItems: [{ title: 'Trousers', href: '/category/trousers' },
-      { title: 'Jackets', href: '/category/jackets' },
-      { title: 'Bikinis', href: '/category/bikinis' }]
+    subItems: []
   },
 ];
