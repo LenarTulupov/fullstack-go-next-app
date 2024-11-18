@@ -22,7 +22,8 @@ export default function PagesLayout({ children }: IPagesLayout) {
   const isCategoriesPage = 
     pathname.startsWith('/categories') || 
     pathname === '/favorite' || 
-    pathname === '/product';
+    pathname === '/product' ||
+    pathname === '/search';
 
   useEffect(() => {
     setIsLoading(false);
