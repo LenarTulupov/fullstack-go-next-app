@@ -8,6 +8,7 @@ import styles from './layout.module.scss';
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import CartContent from "@/components/cart-content/cart-content";
 import useCart from "@/hooks/useCart";
+import { usePathname } from "next/navigation";
 
 interface IPagesLayout {
   children: ReactNode;
@@ -16,6 +17,12 @@ interface IPagesLayout {
 export default function PagesLayout({ children }: IPagesLayout) {
   const [isLoading, setIsLoading] = useState(true);
   const { isCartSidebarOpened } = useCart();
+  const pathname = usePathname();
+
+  const isCategoriesPage = 
+    pathname.startsWith('/categories') || 
+    pathname === '/favorite' || 
+    pathname === '/product';
 
   useEffect(() => {
     setIsLoading(false);
@@ -31,7 +38,10 @@ export default function PagesLayout({ children }: IPagesLayout) {
             <CartContent />
           </Sidebar>
           <Header />
-          <div className={styles.layout__children}>
+          <div className={isCategoriesPage
+            ? styles.layout__children
+            : styles['layout__children_no-margin']}
+          >
             {children}
           </div>
           <Footer />
