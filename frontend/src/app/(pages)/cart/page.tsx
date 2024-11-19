@@ -26,7 +26,7 @@ export default function Cart() {
               icon={<TbShoppingCartPlus />}
             />
           ) : (
-            <CartContent />
+            <CartContent isCartPage/>
           )}
         </div>
       </Container>

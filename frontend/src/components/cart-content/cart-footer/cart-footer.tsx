@@ -4,9 +4,11 @@ import Button from '@/components/ui/button/button';
 import Link from 'next/link';
 import CartService from '@/services/cart.service';
 import Price from '@/components/ui/price/price';
+import useCart from '@/hooks/useCart';
 
 export default function CartFooter() {
   const { totalPrice, discount } = CartService();
+  const { handleCartSidebarToggle } = useCart();
   return (
     <div className={styles['cart-footer']}>
       <div className={styles['cart-footer__discount']}>
@@ -24,6 +26,7 @@ export default function CartFooter() {
         <Link
           href='/cart'
           className={styles['cart-footer__buttons-link']}
+          onClick={handleCartSidebarToggle}
 
         >
           View Cart

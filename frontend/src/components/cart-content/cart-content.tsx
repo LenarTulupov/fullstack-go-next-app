@@ -11,11 +11,18 @@ import EmptyMessage from '../ui/empty-message/empty-message';
 import { TbShoppingCartPlus } from "react-icons/tb";
 import { usePathname } from 'next/navigation';
 
-export default function CartContent() {
+interface ICartContent {
+  isCartPage?: boolean;
+}
+
+export default function CartContent({ isCartPage = false }: ICartContent) {
   const cart = useSelector(selectCart);
   const pathname = usePathname();
 
-  const isCartPage = pathname === '/cart';
+  if(isCartPage) {
+    pathname === '/cart'
+  }
+
   return (
     <div className={styles['cart-content']}>
       {!isCartPage && <CartHeader />}
@@ -35,7 +42,7 @@ export default function CartContent() {
               />
             ))}
           </div>
-          {!isCartPage &&<CartFooter />}
+          {!isCartPage && <CartFooter />}
         </>
       )}
       {!isCartPage && <CartPromoSubfooter />}
