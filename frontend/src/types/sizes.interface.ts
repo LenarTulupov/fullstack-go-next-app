@@ -4,4 +4,5 @@ export interface ISize {
   name?: string;
   description?: string;
   available?: boolean;
+  quantity: number;
 }

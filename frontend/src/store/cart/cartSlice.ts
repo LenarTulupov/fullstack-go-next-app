@@ -29,14 +29,25 @@ export const cartSlice = createSlice({
       }>
     ) => {
       const { product, size } = action.payload;
+
       const existingItem = state.cart.find(
         (item) => item.product.id === product.id && item.size.id === size.id
       );
 
       if (existingItem) {
-        existingItem.quantity += 1;
+        const availableQuantity = size.quantity - existingItem.quantity;
+
+        if (availableQuantity > 0) {
+          existingItem.quantity += 1;
+        } else {
+          console.warn("Нельзя добавить больше, чем доступно на складе");
+        }
       } else {
-        state.cart.push({ product, size, quantity: 1 });
+        if (size.quantity > 0) {
+          state.cart.push({ product, size, quantity: 1 });
+        } else {
+          console.warn("Нельзя добавить товар с нулевым остатком");
+        }
       }
     },
     removeFromCart: (
@@ -47,12 +58,14 @@ export const cartSlice = createSlice({
       }>
     ) => {
       const { product, size } = action.payload;
+
       const existingItemIndex = state.cart.findIndex(
         (item) => item.product.id === product.id && item.size.id === size.id
       );
 
       if (existingItemIndex !== -1) {
         const existingItem = state.cart[existingItemIndex];
+
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
         } else {

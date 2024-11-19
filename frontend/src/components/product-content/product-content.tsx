@@ -14,6 +14,8 @@ import FavoriteButton from '../ui/favorite-button/favorite-button';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite, isFavorite } from '@/store/favorites/favoritesSlice';
 import { RootState } from '@/store/store';
+import { ISize } from '@/types/sizes.interface';
+import { addToCart } from '@/store/cart/cartSlice';
 
 interface IProductContent {
   product: IProduct;
@@ -30,13 +32,30 @@ export default function ProductContent({
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
+  const [selectedSize, setSelectedSize] = useState<ISize | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { handleProductPopupToggle } = useProductPopup();
   const dispatch = useDispatch();
+  console.log(product)
 
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
   }
+
+  const handleSelectSize = (size: ISize) => {
+    setSelectedSize(size);
+    setError(null); 
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      setError("Please select a size before adding to cart.");
+      return;
+    }
+    dispatch(addToCart({ product, size: selectedSize }));
+    setError(null); 
+  };
 
   const id  = product.id;
 
@@ -98,7 +117,12 @@ export default function ProductContent({
           </div>
           <div className={styles.sizes}>
             {product.sizes.map((size) => (
-              <Button key={size.id} disabled={!size.available}>
+              <Button 
+                className={selectedSize?.id ? styles['sizes-button_active'] : ''}
+                key={size.id} 
+                disabled={!size.available}
+                onClick={() => handleSelectSize(size)}
+              >
                 {size.abbreviation}
               </Button>
             ))}
@@ -134,7 +158,7 @@ export default function ProductContent({
             </div>
           </div>
           <div className={styles.buttons}>
-            <Button>Add To Cart</Button>
+            <Button onClick={handleAddToCart}>Add To Cart</Button>
             <FavoriteButton 
               onClick={handleToggleFavorite}
               isFavorite={isProductFavorite}

@@ -20,9 +20,7 @@ import { RootState } from "@/store/store";
 
 export default function Card({
   product,
-  // handleFavorite,
   onClick,
-  // handleAddedToCart,
   handleSizeSelectPopup}: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);

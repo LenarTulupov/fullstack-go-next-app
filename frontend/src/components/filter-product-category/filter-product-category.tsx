@@ -12,9 +12,6 @@ import PopupItemsContent from "../popup-items/poput-items-content";
 import Card from "../card/card";
 import { addToCart } from "@/store/cart/cartSlice";
 import { ISize } from "@/types/sizes.interface";
-import Sidebar from "../ui/sidebar/sidebar";
-import useCart from "@/hooks/useCart";
-import CartContent from "../cart-content/cart-content";
 import { RootState } from "@/store/store";
 
 interface IFilterProductCategory {
@@ -30,7 +27,6 @@ export default function FilterProductCategory(
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const { isProductPopupOpened, handleProductPopupToggle } = useProductPopup();
-  // const { isCartSidebarOpened } = useCart();
   const selectedSizes = useSelector((state: RootState) => state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) => state.colorFilter.selectedColors);
   const selectedPrice = useSelector((state: RootState) => state.priceFilter.selectedPrice);
@@ -82,11 +78,13 @@ export default function FilterProductCategory(
       ))
     );
 
-    if (selectedSortOption === 'low to high') {
-      filteredProducts = filteredProducts.sort((a, b) => parseFloat(a.price_new) - parseFloat(b.price_new));
-    } else if (selectedSortOption === 'high to low') {
-      filteredProducts = filteredProducts.sort((a, b) => parseFloat(b.price_new) - parseFloat(a.price_new));
-    }
+  if (selectedSortOption === 'low to high') {
+    filteredProducts = filteredProducts.sort((a, b) => 
+      parseFloat(a.price_new) - parseFloat(b.price_new));
+  } else if (selectedSortOption === 'high to low') {
+    filteredProducts = filteredProducts.sort((a, b) => 
+      parseFloat(b.price_new) - parseFloat(a.price_new));
+  }
 
 
   if (sortFunction) {
@@ -131,9 +129,6 @@ export default function FilterProductCategory(
           />
         </Popup>
       )}
-      {/* <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
-        <CartContent />
-      </Sidebar> */}
     </div>
   );
 }
