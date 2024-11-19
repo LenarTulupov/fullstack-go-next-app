@@ -58,7 +58,11 @@ export default function Product() {
   }
 
   if (!product) {
-    return <div>Product not found</div>;
+    return (
+      <Container>
+        <div className={styles.message}>Product not found</div>
+      </Container>
+    );
   }
 
   return (
