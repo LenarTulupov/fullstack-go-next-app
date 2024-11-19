@@ -16,9 +16,10 @@ interface ICartCard {
     size: ISize;
     product: IProduct;
   }
+  isCartPage?: boolean;
 }
 
-export default function CartCard({ product }: ICartCard) {
+export default function CartCard({ product, isCartPage }: ICartCard) {
   const dispatch = useDispatch();
   const selectedColor = colors[`color-${product.product.color}`];
 
@@ -32,7 +33,7 @@ export default function CartCard({ product }: ICartCard) {
   }
 
   return (
-    <div className={styles['cart-card']}>
+    <div className={`${styles['cart-card']} ${isCartPage ? styles['cart-card_sidebar'] : ''}`}>
       <Link 
         href={`/product/${product.product.id}`} 
         className={styles['cart-card__link-image']}

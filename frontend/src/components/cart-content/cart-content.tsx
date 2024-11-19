@@ -39,6 +39,7 @@ export default function CartContent({ isCartPage = false }: ICartContent) {
               <CartCard
                 key={item.product.id}
                 product={item}
+                isCartPage={isCartPage}
               />
             ))}
           </div>

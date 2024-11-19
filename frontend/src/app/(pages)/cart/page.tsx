@@ -30,7 +30,6 @@ export default function Cart() {
           )}
         </div>
       </Container>
-      <Divider />
     </div>
   )
 };

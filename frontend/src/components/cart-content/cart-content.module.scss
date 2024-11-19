@@ -6,6 +6,8 @@
     gap: 10px;  
     max-height: 400px;
     overflow-y: auto;
+    border-bottom: 1px solid var(--gray);
+    border-top: 1px solid var(--gray);
   }
 }
 
