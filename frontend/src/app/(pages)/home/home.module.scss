@@ -1,6 +1,5 @@
-.image-wrapper {
-  position: relative;
-  height: calc(100vh - var(--header-height));
-  width: 1800px;
-  height: 900px;
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

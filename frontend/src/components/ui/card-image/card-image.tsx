@@ -31,6 +31,9 @@ export default function CardImage(
           src={src}
           alt={alt}
           fill
+          // layout="responsive"
+          // width={0}
+          // height={0}
           loading={priority ? undefined : 'lazy'}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
           priority={priority}

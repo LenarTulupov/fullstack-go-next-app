@@ -15,6 +15,7 @@ export interface ICard {
   handleFavorite?: () => void;
   onClick?: () => void;
   handleSizeSelectPopup?: () => void;
+  info?: boolean;
 }
 
 

@@ -21,7 +21,8 @@ import { RootState } from "@/store/store";
 export default function Card({
   product,
   onClick,
-  handleSizeSelectPopup}: ICard) {
+  handleSizeSelectPopup,
+  info = true }: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
   const { handleProductPopupToggle } = useProductPopup();
@@ -85,24 +86,26 @@ export default function Card({
           />
         </Tooltip>
       </div>
-      <div className={styles['card__product-info']}>
-        <Link href={`/product/${id}`}>
-          <Title>{title}</Title>
-        </Link>
-        <Color color={color} />
-        <div className={styles.prices}>
-          <Price className={styles.prices__old} price={price_old} old />
-          <Price price={price_new} className={styles.prices_active} />
+      {info ? 
+        <div className={styles['card__product-info']}>
+          <Link href={`/product/${id}`}>
+            <Title>{title}</Title>
+          </Link>
+          <Color color={color} />
+          <div className={styles.prices}>
+            <Price className={styles.prices__old} price={price_old} old />
+            <Price price={price_new} className={styles.prices_active} />
+          </div>
+          <Button
+            variant='black'
+            onClick={handleSizeSelectPopup}
+            className={styles.card__button}
+          >
+            <MdShoppingCart className={styles['card__button-icon']} />
+            <span>Add To Cart</span>
+          </Button>
         </div>
-        <Button
-          variant='black'
-          onClick={handleSizeSelectPopup}
-          className={styles.card__button}
-        >
-          <MdShoppingCart className={styles['card__button-icon']} />
-          <span>Add To Cart</span>
-        </Button>
-      </div>
+        : null}
     </div>
   )
 };

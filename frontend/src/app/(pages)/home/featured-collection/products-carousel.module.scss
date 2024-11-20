@@ -1,0 +1,36 @@
+.products-carousel {
+  position: relative;
+  &__grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+  }
+  &__carousel {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.products-carousel__prev-arrow {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.products-carousel__next-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+

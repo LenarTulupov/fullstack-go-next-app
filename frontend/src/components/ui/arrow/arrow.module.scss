@@ -1,0 +1,36 @@
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+}
+
+.carousel {
+  background-color: var(--black);
+  border-radius: 100%;
+}
+
+.normal {
+  font-size: 16px;
+}
+
+.large {
+  font-size: 50px;
+}
+
+.up {
+  transform: rotate(180deg);
+}
+
+.down {
+  transform: rotate(360deg);
+}
+
+.left {
+  transform: rotate(90deg);
+}
+
+.right {
+  transform: rotate(-90deg);
+}
