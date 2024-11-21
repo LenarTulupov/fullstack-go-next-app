@@ -73,7 +73,12 @@ export default function Card({
           ${styles['quick-view']} 
           ${isImageHovered ? styles['quick-view_opened'] : ''}
           `}>
-          <Button className={styles['quick-view_opened-button']} onClick={handleProductPopupToggle}>Quick View</Button>
+          <Button
+            className={styles['quick-view_opened-button']}
+            onClick={handleProductPopupToggle}
+          >
+            Quick View
+          </Button>
         </div>
       </div>
       <div className={styles['tooltip-wrapper']}>
@@ -86,7 +91,7 @@ export default function Card({
           />
         </Tooltip>
       </div>
-      {info ? 
+      {info ?
         <div className={styles['card__product-info']}>
           <Link href={`/product/${id}`}>
             <Title>{title}</Title>
