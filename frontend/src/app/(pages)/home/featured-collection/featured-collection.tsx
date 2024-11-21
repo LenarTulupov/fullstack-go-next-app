@@ -10,8 +10,8 @@ import Tab from '@/components/ui/tabs/tab';
 
 export default function FeaturedCollection() {
   const tabs = ['hot', 'new'];
-  const tabsFirstUpperLetter = tabs.map((item) => item.slice(0,1).toUpperCase() + item.slice(1));
-  const [selectedTab, setSelectedTab] = useState<string>('hot');
+  const tabsFirstUpperLetter = tabs.map((item) => item.slice(0, 1).toUpperCase() + item.slice(1));
+  const [selectedTab, setSelectedTab] = useState<string>(tabsFirstUpperLetter[0]);
   const [isCarousel, setIsCarousel] = useState<boolean>(true);
   const { products } = useProducts();
 
@@ -39,7 +39,12 @@ export default function FeaturedCollection() {
     <section className={styles['featured-collection']}>
       <Container>
         <div className={styles['featured-collection__text']}>
-          <Title className={styles['featured-collection__title']} weight='bold'>Featured Collection</Title>
+          <Title
+            className={styles['featured-collection__title']}
+            weight='bold'
+          >
+            Featured Collection
+          </Title>
           <div className={styles['featured-collection__tabs']}>
             {tabsFirstUpperLetter.map((item, index) => (
               <Tab

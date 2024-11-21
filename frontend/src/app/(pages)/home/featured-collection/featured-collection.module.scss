@@ -25,6 +25,6 @@
     gap: 10px;
   }
   &__tab_active {
-    background-color: #c3c3c3 !important;
+    background-color: var(--gray-active) !important;
   }
 }

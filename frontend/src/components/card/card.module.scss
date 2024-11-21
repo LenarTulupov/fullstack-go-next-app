@@ -41,6 +41,9 @@
   &_opened {
     opacity: 1;
     bottom: 10px;
+    &-button {
+      width: 100% !important;
+    }
   }
 }
 
