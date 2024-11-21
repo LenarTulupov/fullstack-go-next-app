@@ -6,17 +6,19 @@ import Button from '@/components/ui/button/button';
 import ProductsCarousel from './products-carousel';
 import styles from './featured-collection.module.scss';
 import Card from '@/components/card/card';
+import Tab from '@/components/ui/tabs/tab';
 
 export default function FeaturedCollection() {
   const tabs = ['hot', 'new'];
+  const tabsFirstUpperLetter = tabs.map((item) => item.slice(0,1).toUpperCase() + item.slice(1));
   const [selectedTab, setSelectedTab] = useState<string>('hot');
   const [isCarousel, setIsCarousel] = useState<boolean>(true);
   const { products } = useProducts();
 
   const filteredProducts = products.filter((product) => {
-    if (selectedTab === 'hot') {
+    if (selectedTab === 'Hot') {
       return product.categories?.includes('trends')
-    } else if (selectedTab === 'new') {
+    } else if (selectedTab === 'New') {
       return product
     }
     return true;
@@ -37,19 +39,19 @@ export default function FeaturedCollection() {
     <section className={styles['featured-collection']}>
       <Container>
         <div className={styles['featured-collection__text']}>
-          <Title className={styles['featured-collection__title']}>Featured Collection</Title>
+          <Title className={styles['featured-collection__title']} weight='bold'>Featured Collection</Title>
           <div className={styles['featured-collection__tabs']}>
-            {tabs.map((item, index) => (
-              <Button
+            {tabsFirstUpperLetter.map((item, index) => (
+              <Tab
+                key={index}
                 className={`
                   ${styles['featured-collection__tab']} 
-                  ${selectedTab === item ? styles['featured-collection__tab_active']: ''}
+                  ${selectedTab === item ? styles['featured-collection__tab_active'] : ''}
                 `}
-                key={index}
                 onClick={() => handleSelectedTab(item)}
               >
                 {item}
-              </Button>
+              </Tab>
             ))}
           </div>
         </div>

@@ -1,6 +1,7 @@
 .featured-collection {
   &__title {
     margin-bottom: 20px;
+    font-size: 18px;
   }
   &__text {
     display: flex;
@@ -12,6 +13,7 @@
     display: block;
     margin: 0 auto;
     margin-top: 20px;
+    padding: 12px 24px;
   }
   &__grid {
     display: grid;
@@ -23,6 +25,6 @@
     gap: 10px;
   }
   &__tab_active {
-    background-color: var(--accent-color);
+    background-color: #c3c3c3 !important;
   }
 }
