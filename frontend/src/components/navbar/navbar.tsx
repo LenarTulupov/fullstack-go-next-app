@@ -26,6 +26,7 @@ import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
 import styles from './navbar.module.scss';
 import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
 import { MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
+import Hamburger from '../ui/hamburger/hamburger';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -43,6 +44,11 @@ export default function Navbar() {
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
   const itemRef = useRef<HTMLLIElement | null>(null);
   const dispatch = useDispatch();
+  const [isHamburgerClick, setIsHamburgerClick] = useState<boolean>(false);
+
+  const handleHamburgerClick = () => {
+    setIsHamburgerClick(p => !p)
+  }
 
   const handleMouseEnter = (index: number) => {
     setActiveDropdown(index)
@@ -124,6 +130,7 @@ export default function Navbar() {
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
+            {/* <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick}/> */}
             <Link href='/' className={styles['logo-link']}>
               <LogoImage />
             </Link>

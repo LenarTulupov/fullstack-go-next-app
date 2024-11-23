@@ -1,23 +1,22 @@
 'use client'
 
 import { ICard } from "@/types/card.interface";
+import Link from "next/link";
+import { MouseEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { toggleFavorite, isFavorite } from "@/store/favorites/favoritesSlice";
+import useProductPopup from "@/hooks/useProductPopup";
 import Button from "../ui/button/button";
 import Title from "../ui/title/title";
 import FavoriteButton from "../ui/favorite-button/favorite-button";
 import CardImage from "../ui/card-image/card-image";
 import Price from "../ui/price/price";
-import Link from "next/link";
 import Tooltip from "../ui/tooltip/tooltip";
-import { MouseEvent, useState } from "react";
-import { MdShoppingCart } from "react-icons/md";
 import Color from "../ui/color/color";
-import useProductPopup from "@/hooks/useProductPopup";
-import styles from './card.module.scss'
 import CardLoader from "../ui/card-image/card-loader";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleFavorite, isFavorite } from "@/store/favorites/favoritesSlice";
-import { RootState } from "@/store/store";
-import Image from "next/image";
+import { MdShoppingCart } from "react-icons/md";
+import styles from './card.module.scss'
 
 export default function Card({
   product,
