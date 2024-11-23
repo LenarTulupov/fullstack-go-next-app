@@ -25,6 +25,7 @@ import CartService from '@/services/cart.service';
 import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
 import styles from './navbar.module.scss';
 import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
+import { MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -123,7 +124,7 @@ export default function Navbar() {
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
-            <Link href='/'>
+            <Link href='/' className={styles['logo-link']}>
               <LogoImage />
             </Link>
             <div className={styles.navbar__main}>
@@ -145,9 +146,11 @@ export default function Navbar() {
                     >
                       {item.title}
                       {item.subItems && item.subItems.length > 0 && (
-                        <IoIosArrowDown
-                          className={styles['navbar__link-arrow']}
-                        />
+                        <>
+                          <IoIosArrowDown
+                            className={styles['navbar__link-arrow']}
+                          />
+                        </>
                       )}
                       {activeDropdown === index && item.subItems && item.subItems.length > 0 && (
                         <>

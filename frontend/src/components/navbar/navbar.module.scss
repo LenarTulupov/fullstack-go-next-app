@@ -8,6 +8,9 @@
     grid-template-columns: 1fr auto auto;
     align-items: center;
     height: 100%;
+    .logo-link {
+      padding: 0 24px;
+    }
   }
   &__list {
     display: flex;

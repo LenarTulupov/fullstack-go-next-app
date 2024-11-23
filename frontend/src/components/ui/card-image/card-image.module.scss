@@ -3,9 +3,6 @@
   overflow: hidden;
 }
 .card-image {
-  position: relative;
-  width: 100%;
-  min-height: 400px;
   transition: transform 0.3s ease-in-out;
   &_hovered {
     transform: scale(1.05);
@@ -13,4 +10,5 @@
 }
 .image {
   object-fit: cover;
+  display: block;
 }

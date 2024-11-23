@@ -17,6 +17,7 @@ import CardLoader from "../ui/card-image/card-loader";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleFavorite, isFavorite } from "@/store/favorites/favoritesSlice";
 import { RootState } from "@/store/store";
+import Image from "next/image";
 
 export default function Card({
   product,
@@ -64,7 +65,6 @@ export default function Card({
             src={whichImage}
             alt={title}
             isImageHovered={isImageHovered}
-            id={id}
             priority={isPriority}
             onLoad={handleImageLoad}
           />
