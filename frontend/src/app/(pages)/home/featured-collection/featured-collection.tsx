@@ -1,6 +1,6 @@
 import Title from '@/components/ui/title/title';
 import Container from '@/components/ui/container/container';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useProducts from '@/utils/useProducts';
 import Button from '@/components/ui/button/button';
 import ProductsCarousel from './products-carousel';

@@ -3,7 +3,7 @@
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Loader from "@/components/ui/loader/loader";
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect, useRef, useState } from "react"
 import styles from './layout.module.scss';
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import CartContent from "@/components/cart-content/cart-content";
@@ -14,6 +14,7 @@ import useProductPopup from "@/hooks/useProductPopup";
 import ProductContent from "@/components/product-content/product-content";
 import { IProduct } from "@/types/product.interface";
 import PopupItemsContent from "@/components/popup-items/poput-items-content";
+import { useInView } from "framer-motion";
 
 interface IPagesLayout {
   children: ReactNode;

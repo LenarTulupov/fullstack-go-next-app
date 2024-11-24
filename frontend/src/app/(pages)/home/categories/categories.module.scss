@@ -1,0 +1,28 @@
+.categories {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  &__link {
+    position: relative;
+    &-sublink {
+      background-color: black;
+      padding: 12px 24px;
+      color: white;
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      text-transform: uppercase;
+      transition: all .3s ease-in-out;
+      &:hover {
+        color: black;
+        background-color: white;
+      }
+    }
+  }
+  &__image {
+    border-radius: var(--border-radius);
+  }
+}

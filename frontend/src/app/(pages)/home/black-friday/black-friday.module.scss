@@ -1,0 +1,22 @@
+.black-friday {
+  &__title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+  &__link {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    &-wrapper {
+      &:nth-child(1) {
+        grid-column-start: 2;
+      }
+    }
+  }
+  &__image {
+    border-radius: 150px 150px 0 0;
+    object-fit: cover;
+  }
+}
