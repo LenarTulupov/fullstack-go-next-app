@@ -27,6 +27,7 @@ export default function Banner() {
                   alt="banner"
                   width={1800}
                   height={900}
+                  layout='responsive'
                   priority={index === 0}
                 />
               </div>

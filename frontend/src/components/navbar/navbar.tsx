@@ -27,6 +27,7 @@ import styles from './navbar.module.scss';
 import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
 import { MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
 import Hamburger from '../ui/hamburger/hamburger';
+import NavLink from '../ui/nav-link/nav-link';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -130,7 +131,7 @@ export default function Navbar() {
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
-            {/* <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick}/> */}
+            <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick}/>
             <Link href='/' className={styles['logo-link']}>
               <LogoImage />
             </Link>
@@ -147,10 +148,7 @@ export default function Navbar() {
                     onMouseLeave={handleMouseLeave}
                     ref={activeDropdown === index ? itemRef : null}
                   >
-                    <Link
-                      href={item.href}
-                      className={styles.navbar__link}
-                    >
+                    <NavLink href={item.href} className={styles.navbar__link}>
                       {item.title}
                       {item.subItems && item.subItems.length > 0 && (
                         <>
@@ -176,7 +174,7 @@ export default function Navbar() {
                           )}
                         </>
                       )}
-                    </Link>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -198,20 +196,16 @@ export default function Navbar() {
                   </Tooltip>
                 </li>
                 <li className={styles.navbar__item}>
-                  <Link
-                    href='/sign-in'
-                    className={styles['navbar__link']}
+                  <NavLink href='/sign-in'
                   >
                     Sign In
-                  </Link>
+                  </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
-                  <Link
-                    href='/favorite'
-                    className={styles['navbar__link']}
+                  <NavLink href='/favorite'
                   >
                     Favorite<span>{favorites.length}</span>
-                  </Link>
+                  </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
                   <button

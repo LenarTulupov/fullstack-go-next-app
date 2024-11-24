@@ -21,7 +21,7 @@
     &-search {
       display: flex;
       align-items: center;
-      padding: 12px 24px;
+      padding: 12px 16px;
     }
     &-button {
       background-color: transparent;
@@ -50,10 +50,6 @@
   }
   &__link {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
     &-search {
       padding: 0;
     }
@@ -117,4 +113,16 @@
   width: 20%;
   padding: 15px !important;
   margin-top: 20px;
+}
+
+@media (max-width: 1050px) {
+  .navbar__main {
+    display: none;
+  }
+  .navbar__wrapper {
+    grid-template-columns: auto auto 1fr;
+  }
+  .navbar__sub {
+    justify-self: end;
+  }
 }
