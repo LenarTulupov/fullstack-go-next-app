@@ -5,7 +5,7 @@
   }
   &__wrapper {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: repeat(4, auto);
     align-items: center;
     height: 100%;
     .logo-link {
