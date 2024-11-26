@@ -7,34 +7,81 @@
   background-color: rgba(0, 0, 0, 0.5);
   visibility: hidden;
   opacity: 0;
-  transition: visibility .3s ease-in-out, opacity .3s ease-in-out;
+  transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
   &_opened {
     visibility: visible;
     opacity: 1;
-    transition: visibility .3s ease-in-out, opacity .3s ease-in-out;
+    transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
 }
 .sidebar {
   position: fixed;
-  top: 0;
-  right: -100%;
   background-color: #fff;
   height: 100%;
+  min-width: 30vw;
   border-left: 1px solid var(--gray);
-  transition: right 0.5s ease-in-out;
+  &_opened {
+  }
+
+  &__children {
+    // display: flex;
+    // justify-content: center;
+    // align-items: flex-start;
+    // &:nth-child(2) {
+    //   align-self: flex-start;
+    //   height: auto;
+    // }
+  }
+  &__header {
+    padding: 20px 36px;
+    display: flex;
+    &_left {
+      justify-content: flex-start;
+    }
+    &_right {
+      justify-content: flex-end;
+    }
+  }
+}
+.right {
+  right: -100%;
+  transition: right 0.3s ease-in-out;
+
   &_opened {
     right: 0;
-    transition: right 0.5s ease-in-out;
+    transition: right 0.3s ease-in-out;
+    &::after {
+      content: "";
+      position: absolute;
+      left: -20.1px;
+      top: 0;
+      width: 20px;
+      height: 100%;
+      // background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
   }
-  &::after {
-    content: "";
-    position: absolute;
-    left: -20.5px;
-    top: 0;
-    width: 20px;
-    height: 100%;
-    // background-color: #fff;
-    background-color: rgba(255, 255, 255, 0.8);
-    
+}
+.left {
+  left: -100%;
+  transition: left 0.3s ease-in-out;
+  &_opened {
+    left: 0;
+    transition: left 0.3s ease-in-out;
+    &::after {
+      content: "";
+      position: absolute;
+      right: -20.1px;
+      top: 0;
+      width: 20px;
+      height: 100%;
+      // background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+@media (min-width: 1050px) {
+  .overlay {
+    display: none;
   }
 }

@@ -28,6 +28,9 @@ import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice'
 import { MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
 import Hamburger from '../ui/hamburger/hamburger';
 import NavLink from '../ui/nav-link/nav-link';
+import NavMain from './nav-main/nav-main';
+import Sidebar from '../ui/sidebar/sidebar';
+import Divider from '../ui/divider/divider';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -46,9 +49,19 @@ export default function Navbar() {
   const itemRef = useRef<HTMLLIElement | null>(null);
   const dispatch = useDispatch();
   const [isHamburgerClick, setIsHamburgerClick] = useState<boolean>(false);
+  const [activeDropdownSecond, setActiveDropdownSecond] = useState<number | null>(null);
+
+  const handleDropdownSecond = (index: number) => {
+    setActiveDropdownSecond((prev) => (prev === index ? null : index));
+  };
 
   const handleHamburgerClick = () => {
-    setIsHamburgerClick(p => !p)
+    setIsHamburgerClick(p => {
+      if(!p) {
+        setActiveDropdownSecond(null)
+      }
+      return !p
+    })
   }
 
   const handleMouseEnter = (index: number) => {
@@ -131,54 +144,19 @@ export default function Navbar() {
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
-            <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick}/>
+            <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick} />
             <Link href='/' className={styles['logo-link']}>
               <LogoImage />
             </Link>
-            <div className={styles.navbar__main}>
-              <ul className={styles.navbar__list}>
-                {navItems.map((item, index) => (
-                  <li
-                    key={index}
-                    className={`
-                      ${styles.navbar__item}
-                      ${activeDropdown === index ? styles['navbar__item_active'] : ''}
-                    `}
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={handleMouseLeave}
-                    ref={activeDropdown === index ? itemRef : null}
-                  >
-                    <NavLink href={item.href} className={styles.navbar__link}>
-                      {item.title}
-                      {item.subItems && item.subItems.length > 0 && (
-                        <>
-                          <IoIosArrowDown
-                            className={styles['navbar__link-arrow']}
-                          />
-                        </>
-                      )}
-                      {activeDropdown === index && item.subItems && item.subItems.length > 0 && (
-                        <>
-                          <div className={styles['navbar__link-hover-zone']} />
-                          {dropdownPosition && (
-                            <DropdownMenu
-                              onClick={(e) => {
-                                if (activeDropdown === index) {
-                                  e.preventDefault();
-                                }
-                              }}
-                              items={item.subItems}
-                              position={dropdownPosition}
-                              onClose={() => setActiveDropdown(null)}
-                            />
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <NavMain
+              activeDropdown={activeDropdown}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              itemRef={itemRef}
+              dropdownPosition={dropdownPosition}
+              setActiveDropdown={setActiveDropdown}
+              sidebar={false}
+            />
             <div className={styles.navbar__sub}>
               <ul className={styles.navbar__list}>
                 <li className={styles['navbar__item-search']}>
@@ -279,6 +257,57 @@ export default function Navbar() {
         </>
       )
       }
+      <Sidebar
+      header
+        variant='left'
+        isCartSidebarOpened={isHamburgerClick}
+        handleHamburgerClick={handleHamburgerClick}
+      >
+        <div className={`${styles['navbar__sidebar-content']} ${styles['sidebar-content']}`}>
+          <ul className={styles['sidebar-content__list']}>
+            {navItems.map((item, index) => (
+              <li key={index} className={styles['sidebar-content__item']}>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    if (item.subItems && item.subItems.length > 0) {
+                      e.preventDefault();
+                      handleDropdownSecond(index)
+                    }
+                  }}
+                  className={`${styles['sidebar-content__link']} ${styles.link}`}
+                >
+                  <div className={styles.link__inner}>
+                    {item.title}
+                    {item.subItems && item.subItems.length > 0 && (
+                      <IoIosArrowDown
+                        className={styles['navbar__link-arrow']}
+                      />
+                    )}
+                  </div>
+                  {activeDropdownSecond === index && item.subItems && item.subItems.length > 0 && (
+                    <div className={styles['sidebar-content__dropdown']}>
+                      <Divider />
+                      <div className={styles['sidebar-content__dropdown-inner']}>
+                        <ul>
+                          {item.subItems?.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              <NavLink href={subItem.href}>
+                                {subItem.title}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Divider />
+                    </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Sidebar>
     </nav >
   )
 }

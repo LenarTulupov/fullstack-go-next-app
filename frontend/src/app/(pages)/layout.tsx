@@ -62,6 +62,9 @@ export default function PagesLayout({ children }: IPagesLayout) {
           <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
             <CartContent />
           </Sidebar>
+          {/* <Sidebar>
+            
+          </Sidebar> */}
           {selectedProduct && (
             <Popup isPopupOpened={isProductPopupOpened} nested>
               <ProductContent

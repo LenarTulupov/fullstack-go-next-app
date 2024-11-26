@@ -76,6 +76,15 @@
       cursor: pointer;
     }
   }
+  &__sidebar {
+    &-content {
+      padding: 20px;
+    }
+  }
+  &__sidebar-content {
+
+  }
+
 }
 .search-bar__container {
   height: 100%;
@@ -124,5 +133,24 @@
   }
   .navbar__sub {
     justify-self: end;
+  }
+}
+.link__inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  &:hover {
+    background-color: var(--gray);
+  }
+}  
+.sidebar-content {
+
+  &__dropdown {
+    margin: 20px 0;
+    &-inner {
+      padding: 20px 0;
+    }
   }
 }
