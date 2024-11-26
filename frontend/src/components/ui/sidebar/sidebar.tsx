@@ -8,7 +8,7 @@ interface ISidebar {
   children: ReactNode;
   isCartSidebarOpened: boolean;
   variant?: 'left' | 'right';
-  handleHamburgerClick: () => void;
+  handleHamburgerClick?: () => void;
   header?: boolean;
 }
 
