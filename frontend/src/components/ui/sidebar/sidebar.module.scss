@@ -18,7 +18,8 @@
   position: fixed;
   background-color: #fff;
   height: 100%;
-  min-width: 30vw;
+  max-width: 375px;
+  min-width: 250px;
   border-left: 1px solid var(--gray);
   &_opened {
   }
