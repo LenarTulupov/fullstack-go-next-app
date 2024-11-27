@@ -57,7 +57,7 @@ export default function Navbar() {
 
   const handleHamburgerClick = () => {
     setIsHamburgerClick(p => {
-      if(!p) {
+      if (!p) {
         setActiveDropdownSecond(null)
       }
       return !p
@@ -258,7 +258,7 @@ export default function Navbar() {
       )
       }
       <Sidebar
-      header
+        header
         variant='left'
         isCartSidebarOpened={isHamburgerClick}
         handleHamburgerClick={handleHamburgerClick}
@@ -292,7 +292,7 @@ export default function Navbar() {
                         <ul>
                           {item.subItems?.map((subItem, subIndex) => (
                             <li key={subIndex}>
-                              <NavLink href={subItem.href}>
+                              <NavLink href={subItem.href} onClick={(e) => e.stopPropagation()}>
                                 {subItem.title}
                               </NavLink>
                             </li>

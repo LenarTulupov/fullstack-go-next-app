@@ -6,13 +6,21 @@ interface INavLink {
   children: ReactNode;
   href: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export default function NavLink({ children, href, className, onClick }: INavLink) {
   return (
-    <Link href={href} className={`${styles['nav-link']} ${className || ''}`} onClick={onClick}>
-        { children }
+    <Link
+      href={href}
+      className={`${styles['nav-link']} ${className || ''}`}
+      onClick={(event) => {
+        if (onClick) {
+          onClick(event);
+        }
+      }}
+    >
+      {children}
     </Link>
   )
 };
