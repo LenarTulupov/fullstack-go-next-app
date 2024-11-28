@@ -33,9 +33,7 @@ export default function Sidebar({
             <CloseButton onClick={handleHamburgerClick} />
           </div>
           : null}
-        <div className={styles.sidebar__children}>
-          {children}
-        </div>
+        {children}
       </div>
     </div>,
     document.body

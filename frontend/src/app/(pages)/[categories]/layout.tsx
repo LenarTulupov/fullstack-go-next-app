@@ -2,9 +2,8 @@
 
 import { ReactNode, useState, useEffect } from "react";
 import { IProduct } from "@/types/product.interface";
-import { filterItems, optionsList } from "@/constants/filter-items";
+import { optionsList } from "@/constants/filter-items";
 import Container from "@/components/ui/container/container";
-import useProducts from "@/utils/useProducts";
 import Popup from "@/components/ui/popup/popup";
 import ProductContent from "@/components/product-content/product-content";
 import SizeChartContent from "@/components/size-chart-content/size-chart-content";
@@ -15,10 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { setSelectedSortOption } from "@/store/selectedSortOption/selectedSortOptionSlice";
 import { resetAllFilters } from "@/store/resetFilter/resetFilterSlice";
+import Sidebar from "@/components/ui/sidebar/sidebar";
+import LayoutItemsCenter from "./layout-items-center";
 import styles from './layout.module.scss'
 
 export default function LayoutCategory({ children }: { children: ReactNode }) {
-  const { products } = useProducts();
   const { isProductPopupOpened } = useProductPopup();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
@@ -27,6 +27,8 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [filtersApplied, setFiltersApplied] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [filterButtonContent, setFilterButtonContent] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const selectedSortOption = useSelector((state: RootState) =>
     state.selectedSortOption.selectedSortOption);
   const selectedPrice = useSelector((state: RootState) =>
@@ -35,6 +37,10 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
     state.sizeFilter.selectedSizes);
   const selectedColors = useSelector((state: RootState) =>
     state.colorFilter.selectedColors);
+
+  const handleFilterButtonClick = () => {
+    setFilterButtonContent(p => !p);
+  }
 
   const handleResetFilters = () => {
     dispatch(resetAllFilters());
@@ -69,11 +75,20 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     const isFiltered =
       selectedSortOption !== "recommend" ||
-      (activeItem !== null 
-        && (selectedSizes.length > 0 
-        || selectedColors.length > 0 || selectedPrice !== null));
+      (activeItem !== null
+        && (selectedSizes.length > 0
+          || selectedColors.length > 0 || selectedPrice !== null));
     setFiltersApplied(isFiltered);
   }, [selectedSortOption, activeItem, selectedSizes, selectedColors, selectedPrice]);
 
@@ -82,32 +97,33 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
       <div className={styles['layout-category__wrapper']}>
         <Container>
           <div className={styles['layout-category__list']}>
-            <div className={`
-              ${styles['layout-category__list-center']} 
-              ${styles['list-center']}
-            `}>
-              {filterItems.map((item) => {
-                const itemWithFirstUpperLetter =
-                  item.at(0)?.toUpperCase() + item.slice(1);
-                return (
-                  <button
-                    key={item}
-                    className={styles['list-center__item']}
-                    onClick={() => handleItemClick(item)}
-                  >
-                    {itemWithFirstUpperLetter}
-                  </button>
-                );
-              })}
-              {filtersApplied && (
-                <button
-                  className={styles['list-center__item-reset']}
-                  onClick={handleResetFilters}
-                >
-                  Reset
-                </button>
-              )}
-            </div>
+            {isMobile ? (
+              <button
+                className={styles['layout-category__list-filter-button']}
+                onClick={handleFilterButtonClick}
+              >
+                Filter
+              </button>
+            ) : (
+              <LayoutItemsCenter
+                onClick={handleItemClick}
+                filtersApplied={filtersApplied}
+                handleResetFilters={handleResetFilters}
+              />
+            )}
+            {isMobile &&
+              <Sidebar
+                header
+                isCartSidebarOpened={filterButtonContent}
+                handleHamburgerClick={handleFilterButtonClick}
+              >
+                <LayoutItemsCenter
+                  onClick={handleItemClick}
+                  filtersApplied={filtersApplied}
+                  handleResetFilters={handleResetFilters}
+                />
+              </Sidebar>
+            }
             <div className={`
               ${styles['layout-category__list-end']} 
               ${styles['list-end']}

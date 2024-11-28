@@ -23,16 +23,6 @@
   border-left: 1px solid var(--gray);
   &_opened {
   }
-
-  &__children {
-    // display: flex;
-    // justify-content: center;
-    // align-items: flex-start;
-    // &:nth-child(2) {
-    //   align-self: flex-start;
-    //   height: auto;
-    // }
-  }
   &__header {
     padding: 20px 36px;
     display: flex;
@@ -81,8 +71,3 @@
     }
   }
 }
-// @media (min-width: 1050px) {
-//   .overlay {
-//     display: none;
-//   }
-// }
