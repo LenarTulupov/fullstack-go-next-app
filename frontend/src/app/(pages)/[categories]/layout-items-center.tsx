@@ -36,7 +36,7 @@ export default function LayoutItemsCenter({
             </button>
             {isMobile && isActive && (
               <div className={styles['layout-category__selected-items']}>
-                {activeItem && <Dropdown isStatic item={activeItem} />}
+                {activeItem && <Dropdown isMobile isStatic item={activeItem} />}
               </div>
             )}
           </>
@@ -44,7 +44,10 @@ export default function LayoutItemsCenter({
       })}
       {filtersApplied && (
         <button
-          className={`${styles['list-center__item-reset']} ${isMobile ? styles['list-center__item-reset_mobile'] : ''}`}
+          className={`
+            ${styles['list-center__item-reset']} 
+            ${isMobile ? styles['list-center__item-reset_mobile'] : ''}
+          `}
           onClick={handleResetFilters}
         >
           Reset

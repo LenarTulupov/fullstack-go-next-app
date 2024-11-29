@@ -10,6 +10,9 @@
     height: 100%;
     .logo-link {
       padding: 0 24px;
+      @media (max-width: 480px) {
+        display: none;
+      }
     }
   }
   &__list {
@@ -18,12 +21,23 @@
   &__item {
     display: flex;
     align-items: center;
+    &-sign {
+      font-size: 21px;
+    }
+    &-favorite {
+      padding: 0 !important;
+    }
+    &-cart {
+      font-size: 21px;
+    }
     &-search {
       display: flex;
       align-items: center;
       padding: 12px 16px;
     }
     &-button {
+      display: flex;
+      align-items: center;
       background-color: transparent;
       border: none;
       font-size: 16px;
@@ -123,7 +137,11 @@
   padding: 15px !important;
   margin-top: 20px;
 }
-
+@media (max-width: 1180px) {
+  .navbar__item-button {
+    padding: 12px 16px;
+  }
+}
 @media (max-width: 1050px) {
   .navbar__main {
     display: none;
@@ -133,6 +151,20 @@
   }
   .navbar__sub {
     justify-self: end;
+  }
+}
+@media(max-width: 768px) {
+  .navbar__item-button {
+    gap: 5px;
+    padding: 12px 10px;
+  }
+  .navbar__item-search {
+    padding: 12px 10px;
+  }
+}
+@media(max-width: 480px) {
+  .navbar__wrapper {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 .link__inner {

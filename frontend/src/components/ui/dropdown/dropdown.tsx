@@ -13,9 +13,10 @@ import { setPrice } from '@/store/priceFilter/priceFilterSlice';
 interface IDropdown {
   item: string;
   isStatic?: boolean;
+  isMobile?: boolean;
 }
 
-export default function Dropdown({ item, isStatic = false }: IDropdown) {
+export default function Dropdown({ item, isStatic = false, isMobile = false }: IDropdown) {
   const dispatch = useDispatch();
   const selectedSizes = useSelector((state: RootState) =>
     state.sizeFilter.selectedSizes);
@@ -59,8 +60,8 @@ export default function Dropdown({ item, isStatic = false }: IDropdown) {
 
   return (
     <div className={`${styles.dropdown} ${isStatic ? styles.dropdown_static : ''}`}>
-      <Container>
-        <ul className={styles.dropdown__list}>
+      <Container className={styles.container}>
+        <ul className={`${styles.dropdown__list} ${styles.dropdown__list_mobile}`}>
           {items.map((itemValue, index) => {
             const uniqueId = `${itemValue}-${index}`;
             const isChecked =
@@ -73,27 +74,37 @@ export default function Dropdown({ item, isStatic = false }: IDropdown) {
                     : false;
 
             return (
-              <li key={uniqueId} className={styles.dropdown__item}>
-                {isPrice ? (
-                  <Radio
-                    id={uniqueId}
-                    className={styles['dropdown__item-radio']}
-                    onChange={handleRadioChange(itemValue)}
-                    checked={isChecked}
-                  />
-                ) : (
-                  <Checkbox
-                    id={uniqueId}
-                    className={styles['dropdown__item-checkbox']}
-                    onChange={handleCheckboxChange(itemValue)}
-                    checked={isChecked}
-                  />
-                )}
+              <li
+                key={uniqueId}
+                className={`
+                  ${styles.dropdown__item} 
+                  ${isMobile ? styles.dropdown__item_mobile : ''}
+                `}>
                 <LabelText
                   htmlFor={uniqueId}
-                  className={styles['dropdown__item-label']}
+                  className={styles['dropdown__item-label-container']}
                 >
-                  {itemValue}
+                  {isPrice ? (
+                    <Radio
+                      id={uniqueId}
+                      className={styles['dropdown__item-radio']}
+                      onChange={handleRadioChange(itemValue)}
+                      checked={isChecked}
+                    />
+                  ) : (
+                    <Checkbox
+                      id={uniqueId}
+                      className={styles['dropdown__item-checkbox']}
+                      onChange={handleCheckboxChange(itemValue)}
+                      checked={isChecked}
+                    />
+                  )}
+                  <LabelText
+                    htmlFor={uniqueId}
+                    className={styles['dropdown__item-label']}
+                  >
+                    {itemValue}
+                  </LabelText>
                 </LabelText>
               </li>
             );

@@ -3,9 +3,9 @@ import styles from './favorite-button.module.scss'
 
 interface IFavoriteButton {
   className?: string;
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   border: boolean;
-  isFavorite: boolean;
+  isFavorite?: boolean;
 }
 
 export default function FavoriteButton({ 

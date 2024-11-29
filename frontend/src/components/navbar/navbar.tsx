@@ -25,12 +25,14 @@ import CartService from '@/services/cart.service';
 import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
 import styles from './navbar.module.scss';
 import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
-import { MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
+import { MdFace, MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
 import Hamburger from '../ui/hamburger/hamburger';
 import NavLink from '../ui/nav-link/nav-link';
 import NavMain from './nav-main/nav-main';
 import Sidebar from '../ui/sidebar/sidebar';
 import Divider from '../ui/divider/divider';
+import FavoriteButton from '../ui/favorite-button/favorite-button';
+import CartIcon from '../ui/cart-icon/cart-icon';
 
 export default function Navbar() {
   const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
@@ -50,6 +52,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const [isHamburgerClick, setIsHamburgerClick] = useState<boolean>(false);
   const [activeDropdownSecond, setActiveDropdownSecond] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const handleDropdownSecond = (index: number) => {
     setActiveDropdownSecond((prev) => (prev === index ? null : index));
@@ -121,6 +124,15 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth > 768);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [])
+
+  useEffect(() => {
     if (isSearchClicked && searchBarFocus.current) {
       searchBarFocus.current.focus();
     }
@@ -176,13 +188,16 @@ export default function Navbar() {
                 <li className={styles.navbar__item}>
                   <NavLink href='/sign-in'
                   >
-                    Sign In
+                    {isMobile ? 'Sign In' : <MdFace className={styles['navbar__item-sign']}/>}
                   </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
                   <NavLink href='/favorite'
                   >
-                    Favorite<span>{favorites.length}</span>
+                    {isMobile
+                      ? 'Favorite'
+                      : <FavoriteButton border={false} className={styles['navbar__item-favorite']}/>
+                    }<span>{favorites.length}</span>
                   </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
@@ -190,7 +205,10 @@ export default function Navbar() {
                     className={styles['navbar__item-button']}
                     onClick={handleCartSidebarToggle}
                   >
-                    Cart<span>{productsQuantity}</span>
+                    {isMobile 
+                      ? 'Cart' 
+                      : <CartIcon className={styles['navbar__item-cart']} />
+                    }<span>{productsQuantity}</span>
                   </button>
                 </li>
               </ul>

@@ -10,6 +10,7 @@ import styles from './cart-content.module.scss';
 import EmptyMessage from '../ui/empty-message/empty-message';
 import { TbShoppingCartPlus } from "react-icons/tb";
 import { usePathname } from 'next/navigation';
+import CartIcon from '../ui/cart-icon/cart-icon';
 
 interface ICartContent {
   isCartPage?: boolean;
@@ -30,7 +31,7 @@ export default function CartContent({ isCartPage = false }: ICartContent) {
         <EmptyMessage
           className={styles['empty-message']}
           message='Your cart is empty'
-          icon={<TbShoppingCartPlus />}
+          icon={<CartIcon/>}
         />
       ) : (
         <>
