@@ -29,6 +29,10 @@
       &:hover {
         background-color: var(--black-hover);
       }
+      &_mobile {
+        margin-top: 10px;
+        margin-left: 0;
+      }
     }
   }
 }

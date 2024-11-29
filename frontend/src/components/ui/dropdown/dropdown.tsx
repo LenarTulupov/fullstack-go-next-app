@@ -12,9 +12,10 @@ import { setPrice } from '@/store/priceFilter/priceFilterSlice';
 
 interface IDropdown {
   item: string;
+  isStatic?: boolean;
 }
 
-export default function Dropdown({ item }: IDropdown) {
+export default function Dropdown({ item, isStatic = false }: IDropdown) {
   const dispatch = useDispatch();
   const selectedSizes = useSelector((state: RootState) =>
     state.sizeFilter.selectedSizes);
@@ -57,7 +58,7 @@ export default function Dropdown({ item }: IDropdown) {
   }
 
   return (
-    <div className={styles.dropdown}>
+    <div className={`${styles.dropdown} ${isStatic ? styles.dropdown_static : ''}`}>
       <Container>
         <ul className={styles.dropdown__list}>
           {items.map((itemValue, index) => {

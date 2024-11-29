@@ -118,6 +118,8 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
                 handleHamburgerClick={handleFilterButtonClick}
               >
                 <LayoutItemsCenter
+                  isMobile={isMobile}
+                  activeItem={activeItem}
                   onClick={handleItemClick}
                   filtersApplied={filtersApplied}
                   handleResetFilters={handleResetFilters}
@@ -158,9 +160,11 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
         </Container>
       </div>
       <Container>
-        <div className={styles['layout-category__selected-items']}>
-          {activeItem && <Dropdown item={activeItem} />}
-        </div>
+        {!isMobile &&
+          <div className={styles['layout-category__selected-items']}>
+            {activeItem && <Dropdown item={activeItem} />}
+          </div>
+        }
         {children}
       </Container>
       {selectedProduct && (
@@ -172,7 +176,6 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
           />
         </Popup>
       )}
-
       {selectedProduct && (
         <Popup nested isPopupOpened={isSizeChartPopupOpened}>
           <SizeChartContent handleSizeChart={handleSizeChartPopup} />
