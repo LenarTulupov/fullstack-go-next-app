@@ -1,6 +1,8 @@
 import { filterItems } from '@/constants/filter-items';
 import styles from './layout-items-center.module.scss';
 import Dropdown from '@/components/ui/dropdown/dropdown';
+import Link from 'next/link';
+import LogoImage from '@/components/ui/logo/logo';
 
 interface ILayoutItemsCenter {
   onClick: (item: string) => void;

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { navItems } from '@/constants/nav-items';
@@ -34,8 +34,12 @@ import Divider from '../ui/divider/divider';
 import FavoriteButton from '../ui/favorite-button/favorite-button';
 import CartIcon from '../ui/cart-icon/cart-icon';
 
-export default function Navbar() {
-  const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
+interface INavbar {
+  isSearchClicked: boolean;
+  setIsSearchClicked: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) {
   const searchBarFocus = useRef<HTMLInputElement>(null);
   const searchBarValue = useSearchBarValue();
   const setSearchBarValue = useSetSearchBarValue();
@@ -188,7 +192,7 @@ export default function Navbar() {
                 <li className={styles.navbar__item}>
                   <NavLink href='/sign-in'
                   >
-                    {isMobile ? 'Sign In' : <MdFace className={styles['navbar__item-sign']}/>}
+                    {isMobile ? 'Sign In' : <MdFace className={styles['navbar__item-sign']} />}
                   </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
@@ -196,7 +200,7 @@ export default function Navbar() {
                   >
                     {isMobile
                       ? 'Favorite'
-                      : <FavoriteButton border={false} className={styles['navbar__item-favorite']}/>
+                      : <FavoriteButton border={false} className={styles['navbar__item-favorite']} />
                     }<span>{favorites.length}</span>
                   </NavLink>
                 </li>
@@ -205,8 +209,8 @@ export default function Navbar() {
                     className={styles['navbar__item-button']}
                     onClick={handleCartSidebarToggle}
                   >
-                    {isMobile 
-                      ? 'Cart' 
+                    {isMobile
+                      ? 'Cart'
                       : <CartIcon className={styles['navbar__item-cart']} />
                     }<span>{productsQuantity}</span>
                   </button>
@@ -226,12 +230,14 @@ export default function Navbar() {
               ref={searchBarFocus}
               onKeyDown={handleKeyDown}
             />
-            <Button onClick={handleShowFilteredProducts}>
-              Search
-            </Button>
-            <Button variant='white' onClick={handleSearch}>
-              Close
-            </Button>
+            <div className={styles['search-bar__container-buttons']}>
+              <Button onClick={handleShowFilteredProducts}>
+                Search
+              </Button>
+              <Button variant='white' onClick={handleSearch}>
+                Close
+              </Button>
+            </div>
           </Container>
           {pathname !== '/search' && (
             <div className={styles['search-bar__products-wrapper']}>
@@ -283,6 +289,9 @@ export default function Navbar() {
       >
         <div className={`${styles['navbar__sidebar-content']} ${styles['sidebar-content']}`}>
           <ul className={styles['sidebar-content__list']}>
+            <Link href='/' className={styles['logo-link_mobile']}>
+              <LogoImage />
+            </Link>
             {navItems.map((item, index) => (
               <li key={index} className={styles['sidebar-content__item']}>
                 <Link

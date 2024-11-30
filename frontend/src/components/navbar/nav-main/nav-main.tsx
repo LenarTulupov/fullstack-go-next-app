@@ -4,10 +4,12 @@ import NavLink from '@/components/ui/nav-link/nav-link';
 import { IoIosArrowDown } from 'react-icons/io';
 import DropdownMenu from '@/components/ui/dropdown-menu/dropdown-menu';
 import { RefObject, SetStateAction } from 'react';
+import Link from 'next/link';
+import LogoImage from '@/components/ui/logo/logo'
 
 interface INavMain {
   activeDropdown: number | null;
-  onMouseEnter: (index: number) => void; 
+  onMouseEnter: (index: number) => void;
   onMouseLeave: () => void;
   itemRef: RefObject<HTMLLIElement>;
   dropdownPosition: { top: number; left: number } | null;

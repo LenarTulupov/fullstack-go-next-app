@@ -4,4 +4,9 @@
   // justify-content: center;
   height: var(--header-height);
   border-bottom: 1px solid var(--gray);
+  &_search {
+    @media(max-width: 560px) {
+      height: 108px;
+    }
+  }
 }
