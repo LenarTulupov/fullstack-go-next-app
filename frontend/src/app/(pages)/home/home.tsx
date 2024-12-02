@@ -2,15 +2,15 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import styles from './home.module.scss';
 import FeaturedCollection from './featured-collection/featured-collection';
 import Banner from './banner';
 import BlackFriday from './black-friday/black-friday';
 import Categories from './categories/categories';
+import styles from './home.module.scss';
 
 export default function Home() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+  const isInView = useInView(ref, { once: true, margin: '20%' });
 
   return (
     <div className={styles.home}>

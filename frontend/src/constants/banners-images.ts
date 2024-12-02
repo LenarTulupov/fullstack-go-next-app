@@ -5,5 +5,5 @@ export const bannerImagesLarge = [
 
 export const bannerImagesMobile = [
   '/banners/banner-mobile-screen-1.webp',
-  '/banners/banner-mobile-screen-1.webp'
+  '/banners/banner-mobile-screen-2.webp'
 ];
