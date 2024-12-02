@@ -31,14 +31,22 @@
     }
     &-header {
       margin-bottom: 20px;
-      @media(max-width: 768px) {
-        font-weight: bold;
-      }
+      font-weight: bold;
     }
     &-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+  }
+}
+@media(max-width: 992px) {
+  .footer__wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .footer__logo {
+    order: 1;
+    align-items: center;
   }
 }
