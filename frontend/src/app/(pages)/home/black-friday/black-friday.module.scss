@@ -21,6 +21,12 @@
       grid-template-columns: repeat(2, 1fr);
       padding: 0 100px;
     }
+    @media(max-width: 768px) {
+      padding: 0;
+    }
+    @media(max-width: 320px) {
+      grid-template-columns: 1fr;
+    }
   }
   &__image {
     border-radius: 150px 150px 0 0;

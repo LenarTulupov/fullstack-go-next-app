@@ -34,7 +34,15 @@ export default function Categories() {
 
   useEffect(() => {
     const updateItemsPerSlide = () => {
-      setItemsPerSlide(window.innerWidth > 992 ? 4 : 3);
+      if(window.innerWidth > 992) {
+        setItemsPerSlide(4)
+      } else if(window.innerWidth > 768) {
+        setItemsPerSlide(3)
+      } else if(window.innerWidth > 320) {
+        setItemsPerSlide(2)
+      } else {
+        setItemsPerSlide(1)
+      }
     };
 
     updateItemsPerSlide();
@@ -49,7 +57,7 @@ export default function Categories() {
     <section className={styles.categories}>
       <Container>
         <Carousel
-          arrows={true}
+          arrows={false}
           dots={false}
           ref={carouselRef}
           beforeChange={handleBeforeChange}
