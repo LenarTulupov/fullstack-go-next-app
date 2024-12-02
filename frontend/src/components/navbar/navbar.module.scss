@@ -218,3 +218,10 @@
     display: none;
   }
 }
+@media(max-width: 480px) {
+  .logo-link_mobile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+}
