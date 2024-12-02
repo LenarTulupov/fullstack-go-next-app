@@ -1,6 +1,6 @@
 .popup-page {
-    background-color: #fff;
-    border-radius: 20px;
+  background-color: #fff;
+  border-radius: 20px;
 }
 
 .buttons {
@@ -31,6 +31,12 @@
 .product__content {
   display: flex;
   gap: 20px;
+  &-images {
+    @extend .images;
+  }
+  &-description {
+    @extend .description;
+  }
 }
 .main-price {
   font-weight: 700;
@@ -54,6 +60,7 @@
     height: auto;
     padding: 0;
     transition: padding 10s ease-in-out;
+    cursor: pointer;
     &_active {
       border: 1px solid var(--gray);
       padding: 5px;
@@ -68,6 +75,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 992px) {
+    gap: 20px;
+  }
   &__size-button {
     background: transparent;
     border: none;
@@ -103,4 +113,16 @@
 
 .sizes-button_active {
   background-color: var(--accent-color);
+}
+@media (max-width: 992px) {
+  .product__content {
+    flex-direction: column;
+  }
+}
+.carousel-wrapper {
+  width: 100vw;
+  &__image {
+    // width: 45vw;
+    padding: 0 10px;
+  }
 }

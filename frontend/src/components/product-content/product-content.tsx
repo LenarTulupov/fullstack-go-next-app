@@ -5,7 +5,7 @@ import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
 // import FavoriteButton from '../ui/favorite-button/favorite-button';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
 import useProductPopup from '@/hooks/useProductPopup';
@@ -16,6 +16,9 @@ import { toggleFavorite, isFavorite } from '@/store/favorites/favoritesSlice';
 import { RootState } from '@/store/store';
 import { ISize } from '@/types/sizes.interface';
 import { addToCart } from '@/store/cart/cartSlice';
+import { Carousel } from 'antd';
+import { div } from 'framer-motion/client';
+import Container from '../ui/container/container';
 
 interface IProductContent {
   product: IProduct;
@@ -24,10 +27,10 @@ interface IProductContent {
   onClose?: () => void;
 }
 
-export default function ProductContent({ 
-  product, 
-  handleSizeChartPopup, 
-  closeButton, 
+export default function ProductContent({
+  product,
+  handleSizeChartPopup,
+  closeButton,
   onClose }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
@@ -36,7 +39,7 @@ export default function ProductContent({
   const [error, setError] = useState<string | null>(null);
   const { handleProductPopupToggle } = useProductPopup();
   const dispatch = useDispatch();
-  console.log(product)
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -45,7 +48,7 @@ export default function ProductContent({
 
   const handleSelectSize = (size: ISize) => {
     setSelectedSize(size);
-    setError(null); 
+    setError(null);
   };
 
   const handleAddToCart = () => {
@@ -54,16 +57,26 @@ export default function ProductContent({
       return;
     }
     dispatch(addToCart({ product, size: selectedSize }));
-    setError(null); 
+    setError(null);
   };
 
-  const id  = product.id;
+  const id = product.id;
 
   const isProductFavorite = useSelector((state: RootState) => isFavorite(state, id));
 
   const handleImageMain = (image: string) => {
     setIsManeImage(image);
   }
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 992);
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <>
@@ -72,37 +85,70 @@ export default function ProductContent({
           ${styles['product__content-images']} 
           ${styles.images}
           `}>
-          <div className={styles.images__all}>
-            {Array.isArray(product.images) ? (
-              product.images.map((image: { image_url: string }) => (
-                <Image
-                  key={image.image_url}
-                  alt={product.title}
-                  src={image.image_url}
-                  className={isManeImage === image.image_url
-                    ? styles['images__all_active']
-                    : ''
-                  }
-                  width={0}
-                  height={0}
-                  layout="responsive"
-                  priority
-                  onClick={() => handleImageMain(image.image_url)}
-                />
-              ))
-            ) : (
-              <p>No images available</p>
-            )}
-          </div>
-          <div className={styles.images__main}>
-            <ZoomImagePopup
-              src={isManeImage}
-              alt={product.title}
-            />
-          </div>
+          {!isMobile ? (
+            <>
+              <div className={styles.images__all}>
+                {Array.isArray(product.images) ? (
+                  product.images.map((image: { image_url: string }) => (
+                    <Image
+                      key={image.image_url}
+                      alt={product.title}
+                      src={image.image_url}
+                      className={
+                        isManeImage === image.image_url
+                          ? styles['images__all_active']
+                          : ''
+                      }
+                      width={0}
+                      height={0}
+                      layout='responsive'
+                      priority
+                      onClick={() => handleImageMain(image.image_url)}
+                    />
+                  ))
+                ) : (
+                  <p>No images available</p>
+                )}
+              </div>
+              <div className={styles.images__main}>
+                <ZoomImagePopup src={isManeImage} alt={product.title} />
+              </div>
+            </>
+          ) : (
+            <Carousel
+              className={styles['carousel-wrapper']}
+              draggable
+              slidesToShow={2} // Отображать два слайда
+              responsive={[
+                {
+                  breakpoint: 992, // Для мобильных устройств
+                  settings: {
+                    slidesToShow: 2, // Отображать один слайд на маленьких экранах
+                  },
+                },
+              ]}
+            >
+              {Array.isArray(product.images) ? (
+                product.images.map((image: { image_url: string }, index: number) => (
+                  <div className={styles['carousel-wrapper__image']} key={index}>
+                    <Image
+                      alt={product.title}
+                      src={image.image_url}
+                      width={0}
+                      height={0}
+                      layout="responsive"
+                      priority
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>No images available</p>
+              )}
+            </Carousel>
+          )}
         </div>
         <div className={`
-          ${styles['product__content-description']} 
+                ${styles['product__content-description']} 
           ${styles.description}
           `}>
           <div className={styles['title-block']}>
@@ -117,9 +163,9 @@ export default function ProductContent({
           </div>
           <div className={styles.sizes}>
             {product.sizes.map((size) => (
-              <Button 
+              <Button
                 className={selectedSize?.id ? styles['sizes-button_active'] : ''}
-                key={size.id} 
+                key={size.id}
                 disabled={!size.available}
                 onClick={() => handleSelectSize(size)}
               >
@@ -159,7 +205,7 @@ export default function ProductContent({
           </div>
           <div className={styles.buttons}>
             <Button onClick={handleAddToCart}>Add To Cart</Button>
-            <FavoriteButton 
+            <FavoriteButton
               onClick={handleToggleFavorite}
               isFavorite={isProductFavorite}
               border
