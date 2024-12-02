@@ -21,6 +21,9 @@
   max-width: 375px;
   min-width: 250px;
   border-left: 1px solid var(--gray);
+  @media(max-width: 480px) {
+    min-width: 100vw;
+  }
   &_opened {
   }
   &__header {

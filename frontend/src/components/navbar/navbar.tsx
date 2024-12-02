@@ -160,7 +160,10 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) 
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
-            <Hamburger isHamburgerClick={isHamburgerClick} onClick={handleHamburgerClick} />
+            <Hamburger 
+              isHamburgerClick={isHamburgerClick} 
+              onClick={handleHamburgerClick} 
+            />
             <Link href='/' className={styles['logo-link']}>
               <LogoImage />
             </Link>
@@ -287,7 +290,10 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) 
         isCartSidebarOpened={isHamburgerClick}
         handleHamburgerClick={handleHamburgerClick}
       >
-        <div className={`${styles['navbar__sidebar-content']} ${styles['sidebar-content']}`}>
+        <div className={`
+          ${styles['navbar__sidebar-content']} 
+          ${styles['sidebar-content']}
+        `}>
           <ul className={styles['sidebar-content__list']}>
             <Link href='/' className={styles['logo-link_mobile']}>
               <LogoImage />
