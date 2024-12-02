@@ -1,13 +1,21 @@
 .footer {
+  margin-bottom: 20px;
   &__wrapper {
     display: flex;
     justify-content: space-between;
     column-gap: 100px;
+    @media(max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+    }
   }
   &__logo {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    @media(max-width: 768px) {
+      align-items: center;
+    }
   }
   &__menu {
     display: grid;
@@ -15,8 +23,17 @@
     grid-template-columns: repeat(3, 1fr);
     column-gap: 100px;
     flex: 1;
+    @media(max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      gap: 20px;
+    }
     &-header {
       margin-bottom: 20px;
+      @media(max-width: 768px) {
+        font-weight: bold;
+      }
     }
     &-list {
       display: flex;
