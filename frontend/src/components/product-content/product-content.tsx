@@ -125,7 +125,7 @@ export default function ProductContent({
                 {
                   breakpoint: 992,
                   settings: {
-                    slidesToShow: 2, 
+                    slidesToShow: 2,
                   },
                 },
               ]}
@@ -166,7 +166,7 @@ export default function ProductContent({
           <div className={styles.sizes}>
             {product.sizes.map((size) => (
               <Button
-                className={selectedSize?.id ? styles['sizes-button_active'] : ''}
+                className={selectedSize?.id === size.id? styles['sizes-button_active'] : ''}
                 key={size.id}
                 disabled={!size.available}
                 onClick={() => handleSelectSize(size)}
@@ -208,7 +208,6 @@ export default function ProductContent({
           <div className={styles.buttons}>
             <Button onClick={handleAddToCart}>Add To Cart</Button>
             <FavoriteButton
-              className={styles.buttons__favorite}
               onClick={handleToggleFavorite}
               isFavorite={isProductFavorite}
               border
