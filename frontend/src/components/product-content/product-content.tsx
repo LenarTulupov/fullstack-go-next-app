@@ -118,12 +118,14 @@ export default function ProductContent({
             <Carousel
               className={styles['carousel-wrapper']}
               draggable
-              slidesToShow={2} // Отображать два слайда
+              slidesToShow={2}
+              infinite={false}
+              dots={false}
               responsive={[
                 {
-                  breakpoint: 992, // Для мобильных устройств
+                  breakpoint: 992,
                   settings: {
-                    slidesToShow: 2, // Отображать один слайд на маленьких экранах
+                    slidesToShow: 2, 
                   },
                 },
               ]}

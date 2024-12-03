@@ -8,6 +8,7 @@ import styles from './page.module.scss';
 import Container from '@/components/ui/container/container';
 import Title from '@/components/ui/title/title';
 import ProductContent from '@/components/product-content/product-content';
+import Loader from '@/components/ui/loader/loader';
 
 export default function Product() {
   const { id } = useParams();
@@ -54,7 +55,7 @@ export default function Product() {
   }, [product, id, dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   if (!product) {
@@ -73,12 +74,12 @@ export default function Product() {
           handleSizeChartPopup={handleSizeChartPopup}
           closeButton={false}
         />
-        <div>
+        {/* <div>
           <Title>
             recommended
           </Title>
 
-        </div>
+        </div> */}
       </Container>
     </div>
   );
