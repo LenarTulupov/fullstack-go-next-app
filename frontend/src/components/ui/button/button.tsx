@@ -10,7 +10,8 @@ export default function Button({
   disabled = false,
   weight = 'bold',
   radius = 'main',
-  type="button" }: IButton) {
+  type="button",
+  onTouchStart }: IButton) {
   return (
     <button
       onClick={onClick}
@@ -22,6 +23,7 @@ export default function Button({
         ${styles[radius]}
         ${className || ''}
       `}
+      onTouchStart={onTouchStart}
       disabled={disabled}
       type={type}
     >

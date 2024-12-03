@@ -10,4 +10,5 @@ export interface IButton {
   disabled?: boolean;
   radius?: 'main' | 'none';
   type?: 'button' | 'submit';
+  onTouchStart?: () => void;
 }

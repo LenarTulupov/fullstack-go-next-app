@@ -170,6 +170,7 @@ export default function ProductContent({
                 key={size.id}
                 disabled={!size.available}
                 onClick={() => handleSelectSize(size)}
+                onTouchStart={() => handleSelectSize(size)}
               >
                 {size.abbreviation}
               </Button>
