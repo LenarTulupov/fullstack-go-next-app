@@ -114,7 +114,7 @@
 }
 
 .sizes-button_active {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color) !important;
 }
 @media (max-width: 992px) {
   .product__content {
