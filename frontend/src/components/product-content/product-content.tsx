@@ -208,6 +208,7 @@ export default function ProductContent({
           <div className={styles.buttons}>
             <Button onClick={handleAddToCart}>Add To Cart</Button>
             <FavoriteButton
+              className={styles.buttons__favorite}
               onClick={handleToggleFavorite}
               isFavorite={isProductFavorite}
               border
