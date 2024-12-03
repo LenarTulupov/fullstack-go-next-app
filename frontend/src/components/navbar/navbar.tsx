@@ -39,7 +39,7 @@ interface INavbar {
   setIsSearchClicked: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) {
+export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar) {
   const searchBarFocus = useRef<HTMLInputElement>(null);
   const searchBarValue = useSearchBarValue();
   const setSearchBarValue = useSetSearchBarValue();
@@ -160,9 +160,9 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) 
       {!isSearchClicked ? (
         <Container className={styles.navbar__container}>
           <div className={styles.navbar__wrapper}>
-            <Hamburger 
-              isHamburgerClick={isHamburgerClick} 
-              onClick={handleHamburgerClick} 
+            <Hamburger
+              isHamburgerClick={isHamburgerClick}
+              onClick={handleHamburgerClick}
             />
             <Link href='/' className={styles['logo-link']}>
               <LogoImage />
@@ -275,9 +275,14 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked}: INavbar) 
                       )
                     })}
                 </ProductsGrid>
-                <Button className={styles['search-bar__products-button']}>
-                  Show All
-                </Button>
+                <Link
+                  href='/category/all-clothing'
+                  className={styles['search-bar__products-button']}
+                >
+                  <Button>
+                    Show All
+                  </Button>
+                </Link>
               </Container>
             </div>
           )}
