@@ -15,11 +15,15 @@
   }
 
   .info-section {
-    padding: 10px;
+    margin-top: 20px;
+    padding: 20px;
     min-height: 210px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    // border: 1px solid var(--gray);
+    // border-radius: 20px;
+
 
     &__title {
       display: flex;

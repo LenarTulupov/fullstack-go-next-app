@@ -1,6 +1,6 @@
 import Title from '@/components/ui/title/title';
 import Container from '@/components/ui/container/container';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import useProducts from '@/utils/useProducts';
 import Button from '@/components/ui/button/button';
 import ProductsCarousel from './products-carousel';
@@ -13,7 +13,7 @@ export default function FeaturedCollection() {
   const tabsFirstUpperLetter = tabs.map((item) => item.slice(0, 1).toUpperCase() + item.slice(1));
   const [selectedTab, setSelectedTab] = useState<string>(tabsFirstUpperLetter[0]);
   const [isCarousel, setIsCarousel] = useState<boolean>(true);
-  const { products } = useProducts();
+  const { products, isLoading } = useProducts();
 
   const filteredProducts = products.filter((product) => {
     if (selectedTab === 'Hot') {
@@ -61,7 +61,7 @@ export default function FeaturedCollection() {
           </div>
         </div>
         {isCarousel ?
-          <ProductsCarousel displayedProducts={displayedProducts} />
+          <ProductsCarousel displayedProducts={displayedProducts} isLoading={isLoading}/>
           : <div className={styles['featured-collection__grid']}>
             {filteredProducts.map((product) => (
               <Card key={product.id} product={product} info={false} />

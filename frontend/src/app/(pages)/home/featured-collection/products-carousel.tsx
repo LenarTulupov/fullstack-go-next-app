@@ -5,23 +5,25 @@ import Arrow from '@/components/ui/arrow/arrow';
 import { useRef, useState, useEffect } from 'react';
 import { CarouselRef } from 'antd/es/carousel';
 import styles from './products-carousel.module.scss';
+import CardSkeleton from '@/components/ui/card-skeleton/card-skeleton';
 
 interface IProductsCarousel {
   displayedProducts: IProduct[];
+  isLoading?: boolean;
 }
 
-export default function ProductsCarousel({ displayedProducts }: IProductsCarousel) {
+export default function ProductsCarousel({ displayedProducts, isLoading }: IProductsCarousel) {
   const carouselRef = useRef<CarouselRef | null>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
-  const [itemsPerSlide, setItemsPerSlide] = useState<number>(4); 
+  const [itemsPerSlide, setItemsPerSlide] = useState<number>(4);
 
   useEffect(() => {
     const updateItemsPerSlide = () => {
-      if(window.innerWidth > 992) {
+      if (window.innerWidth > 992) {
         setItemsPerSlide(4)
-      } else if(window.innerWidth > 768) {
+      } else if (window.innerWidth > 768) {
         setItemsPerSlide(3)
-      } else if(window.innerWidth > 320) {
+      } else if (window.innerWidth > 320) {
         setItemsPerSlide(2)
       } else {
         setItemsPerSlide(1)
@@ -29,7 +31,7 @@ export default function ProductsCarousel({ displayedProducts }: IProductsCarouse
     };
 
     updateItemsPerSlide();
-    window.addEventListener('resize', updateItemsPerSlide); 
+    window.addEventListener('resize', updateItemsPerSlide);
 
     return () => {
       window.removeEventListener('resize', updateItemsPerSlide);
@@ -61,9 +63,13 @@ export default function ProductsCarousel({ displayedProducts }: IProductsCarouse
       >
         {groupedProducts.map((group, index) => (
           <div key={index} className={styles['products-carousel__grid']}>
-            {group.map((product) => (
-              <Card key={product.id} product={product} info={false} />
-            ))}
+            {isLoading ? (
+              Array.from({ length: itemsPerSlide }).map((_, index) => <CardSkeleton key={index} />)
+            ) : (
+              group.map((product) => (
+                <Card key={product.id} product={product} info={false} />
+              ))
+            )}
           </div>
         ))}
       </Carousel>
