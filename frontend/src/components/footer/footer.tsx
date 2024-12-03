@@ -72,7 +72,7 @@ export default function Footer() {
                   <Link href="/">Terms of Service</Link>
                 </li>
                 <li className={styles['footer__menu__item']}>
-                  <Link href="/">Privacy Policy</Link>
+                  <Link href="/privacy-policy">Privacy Policy</Link>
                 </li>
                 <li className={styles['footer__menu__item']}>
                   <Link href="/">Cookie Policy & GDPR</Link>

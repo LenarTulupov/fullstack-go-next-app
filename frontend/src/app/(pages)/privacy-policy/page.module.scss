@@ -1,0 +1,17 @@
+.privacy-policy {
+  margin-top: 20px;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    .main-title {
+      text-align: center;
+      font-size: 30px;
+    }
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+}
