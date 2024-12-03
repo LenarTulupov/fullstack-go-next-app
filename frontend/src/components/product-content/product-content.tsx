@@ -118,14 +118,14 @@ export default function ProductContent({
             <Carousel
               className={styles['carousel-wrapper']}
               draggable
-              slidesToShow={2}
+              slidesToShow={1.3}
               infinite={false}
               dots={false}
               responsive={[
                 {
                   breakpoint: 992,
                   settings: {
-                    slidesToShow: 2,
+                    slidesToShow: 1.3,
                   },
                 },
               ]}
