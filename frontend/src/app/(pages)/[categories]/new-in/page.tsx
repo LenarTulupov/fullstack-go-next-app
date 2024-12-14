@@ -1,5 +1,9 @@
-import NewIn from "@/client-pages/categories/new-in/page";
+import dynamic from "next/dynamic";
+
+const NewIn = dynamic(() => import("@/client-pages/categories/new-in/page"), { 
+  ssr: false 
+});
 
 export default function NewInPage() {
-  return <NewIn />
-};
+  return <NewIn />;
+}
