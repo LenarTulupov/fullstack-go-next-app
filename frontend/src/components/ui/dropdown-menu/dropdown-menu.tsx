@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link';
 import styles from './dropdown-menu.module.scss';
 import { INavItems } from '@/types/nav-items.interface';

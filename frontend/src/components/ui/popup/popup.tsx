@@ -1,3 +1,5 @@
+'use client'
+
 import { createPortal } from "react-dom";
 import styles from './popup.module.scss';
 import { ReactNode } from "react";
