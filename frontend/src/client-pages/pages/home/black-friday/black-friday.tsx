@@ -1,3 +1,5 @@
+'use client'
+
 import Title from "@/components/ui/title/title";
 import Image from "next/image";
 import Container from "@/components/ui/container/container";
