@@ -28,7 +28,6 @@ export default function Home() {
       </motion.div>
       <BlackFriday/>
       <Categories/>
-      {/* Тест */}
     </div>
   );
 }
