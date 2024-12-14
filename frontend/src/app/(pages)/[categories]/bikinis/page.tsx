@@ -1,11 +1,5 @@
-'use client'
+import Bikinis from "@/client-pages/categories/bikinis/page";
 
-import FilterProductCategory from "@/components/filter-product-category/filter-product-category";
-import { IProduct } from "@/types/product.interface";
-
-export default function Bikinis() {
-  const bikinisProducts = (product: IProduct) =>
-    product.subcategory === 'bikinis'
-  ;
-  return <FilterProductCategory filterFunction={bikinisProducts} />
+export default function BikinisPage() {
+  return <Bikinis />
 };

@@ -64,7 +64,9 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
         {groupedProducts.map((group, index) => (
           <div key={index} className={styles['products-carousel__grid']}>
             {isLoading ? (
-              Array.from({ length: itemsPerSlide }).map((_, index) => <CardSkeleton key={index} />)
+              Array.from({ length: itemsPerSlide }).map((_, index) =>
+                <CardSkeleton key={index} info={false} />
+              )
             ) : (
               group.map((product) => (
                 <Card key={product.id} product={product} info={false} />

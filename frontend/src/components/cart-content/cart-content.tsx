@@ -8,9 +8,10 @@ import { useSelector } from 'react-redux';
 import { selectCart } from '@/store/cart/cartSlice';
 import styles from './cart-content.module.scss';
 import EmptyMessage from '../ui/empty-message/empty-message';
-import { TbShoppingCartPlus } from "react-icons/tb";
 import { usePathname } from 'next/navigation';
 import CartIcon from '../ui/cart-icon/cart-icon';
+import Sidebar from '../ui/sidebar/sidebar';
+import useCart from '@/hooks/useCart';
 
 interface ICartContent {
   isCartPage?: boolean;
@@ -19,8 +20,9 @@ interface ICartContent {
 export default function CartContent({ isCartPage = false }: ICartContent) {
   const cart = useSelector(selectCart);
   const pathname = usePathname();
+  const { isCartSidebarOpened } = useCart();
 
-  if(isCartPage) {
+  if (isCartPage) {
     pathname === '/cart'
   }
 
@@ -31,7 +33,7 @@ export default function CartContent({ isCartPage = false }: ICartContent) {
         <EmptyMessage
           className={styles['empty-message']}
           message='Your cart is empty'
-          icon={<CartIcon/>}
+          icon={<CartIcon />}
         />
       ) : (
         <>
@@ -48,6 +50,9 @@ export default function CartContent({ isCartPage = false }: ICartContent) {
         </>
       )}
       {!isCartPage && <CartPromoSubfooter />}
+      <Sidebar isCartSidebarOpened={isCartSidebarOpened}>
+        <CartContent />
+      </Sidebar>
     </div>
   )
 };

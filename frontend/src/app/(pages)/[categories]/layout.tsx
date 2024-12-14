@@ -167,7 +167,7 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
         }
         {children}
       </Container>
-      {selectedProduct && (
+      {/* {selectedProduct && (
         <Popup isPopupOpened={isProductPopupOpened} nested>
           <ProductContent
             product={selectedProduct}
@@ -189,7 +189,7 @@ export default function LayoutCategory({ children }: { children: ReactNode }) {
             handleAddToCartClick={handleAddedToCart}
           />
         </Popup>
-      )}
+      )} */}
     </div>
   );
 };

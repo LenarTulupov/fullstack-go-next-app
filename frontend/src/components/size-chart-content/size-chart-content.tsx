@@ -3,17 +3,17 @@ import CloseButton from "../ui/close-button/close-button";
 import styles from './size-chart-content.module.scss';
 
 interface ISizeChartContent {
-  handleSizeChart: () => void;
+  onClick: () => void;
 }
 
 export default function SizeChartContent(
-  { handleSizeChart }: ISizeChartContent) {
+  { onClick }: ISizeChartContent) {
   const sizesImage = 
   'https://cdn.kiwisizing.com/simpleretro-1610555643896.png';
   return (
       <div className={styles['size-chart-content']}>
         <div className={styles['text-wrapper']}>
-          <CloseButton onClick={handleSizeChart} />
+          <CloseButton onClick={onClick} />
         </div>
         <div className={styles.subtitle}>Size Charts</div>
         <div />

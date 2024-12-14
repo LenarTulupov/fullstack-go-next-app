@@ -1,11 +1,5 @@
-'use client'
+import Summer from "@/client-pages/categories/summer/page";
 
-import FilterProductCategory from "@/components/filter-product-category/filter-product-category";
-import { IProduct } from "@/types/product.interface"
-
-export default function Summer() {
-  const summerProducts = (product: IProduct) => 
-    product.categories?.includes('summer')
-  ;
-  return <FilterProductCategory filterFunction={summerProducts}/>
+export default function SummerPage() {
+  return <Summer />
 };

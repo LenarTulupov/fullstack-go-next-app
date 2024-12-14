@@ -117,7 +117,7 @@ export default function FilterProductCategory(
       )}
       {selectedProduct && (
         <Popup nested isPopupOpened={isSizeChartPopupOpened}>
-          <SizeChartContent handleSizeChart={handleSizeChartPopup} />
+          <SizeChartContent onClick={handleSizeChartPopup} />
         </Popup>
       )}
       {isAddedToCart && selectedProduct && (

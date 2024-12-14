@@ -1,7 +1,5 @@
-'use client';
+import AllClothing from "@/client-pages/categories/all-clothing/page";
 
-import FilterProductCategory from "@/components/filter-product-category/filter-product-category";
-
-export default function AllClothing() {
-  return <FilterProductCategory filterFunction={() => true}/>
+export default function AllClothingPage() {
+  return <AllClothing />
 };

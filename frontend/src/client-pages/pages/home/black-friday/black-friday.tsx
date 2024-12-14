@@ -10,7 +10,6 @@ import Link from "next/link";
 export default function BlackFriday() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-10px' })
-  console.log('isInView:', isInView);
   return (
     <section className={styles['black-friday']}>
       <Container>

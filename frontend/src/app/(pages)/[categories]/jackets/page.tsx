@@ -1,12 +1,5 @@
-'use client'
+import Jackets from "@/client-pages/categories/jackets/page";
 
-import FilterProductCategory from "@/components/filter-product-category/filter-product-category";
-import { IProduct } from "@/types/product.interface"
-
-export default function Jackets() {
-  const jacketsProducts = (product: IProduct) => 
-    product.subcategory?.includes('jackets')
-  ;
-
-  return <FilterProductCategory filterFunction={jacketsProducts}/>
+export default function JacketsPage() {
+  return <Jackets />
 };
