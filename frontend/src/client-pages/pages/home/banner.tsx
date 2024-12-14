@@ -1,3 +1,5 @@
+'use client'
+
 import { Carousel } from 'antd'
 import { bannerImagesLarge, bannerImagesMobile } from '@/constants/banners-images'
 import Image from 'next/image'

@@ -1,3 +1,5 @@
+'use client'
+
 import { IProduct } from '@/types/product.interface';
 import { Carousel } from 'antd';
 import Card from '@/components/card/card';

@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image';
 import ZoomImagePopup from '../zoom-image-popup/zoom-image-popup';
 import Color from '../ui/color/color';
