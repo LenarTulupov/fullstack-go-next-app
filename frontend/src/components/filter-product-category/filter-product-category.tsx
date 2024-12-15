@@ -10,7 +10,7 @@ import ProductContent from "../product-content/product-content";
 import SizeChartContent from "../size-chart-content/size-chart-content";
 import PopupItemsContent from "../popup-items/poput-items-content";
 import Card from "../card/card";
-import { addToCart } from "@/store/cart/cartSlice";
+import { addToCart } from "@/store/cart/cart-slice";
 import { ISize } from "@/types/sizes.interface";
 import { RootState } from "@/store/store";
 

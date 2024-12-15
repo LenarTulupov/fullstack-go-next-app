@@ -10,7 +10,7 @@ interface ISidebar {
   children: ReactNode;
   isCartSidebarOpened: boolean;
   variant?: 'left' | 'right';
-  handleHamburgerClick?: () => void;
+  onClick?: () => void;
   header?: boolean;
 }
 
@@ -18,11 +18,10 @@ export default function Sidebar({
   children,
   isCartSidebarOpened,
   variant = 'right',
-  handleHamburgerClick,
+  onClick,
   header = false
 }: ISidebar) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
   useEffect(() => {
     setPortalTarget(document.body); 
   }, []);
@@ -44,7 +43,7 @@ export default function Sidebar({
       `}>
         {header && (
           <div className={`${styles.sidebar__header} ${styles[`sidebar__header_${variant}`]}`}>
-            <CloseButton onClick={handleHamburgerClick} />
+            <CloseButton onClick={onClick} />
           </div>
         )}
         {children}

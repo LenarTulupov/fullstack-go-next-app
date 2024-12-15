@@ -8,7 +8,7 @@ import EmptyMessage from "@/components/ui/empty-message/empty-message";
 import { TbShoppingCartPlus } from "react-icons/tb";
 import Divider from "@/components/ui/divider/divider";
 import { useSelector } from "react-redux";
-import { selectCart } from "@/store/cart/cartSlice";
+import { selectCart } from "@/store/cart/cart-slice";
 
 export default function Cart() {
   const cart = useSelector(selectCart);
@@ -26,7 +26,7 @@ export default function Cart() {
               icon={<TbShoppingCartPlus />}
             />
           ) : (
-            <CartContent isCartPage/>
+            <CartContent isCartPage />
           )}
         </div>
       </Container>

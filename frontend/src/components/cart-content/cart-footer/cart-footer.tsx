@@ -13,14 +13,14 @@ export default function CartFooter() {
     <div className={styles['cart-footer']}>
       <div className={styles['cart-footer__discount']}>
         <Title weight='bold'>Discount</Title>
-        <Price price={discount}/>
+        <Price price={discount} />
       </div>
       <div className={styles['cart-footer__subtotal']}>
         <div>
           <Title weight='bold'>Subtotal (excluding delivery)</Title>
           <Title>*All taxes are included in product prices</Title>
         </div>
-        <Price price={totalPrice}/>
+        <Price price={totalPrice} />
       </div>
       <div className={styles['cart-footer__buttons']}>
         <Link

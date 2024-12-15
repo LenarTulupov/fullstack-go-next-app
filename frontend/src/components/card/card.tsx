@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { toggleFavorite, isFavorite } from "@/store/favorites/favoritesSlice";
+import { toggleFavorite, isFavorite } from "@/store/favorites/favorites-slice";
 import useProductPopup from "@/hooks/useProductPopup";
 import Button from "../ui/button/button";
 import Title from "../ui/title/title";

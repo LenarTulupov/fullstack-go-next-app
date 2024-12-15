@@ -14,10 +14,10 @@ import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
 import FavoriteButton from '../ui/favorite-button/favorite-button';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleFavorite, isFavorite } from '@/store/favorites/favoritesSlice';
+import { toggleFavorite, isFavorite } from '@/store/favorites/favorites-slice';
 import { RootState } from '@/store/store';
 import { ISize } from '@/types/sizes.interface';
-import { addToCart } from '@/store/cart/cartSlice';
+import { addToCart } from '@/store/cart/cart-slice';
 import { Carousel } from 'antd';
 import { div } from 'framer-motion/client';
 import Container from '../ui/container/container';
@@ -168,7 +168,7 @@ export default function ProductContent({
           <div className={styles.sizes}>
             {product.sizes.map((size) => (
               <Button
-                className={selectedSize?.id === size.id? styles['sizes-button_active'] : ''}
+                className={selectedSize?.id === size.id ? styles['sizes-button_active'] : ''}
                 key={size.id}
                 disabled={!size.available}
                 onClick={() => handleSelectSize(size)}

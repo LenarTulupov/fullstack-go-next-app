@@ -19,13 +19,11 @@ import Title from '../ui/title/title';
 import Button from '../ui/button/button';
 import CardSkeleton from '../ui/card-skeleton/card-skeleton';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFavorites } from '@/store/favorites/favoritesSlice';
+import { selectFavorites } from '@/store/favorites/favorites-slice';
 import useCart from '@/hooks/useCart';
 import CartService from '@/services/cart.service';
-import DropdownMenu from '../ui/dropdown-menu/dropdown-menu';
-import styles from './navbar.module.scss';
-import { setFilteredProducts } from '@/store/searchProducts/searchProductsSlice';
-import { MdFace, MdOutlineHorizontalRule, MdOutlineMaximize, MdOutlineMinimize } from 'react-icons/md';
+import { setFilteredProducts } from '@/store/search-products/search-products-slice';
+import { MdFace } from 'react-icons/md';
 import Hamburger from '../ui/hamburger/hamburger';
 import NavLink from '../ui/nav-link/nav-link';
 import NavMain from './nav-main/nav-main';
@@ -33,6 +31,8 @@ import Sidebar from '../ui/sidebar/sidebar';
 import Divider from '../ui/divider/divider';
 import FavoriteButton from '../ui/favorite-button/favorite-button';
 import CartIcon from '../ui/cart-icon/cart-icon';
+import styles from './navbar.module.scss';
+import CartContent from '../cart-content/cart-content';
 
 interface INavbar {
   isSearchClicked: boolean;
@@ -57,7 +57,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
   const [isHamburgerClick, setIsHamburgerClick] = useState<boolean>(false);
   const [activeDropdownSecond, setActiveDropdownSecond] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
+  const { isCartSidebarOpened } = useCart();
   const handleDropdownSecond = (index: number) => {
     setActiveDropdownSecond((prev) => (prev === index ? null : index));
   };
@@ -293,7 +293,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
         header
         variant='left'
         isCartSidebarOpened={isHamburgerClick}
-        handleHamburgerClick={handleHamburgerClick}
+        onClick={handleHamburgerClick}
       >
         <div className={`
           ${styles['navbar__sidebar-content']} 

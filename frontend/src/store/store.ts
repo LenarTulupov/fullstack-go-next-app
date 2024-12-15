@@ -1,17 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit'
-import productPopupStateReducer from './productPopup/productPopupSlice'
-import sizesPopupStateReducer from './sizesPopup/sizesPopupSlice'
-import productsReducer from './products/productsSlice'
-import selectedProductReducer from './selectedProduct/selectedProductSlice'
-import searchBarValueStateReducer from './search-bar-input-value/searchBarInputValueSlice'
-import favoritesStateReducer from './favorites/favoritesSlice'
-import cartStateReducer from './cart/cartSlice'
-import cartSidebarStateReducer from './cart/cartSidebarState'
-import sizeFilterReducer from './sizeFilter/sizeFilterSlice'
-import colorFilterReducer from './colorFilter/colorFilterSlice'
-import priceFilterReducer from './priceFilter/priceFilterSlice'
-import selectedSortOptionReducer from './selectedSortOption/selectedSortOptionSlice'
-import searchProductsReducer from './searchProducts/searchProductsSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import sizesPopupStateReducer from "./sizes-popup/sizes-popup-slice";
+import productsReducer from "./products/productsSlice";
+import searchBarValueStateReducer from "./search-bar-input-value/search-bar-input-value-slice";
+import favoritesStateReducer from "./favorites/favorites-slice";
+import cartStateReducer from "./cart/cart-slice";
+import cartSidebarStateReducer from "./cart/cart-sidebar-state";
+import sizeFilterReducer from "./size-filter/size-filter-slice";
+import colorFilterReducer from "./color-filter/color-filter-slice";
+import priceFilterReducer from "./price-filter/price-filter-slice";
+import productPopupStateReducer from './product-popup/product-popup-slice'
+import selectedProductReducer from './selected-product/selected-product-slice'
+import selectedSortOptionReducer from './selected-sort-option/selected-sort-option-slice'
+import searchProductsReducer from './search-products/search-products-slice'
 
 export const store = configureStore({
   reducer: {

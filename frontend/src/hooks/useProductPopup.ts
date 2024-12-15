@@ -1,6 +1,6 @@
-import { productPopupState } from "@/store/productPopup/productPopupSlice";
+import { productPopupState } from "@/store/product-popup/product-popup-slice";
 import { RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 
 export default function useProductPopup() {
   const dispatch = useDispatch();
@@ -10,9 +10,9 @@ export default function useProductPopup() {
 
   const handleProductPopupToggle = () => {
     dispatch(productPopupState());
-  }
-  return { 
-    isProductPopupOpened, 
-    handleProductPopupToggle 
   };
-};
+  return {
+    isProductPopupOpened,
+    handleProductPopupToggle,
+  };
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import StoreProvider from "@/store/StoreProvider";
 import Providers from "@/utils/Providers";
 import "./globals.scss";
+import StoreProvider from "@/store/store-provider";
 
 export const metadata: Metadata = {
   title: "Simple Retro | Women Designed, Everyday Retro.",

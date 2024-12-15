@@ -1,6 +1,6 @@
-import { sizesPopupState } from "@/store/sizesPopup/sizesPopupSlice";
+import { sizesPopupState } from "@/store/sizes-popup/sizes-popup-slice";
 import { RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 
 export default function useSizesPopup() {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ export default function useSizesPopup() {
   );
 
   const handleSizesPopup = () => {
-    dispatch(sizesPopupState())
-  }
+    dispatch(sizesPopupState());
+  };
   return { isSizesPopupOpened, handleSizesPopup };
-};
+}

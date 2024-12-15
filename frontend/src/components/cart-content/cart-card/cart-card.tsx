@@ -6,7 +6,7 @@ import colors from '@/app/colors.module.scss'
 import styles from './cart-card.module.scss';
 import Link from 'next/link';
 import { IProduct } from '@/types/product.interface';
-import { removeFromCart } from '@/store/cart/cartSlice';
+import { removeFromCart } from '@/store/cart/cart-slice';
 import { useDispatch } from 'react-redux';
 import { ISize } from '@/types/sizes.interface';
 
@@ -29,13 +29,13 @@ export default function CartCard({ product, isCartPage }: ICartCard) {
   }
 
   const handleRemoveFromCart = () => {
-    dispatch(removeFromCart({ product: product.product, size: product.size}))
+    dispatch(removeFromCart({ product: product.product, size: product.size }))
   }
 
   return (
     <div className={`${styles['cart-card']} ${isCartPage ? styles['cart-card_sidebar'] : ''}`}>
-      <Link 
-        href={`/product/${product.product.id}`} 
+      <Link
+        href={`/product/${product.product.id}`}
         className={styles['cart-card__link-image']}
       >
         <Image
@@ -50,7 +50,7 @@ export default function CartCard({ product, isCartPage }: ICartCard) {
           <Link href={`/product/${product.product.id}`}>
             <div>{product.product.title}</div>
           </Link>
-          <CloseButton onClick={handleRemoveFromCart}/>
+          <CloseButton onClick={handleRemoveFromCart} />
         </div>
         <div className={`
           ${styles['cart-card__product-info']} 

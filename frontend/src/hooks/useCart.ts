@@ -1,4 +1,4 @@
-import { cartSidebarState } from "@/store/cart/cartSidebarState";
+import { cartSidebarState } from "@/store/cart/cart-sidebar-state";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,6 +10,6 @@ export default function useCart() {
 
   const handleCartSidebarToggle = () => {
     dispatch(cartSidebarState());
-  }
-  return { isCartSidebarOpened, handleCartSidebarToggle }
+  };
+  return { isCartSidebarOpened, handleCartSidebarToggle };
 }

@@ -55,7 +55,7 @@ export default function Product() {
   }, [product, id, dispatch]);
 
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   if (!product) {
