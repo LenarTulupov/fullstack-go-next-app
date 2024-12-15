@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import Link from 'next/link';
 import styles from './dropdown-menu.module.scss';
 import { INavItems } from '@/types/nav-items.interface';
 import { createPortal } from 'react-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface IDropdownMenu {
   items: INavItems[];
@@ -14,23 +14,28 @@ interface IDropdownMenu {
 }
 
 export default function DropdownMenu({ items, position, onClose, onClick }: IDropdownMenu) {
-  const dropdownRoot = typeof document !== "undefined"
-    ? document.getElementById('dropdown-root')
-    : null;
+  const [dropdownRoot, setDropdownRoot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
+    const root = document.getElementById('dropdown-root');
+    setDropdownRoot(root);
+
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRoot && !dropdownRoot.contains(event.target as Node)) {
+      if (root && !root.contains(event.target as Node)) {
         onClose();
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [onClose, dropdownRoot]);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   if (!dropdownRoot) {
     return null;
   }
+
   return createPortal(
     <div
       className={styles['dropdown-menu']}
@@ -39,7 +44,7 @@ export default function DropdownMenu({ items, position, onClose, onClick }: IDro
         top: position.top,
         left: `calc(${position.left}px - 30px)`,
       }}
-      onMouseEnter={() => { }}
+      onMouseEnter={() => {}}
       onMouseLeave={onClose}
       onClick={onClick}
     >

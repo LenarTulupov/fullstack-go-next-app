@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { ReactNode, useRef, useState, useEffect } from "react";
 import styles from "./tooltip.module.scss";
@@ -19,8 +19,13 @@ export default function Tooltip({
 }: ITooltip) {
   const [isVisible, setIsVisible] = useState(false);
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setPortalTarget(document.body); 
+  }, []);
 
   const handleMouseEnter = () => setIsVisible(true);
   const handleMouseLeave = () => setIsVisible(false);
@@ -34,7 +39,7 @@ export default function Tooltip({
       switch (position) {
         case "top":
           style.left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-          style.top = triggerRect.top - tooltipRect.height - 8; 
+          style.top = triggerRect.top - tooltipRect.height - 8;
           break;
         case "bottom":
           style.left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
@@ -55,6 +60,10 @@ export default function Tooltip({
     }
   }, [isVisible, position]);
 
+  if (!portalTarget) {
+    return null; 
+  }
+
   return (
     <>
       <div
@@ -74,7 +83,7 @@ export default function Tooltip({
           >
             {content}
           </div>,
-          document.body
+          portalTarget
         )}
     </>
   );

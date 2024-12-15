@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './sidebar.module.scss';
 import useScrollLock from '@/hooks/useScrollLock';
@@ -19,25 +19,37 @@ export default function Sidebar({
   isCartSidebarOpened,
   variant = 'right',
   handleHamburgerClick,
-  header = false }: ISidebar) {
+  header = false
+}: ISidebar) {
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPortalTarget(document.body); 
+  }, []);
+
   useScrollLock(isCartSidebarOpened);
+
+  if (!portalTarget) {
+    return null; 
+  }
+
   return createPortal(
     <div className={`
       ${styles.overlay} 
       ${isCartSidebarOpened ? styles.overlay_opened : ''}
-      `}>
+    `}>
       <div className={`
         ${styles.sidebar} 
         ${isCartSidebarOpened ? styles[`${variant}_opened`] : styles[variant]}
       `}>
-        {header ?
+        {header && (
           <div className={`${styles.sidebar__header} ${styles[`sidebar__header_${variant}`]}`}>
             <CloseButton onClick={handleHamburgerClick} />
           </div>
-          : null}
+        )}
         {children}
       </div>
     </div>,
-    document.body
-  )
-};
+    portalTarget
+  );
+}

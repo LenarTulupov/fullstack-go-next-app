@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
 import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
 import styles from './popup.module.scss';
 import { ReactNode } from "react";
 
@@ -15,7 +16,18 @@ export default function Popup({
   children,
   isPopupOpened,
   variant = 'bottom',
-  nested = false }: IPopup) {
+  nested = false,
+}: IPopup) {
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPortalTarget(document.body);
+  }, []);
+
+  if (!portalTarget) {
+    return null; 
+  }
+
   return createPortal(
     <div className={`
       ${!nested ? styles.overlay_nested : styles.overlay} 
@@ -29,6 +41,6 @@ export default function Popup({
         {children}
       </div>
     </div>,
-    document.body
-  )
-};
+    portalTarget
+  );
+}
