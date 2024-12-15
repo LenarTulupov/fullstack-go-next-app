@@ -2,6 +2,7 @@ import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import styles from './layout.module.scss';
 import { ReactNode } from "react";
+import ClientWrapper from "./client-wrapper";
 
 interface IPagesLayout {
   children: ReactNode;
@@ -10,11 +11,13 @@ interface IPagesLayout {
 export default function PagesLayout({ children }: IPagesLayout) {
   return (
     <>
-      <Header />
-      <div className={styles.layout__children} >
-        {children}
-      </div>
-      <Footer />
+      <ClientWrapper>
+        <Header />
+        <div className={styles.layout__children} >
+          {children}
+        </div>
+        <Footer />
+      </ClientWrapper>
     </>
   )
 };

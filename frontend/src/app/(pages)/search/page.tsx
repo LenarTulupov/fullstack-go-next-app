@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Search = dynamic(() => import("@/client-pages/pages/search/page"), { 
-  ssr: false 
-});
+import Search from "@/client-pages/pages/search/page";
 
 export default function SearchPage() {
-  return <Search />;
-}
+  return <Search />
+};

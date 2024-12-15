@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Trousers = dynamic(() => import("@/client-pages/categories/trousers/page"), { 
-  ssr: false 
-});
+import Trousers from "@/client-pages/categories/trousers/page";
 
 export default function TrousersPage() {
-  return <Trousers />;
-}
+  return <Trousers />
+};

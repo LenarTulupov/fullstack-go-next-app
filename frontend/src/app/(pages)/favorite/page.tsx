@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Favorite = dynamic(() => import("@/client-pages/pages/favorite/page"), { 
-  ssr: false 
-});
+import Favorite from "@/client-pages/pages/favorite/page";
 
 export default function FavoritePage() {
-  return <Favorite />;
-}
+  return <Favorite />
+};

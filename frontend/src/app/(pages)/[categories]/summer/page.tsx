@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Summer = dynamic(() => import("@/client-pages/categories/summer/page"), { 
-  ssr: false 
-});
+import Summer from "@/client-pages/categories/summer/page";
 
 export default function SummerPage() {
-  return <Summer />;
-}
+  return <Summer />
+};

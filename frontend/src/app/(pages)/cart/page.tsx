@@ -1,10 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Cart = dynamic(() => import("@/client-pages/pages/cart/page"), { 
-  ssr: false 
-});
+import Cart from "@/client-pages/pages/cart/page";
 
 export default function CartPage() {
-  return <Cart />;
-}
-
+  return <Cart />
+};

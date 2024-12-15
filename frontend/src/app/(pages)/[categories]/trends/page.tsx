@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const Trends = dynamic(() => import("@/client-pages/categories/trends/page"), { 
-  ssr: false 
-});
+import Trends from "@/client-pages/categories/trends/page";
 
 export default function TrendsPage() {
-  return <Trends />;
-}
+  return <Trends />
+};

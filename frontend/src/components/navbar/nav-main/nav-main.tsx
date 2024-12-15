@@ -1,3 +1,5 @@
+'use client'
+
 import { navItems } from '@/constants/nav-items';
 import styles from './nav-main.module.scss';
 import NavLink from '@/components/ui/nav-link/nav-link';

@@ -1,9 +1,5 @@
-import dynamic from "next/dynamic";
-
-const PrivacyPolicy = dynamic(() => import("@/client-pages/pages/privacy-policy/page"), { 
-  ssr: false 
-});
+import PrivacyPolicy from "@/client-pages/pages/privacy-policy/page";
 
 export default function PrivacyPolicyPage() {
-  return <PrivacyPolicy />;
-}
+  return <PrivacyPolicy />
+};
