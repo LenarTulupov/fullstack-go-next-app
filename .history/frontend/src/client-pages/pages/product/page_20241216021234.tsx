@@ -64,6 +64,12 @@ export default function Product() {
           onClick={toggleSizeChartPopup}
           closeButton={false}
         />
+        {/* <div>
+          <Title>
+            recommended
+          </Title>
+
+        </div> */}
       </Container>
     </div>
   );

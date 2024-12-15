@@ -15,7 +15,17 @@ export default function Product() {
   const dispatch = useDispatch();
   const products = useSelector(productsData);
   const [loading, setLoading] = useState(true);
-  const { toggleSizeChartPopup } = useSizeChartPopup();
+  const [isPopupPageOpened, setIsPopupPageOpened] = useState<boolean>(false);
+  // const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+  const { toggleSizeChart } = useSizeChartPopup();
+
+  // const handleSizeChartPopup = () => {
+  //   setIsSizeChartPopupOpened(p => !p);
+  // }
+
+  const handlePopupPageOpened = () => {
+    setIsPopupPageOpened(p => !p);
+  }
 
   const product = products.find((product) => product.id === Number(id));
 
@@ -61,9 +71,15 @@ export default function Product() {
       <Container>
         <ProductContent
           product={product}
-          onClick={toggleSizeChartPopup}
+          onClick={handleSizeChartPopup}
           closeButton={false}
         />
+        {/* <div>
+          <Title>
+            recommended
+          </Title>
+
+        </div> */}
       </Container>
     </div>
   );

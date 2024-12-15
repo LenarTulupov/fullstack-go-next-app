@@ -17,6 +17,10 @@ export default function Product() {
   const [loading, setLoading] = useState(true);
   const { toggleSizeChartPopup } = useSizeChartPopup();
 
+  const handlePopupPageOpened = () => {
+    setIsPopupPageOpened(p => !p);
+  }
+
   const product = products.find((product) => product.id === Number(id));
 
   useEffect(() => {
@@ -64,6 +68,12 @@ export default function Product() {
           onClick={toggleSizeChartPopup}
           closeButton={false}
         />
+        {/* <div>
+          <Title>
+            recommended
+          </Title>
+
+        </div> */}
       </Container>
     </div>
   );

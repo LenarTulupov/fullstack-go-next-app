@@ -21,6 +21,7 @@ import { addToCart } from '@/store/cart/cart-slice';
 import { Carousel } from 'antd';
 import Popup from '../ui/popup/popup';
 import SizeChartContent from '../size-chart-content/size-chart-content';
+import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 
 interface IProductContent {
   product: IProduct;
@@ -39,16 +40,17 @@ export default function ProductContent({
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+  // const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+  const { isSizeChartPopupOpened, toggleSizeChartPopup } = useSizeChartPopup();
 
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
   }
 
-  const toggleSizeChartPopup = () => {
-    setIsSizeChartPopupOpened(p => !p);
-  }
+  // const toggleSizeChartPopup = () => {
+  //   setIsSizeChartPopupOpened(p => !p);
+  // }
 
   const handleSelectSize = (size: ISize) => {
     setSelectedSize(size);

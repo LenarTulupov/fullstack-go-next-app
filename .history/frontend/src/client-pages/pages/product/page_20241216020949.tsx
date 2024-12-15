@@ -8,14 +8,23 @@ import styles from './page.module.scss';
 import Container from '@/components/ui/container/container';
 import ProductContent from '@/components/product-content/product-content';
 import Loader from '@/components/ui/loader/loader';
-import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const products = useSelector(productsData);
   const [loading, setLoading] = useState(true);
-  const { toggleSizeChartPopup } = useSizeChartPopup();
+  const [isPopupPageOpened, setIsPopupPageOpened] = useState<boolean>(false);
+  // const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
+  
+
+  // const handleSizeChartPopup = () => {
+  //   setIsSizeChartPopupOpened(p => !p);
+  // }
+
+  const handlePopupPageOpened = () => {
+    setIsPopupPageOpened(p => !p);
+  }
 
   const product = products.find((product) => product.id === Number(id));
 
@@ -61,9 +70,15 @@ export default function Product() {
       <Container>
         <ProductContent
           product={product}
-          onClick={toggleSizeChartPopup}
+          onClick={handleSizeChartPopup}
           closeButton={false}
         />
+        {/* <div>
+          <Title>
+            recommended
+          </Title>
+
+        </div> */}
       </Container>
     </div>
   );
