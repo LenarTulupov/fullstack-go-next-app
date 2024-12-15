@@ -167,7 +167,7 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
         }
         {children}
       </Container>
-      {/* {selectedProduct && (
+      {selectedProduct && (
         <Popup isPopupOpened={isProductPopupOpened} nested>
           <ProductContent
             product={selectedProduct}
@@ -178,7 +178,7 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
       )}
       {selectedProduct && (
         <Popup nested isPopupOpened={isSizeChartPopupOpened}>
-          <SizeChartContent onClick={handleSizeChartPopup} />
+          <SizeChartContent handleSizeChart={handleSizeChartPopup} />
         </Popup>
       )}
 
@@ -189,7 +189,7 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
             handleAddToCartClick={handleAddedToCart}
           />
         </Popup>
-      )} */}
+      )}
     </div>
   );
 };

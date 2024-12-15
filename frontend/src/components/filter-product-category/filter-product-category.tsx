@@ -100,12 +100,12 @@ export default function FilterProductCategory(
             <Card
               key={product.id}
               product={product}
-              onClick={() => handleSelectedProduct(product)}
-              handleSizeSelectPopup={() => handleSizeSelectPopup(product)}
+              onClick={() => {}}
+              handleSizeSelectPopup={() => {}}
             />
           ))}
       </ProductsGrid>
-      {selectedProduct && (
+      {/* {selectedProduct && (
         <Popup isPopupOpened={isProductPopupOpened} nested>
           <ProductContent
             product={selectedProduct}
@@ -114,21 +114,7 @@ export default function FilterProductCategory(
             onClose={handleClosePopup}
           />
         </Popup>
-      )}
-      {selectedProduct && (
-        <Popup nested isPopupOpened={isSizeChartPopupOpened}>
-          <SizeChartContent onClick={handleSizeChartPopup} />
-        </Popup>
-      )}
-      {isAddedToCart && selectedProduct && (
-        <Popup isPopupOpened={isAddedToCart} nested>
-          <PopupItemsContent
-            items={selectedProduct.sizes}
-            handleAddToCartClick={(size: ISize) => handleAddedToCart(size)}
-            onClose={() => setIsAddedToCart(false)}
-          />
-        </Popup>
-      )}
+      )} */}
     </div>
   );
 }

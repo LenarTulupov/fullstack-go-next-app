@@ -175,14 +175,14 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
             closeButton
           />
         </Popup>
-      )}
+      )} */}
       {selectedProduct && (
         <Popup nested isPopupOpened={isSizeChartPopupOpened}>
           <SizeChartContent onClick={handleSizeChartPopup} />
         </Popup>
       )}
 
-      {isAddedToCart && selectedProduct && (
+      {/* {isAddedToCart && selectedProduct && (
         <Popup isPopupOpened={isAddedToCart} nested>
           <PopupItemsContent
             items={selectedProduct.sizes}

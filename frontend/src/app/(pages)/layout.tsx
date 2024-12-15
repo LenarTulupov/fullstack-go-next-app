@@ -11,7 +11,7 @@ export default function PagesLayout({ children }: IPagesLayout) {
   return (
     <>
       <Header />
-      <div className={styles.layout__children} >
+      <div className={styles.layout__children}>
         {children}
       </div>
       <Footer />

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { ICard } from "@/types/card.interface";
 import Link from "next/link";
@@ -16,16 +16,18 @@ import Tooltip from "../ui/tooltip/tooltip";
 import Color from "../ui/color/color";
 import CardLoader from "../ui/card-image/card-loader";
 import { MdShoppingCart } from "react-icons/md";
-import styles from './card.module.scss'
+import styles from './card.module.scss';
+import Popup from "../ui/popup/popup";
+import ProductContent from "../product-content/product-content";
 
 export default function Card({
   product,
-  onClick,
+  // onClick,
   handleSizeSelectPopup,
   info = true }: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
   const [isImageHovered, setIsImageHovered] = useState<boolean>(false);
-  const { handleProductPopupToggle } = useProductPopup();
+  const { handleProductPopupToggle, isProductPopupOpened } = useProductPopup();
   const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
 
@@ -36,14 +38,13 @@ export default function Card({
   const whichImage = isImageHovered ? secondImage : firstImage;
   const isPriority = id <= 10;
 
-
   const handleImageHover = (event: MouseEvent) => {
     if (event.type === 'mouseenter') {
       setIsImageHovered(true);
     } else if (event.type === 'mouseleave') {
       setIsImageHovered(false);
     }
-  }
+  };
 
   const handleImageLoad = () => {
     setIsImageLoading(false);
@@ -52,10 +53,19 @@ export default function Card({
   const handleToggleFavorite = (event: MouseEvent) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
-  }
+  };
+
+  // const handleClosePopup = () => {
+  //   handleProductPopupToggle();
+  // };
+
+  // const handleProductClick = () => {
+  //   onClick();
+  //   handleProductPopupToggle(); // Open the popup on product click
+  // };
 
   return (
-    <div className={styles.card} onClick={onClick}>
+    <div className={styles.card} /* onClick={handleProductPopupToggle} */>
       <div className={styles['image-wrapper']}>
         <Link href={`/product/${id}`} className={styles.card__link}>
           {isImageLoading && <CardLoader />}
@@ -70,8 +80,8 @@ export default function Card({
         </Link>
         <div className={`
           ${styles['quick-view']} 
-          ${isImageHovered ? styles['quick-view_opened'] : ''}
-          `}>
+          ${isImageHovered ? styles['quick-view_opened'] : ''}`}
+        >
           <Button
             className={styles['quick-view_opened-button']}
             onClick={handleProductPopupToggle}
@@ -90,7 +100,7 @@ export default function Card({
           />
         </Tooltip>
       </div>
-      {info ?
+      {info ? (
         <div className={styles['card__product-info']}>
           <Link href={`/product/${id}`}>
             <Title>{title}</Title>
@@ -109,7 +119,19 @@ export default function Card({
             <span>Add To Cart</span>
           </Button>
         </div>
-        : null}
+      ) : null}
+
+      {/* Quick View Popup */}
+      {isProductPopupOpened && (
+
+        <Popup isPopupOpened={isProductPopupOpened} nested>
+          <ProductContent
+            product={product}
+            closeButton
+            onClick={handleProductPopupToggle}
+          />
+        </Popup>
+      )}
     </div>
-  )
-};
+  );
+}

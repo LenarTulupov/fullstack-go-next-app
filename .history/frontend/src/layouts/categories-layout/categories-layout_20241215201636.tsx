@@ -175,7 +175,7 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
             closeButton
           />
         </Popup>
-      )}
+      )} */}
       {selectedProduct && (
         <Popup nested isPopupOpened={isSizeChartPopupOpened}>
           <SizeChartContent onClick={handleSizeChartPopup} />
@@ -189,7 +189,7 @@ export default function CategoriesLayout({ children }: { children: ReactNode }) 
             handleAddToCartClick={handleAddedToCart}
           />
         </Popup>
-      )} */}
+      )}
     </div>
   );
 };

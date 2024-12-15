@@ -19,33 +19,35 @@ import { RootState } from '@/store/store';
 import { ISize } from '@/types/sizes.interface';
 import { addToCart } from '@/store/cart/cart-slice';
 import { Carousel } from 'antd';
-import { div } from 'framer-motion/client';
-import Container from '../ui/container/container';
+import Popup from '../ui/popup/popup';
+import SizeChartContent from '../size-chart-content/size-chart-content';
 
 interface IProductContent {
   product: IProduct;
-  handleSizeChartPopup: () => void;
   closeButton: boolean;
-  onClose?: () => void;
+  onClick?: () => void;
 }
 
 export default function ProductContent({
   product,
-  handleSizeChartPopup,
   closeButton,
-  onClose }: IProductContent) {
+  onClick }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
   const [selectedSize, setSelectedSize] = useState<ISize | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { handleProductPopupToggle } = useProductPopup();
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
 
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
+  }
+
+  const toggleSizeChartPopup = () => {
+    setIsSizeChartPopupOpened(p => !p);
   }
 
   const handleSelectSize = (size: ISize) => {
@@ -159,7 +161,7 @@ export default function ProductContent({
             <Title className={styles['title-main']}>
               {product.title}
             </Title>
-            {closeButton ? <CloseButton onClick={onClose} /> : null}
+            {closeButton ? <CloseButton onClick={onClick} /> : null}
           </div>
           <div className={styles.description__color}>
             <div>Color: <span>{product.color}</span></div>
@@ -189,9 +191,10 @@ export default function ProductContent({
               old
             />
           </div>
+
           <button
             className={styles['description__size-button']}
-            onClick={handleSizeChartPopup}
+            onClick={toggleSizeChartPopup}
           >
             <Image
               src={'/size.svg'}
@@ -202,6 +205,7 @@ export default function ProductContent({
             />
             <span>Size Chart</span>
           </button>
+          
           <div className={styles['description-text']}>
             <Title className={styles.title}>Description</Title>
             <div className={styles['description-text__text']}>
@@ -217,6 +221,11 @@ export default function ProductContent({
             />
           </div>
         </div>
+        {isSizeChartPopupOpened && (
+          <Popup isPopupOpened={isSizeChartPopupOpened}>
+            <SizeChartContent onClick={toggleSizeChartPopup} />
+          </Popup>
+        )}
       </div>
     </>
   )
