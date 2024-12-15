@@ -5,8 +5,11 @@
   //   grid-template-columns: repeat(4, 1fr) !important;
   //   gap: 20px;
   // }
-  &__link {
+  &__image {
     position: relative;
+  }
+  &__link {
+    // position: relative;
     &-sublink {
       background-color: black;
       padding: 12px 24px;

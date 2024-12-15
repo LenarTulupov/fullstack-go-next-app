@@ -36,11 +36,11 @@ export default function Categories() {
 
   useEffect(() => {
     const updateItemsPerSlide = () => {
-      if(window.innerWidth > 992) {
+      if (window.innerWidth > 992) {
         setItemsPerSlide(4)
-      } else if(window.innerWidth > 768) {
+      } else if (window.innerWidth > 768) {
         setItemsPerSlide(3)
-      } else if(window.innerWidth > 320) {
+      } else if (window.innerWidth > 320) {
         setItemsPerSlide(2)
       } else {
         setItemsPerSlide(1)
@@ -78,26 +78,28 @@ export default function Categories() {
                       delay: index * 0.2,
                     }}
                   >
-                    <Link
-                      href={`/category/${item.name}`}
-                      className={styles['categories__link']}
-                    >
-                      <Image
-                        className={styles.categories__image}
-                        key={index}
-                        src={item.url}
-                        alt={`category ${item.name}`}
-                        width={0}
-                        height={0}
-                        layout="responsive"
-                      />
+                    <div className={styles.categories__image}>
+                      <Link
+                        href={`/category/${item.name}`}
+                        className={styles['categories__link']}
+                      >
+                        <Image
+                          className={styles.categories__image}
+                          key={index}
+                          src={item.url}
+                          alt={`category ${item.name}`}
+                          width={0}
+                          height={0}
+                          layout="responsive"
+                        />
+                      </Link>
                       <Link
                         href={`/category/${item.name}`}
                         className={styles['categories__link-sublink']}
                       >
                         {item.name}
                       </Link>
-                    </Link>
+                    </div>
                   </motion.div >
                 </>
               ))}
