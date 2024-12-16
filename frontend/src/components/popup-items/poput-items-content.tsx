@@ -19,7 +19,7 @@ export default function PopupItemsContent({
         <Title weight='bold'>
           Choose the size
         </Title>
-        <CloseButton onClick={onClose} />
+        <CloseButton onClose={onClose} />
       </div>
       <div className={styles['popup-items-content__wrapper']}>
         {items
