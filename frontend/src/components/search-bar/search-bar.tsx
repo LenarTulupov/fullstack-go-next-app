@@ -30,7 +30,7 @@ function SearchBar ({
           className={styles['search-bar__input']}
           onKeyDown={onKeyDown}
         />
-        <CloseButton onClick={onClick} />
+        <CloseButton onClose={onClick} />
       </div>
     </div>
   )
