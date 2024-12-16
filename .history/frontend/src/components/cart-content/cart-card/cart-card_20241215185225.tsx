@@ -50,7 +50,7 @@ export default function CartCard({ product, isCartPage }: ICartCard) {
           <Link href={`/product/${product.product.id}`}>
             <div>{product.product.title}</div>
           </Link>
-          <CloseButton onClose={handleRemoveFromCart} />
+          <CloseButton onClick={handleRemoveFromCart} />
         </div>
         <div className={`
           ${styles['cart-card__product-info']} 
