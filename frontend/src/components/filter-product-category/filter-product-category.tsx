@@ -5,7 +5,7 @@ import useProductPopup from "@/hooks/useProductPopup";
 import useProducts from "@/utils/useProducts";
 import ProductsGrid from "../ui/products-grid/products-grid";
 import CardSkeleton from "../ui/card-skeleton/card-skeleton";
-import Popup from "../ui/popup/popup";
+import Popup from "../ui/modal/modal";
 import ProductContent from "../product-content/product-content";
 import SizeChartContent from "../size-chart-content/size-chart-content";
 import PopupItemsContent from "../popup-items/poput-items-content";
@@ -79,10 +79,10 @@ export default function FilterProductCategory(
     );
 
   if (selectedSortOption === 'low to high') {
-    filteredProducts = filteredProducts.sort((a, b) => 
+    filteredProducts = filteredProducts.sort((a, b) =>
       parseFloat(a.price_new) - parseFloat(b.price_new));
   } else if (selectedSortOption === 'high to low') {
-    filteredProducts = filteredProducts.sort((a, b) => 
+    filteredProducts = filteredProducts.sort((a, b) =>
       parseFloat(b.price_new) - parseFloat(a.price_new));
   }
 
@@ -97,24 +97,9 @@ export default function FilterProductCategory(
         {isLoading
           ? Array.from({ length: 10 }).map((_, index) => <CardSkeleton key={index} />)
           : filteredProducts.map((product) => (
-            <Card
-              key={product.id}
-              product={product}
-              onClick={() => {}}
-              handleSizeSelectPopup={() => {}}
-            />
+            <Card key={product.id} product={product} />
           ))}
       </ProductsGrid>
-      {/* {selectedProduct && (
-        <Popup isPopupOpened={isProductPopupOpened} nested>
-          <ProductContent
-            product={selectedProduct}
-            handleSizeChartPopup={handleSizeChartPopup}
-            closeButton
-            onClose={handleClosePopup}
-          />
-        </Popup>
-      )} */}
     </div>
   );
 }

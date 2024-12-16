@@ -289,7 +289,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
         </>
       )
       }
-      <Sidebar
+      {/* <Sidebar
         header
         variant='left'
         isCartSidebarOpened={isHamburgerClick}
@@ -345,7 +345,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
             ))}
           </ul>
         </div>
-      </Sidebar>
+      </Sidebar> */}
     </nav >
   )
 }

@@ -1,0 +1,9 @@
+.modal__content {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  height: fit-content;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: var(--border-radius);
+}

@@ -1,0 +1,18 @@
+// .popup {
+//   position: absolute;
+//   background-color: #fff;
+//   padding: 20px;
+//   border-radius: 20px;
+//   top: 50%;
+//   left: 50%;
+// }
+.modal {
+  position: absolute;
+  w100
+  &_opened {
+
+  }
+  &_closed {
+    display: none;
+  }
+}

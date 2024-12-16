@@ -2,12 +2,12 @@ import { IoCloseOutline } from "react-icons/io5";
 import styles from './close-button.module.scss'
 
 interface ICloseButton {
-  onClick?: () => void;
+  onClose?: () => void;
 }
 
-export default function CloseButton({ onClick }: ICloseButton) {
+export default function CloseButton({ onClose }: ICloseButton) {
   return (
-    <button onClick={onClick} className={styles['close-button']}>
+    <button onClick={onClose} className={styles['close-button']}>
       <IoCloseOutline/>
     </button>
   )

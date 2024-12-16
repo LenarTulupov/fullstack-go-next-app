@@ -13,6 +13,7 @@ import selectedProductReducer from './selected-product/selected-product-slice'
 import selectedSortOptionReducer from './selected-sort-option/selected-sort-option-slice'
 import searchProductsReducer from './search-products/search-products-slice'
 import sizeChartPopupReducer from './size-chart-popup/size-chart-popup-slice'
+import modalReducer from './modal/modal-slice'
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     selectedSortOption: selectedSortOptionReducer,
     searchProducts: searchProductsReducer,
     sizeChartPopupState: sizeChartPopupReducer,
+    modal: modalReducer,
   },
 });
 

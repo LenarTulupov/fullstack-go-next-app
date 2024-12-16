@@ -6,11 +6,9 @@ import Color from '../ui/color/color';
 import Button from '../ui/button/button';
 import Price from '../ui/price/price';
 import Title from '../ui/title/title';
-// import FavoriteButton from '../ui/favorite-button/favorite-button';
 import { MouseEvent, useEffect, useState } from 'react';
 import { IProduct } from '@/types/product.interface';
 import CloseButton from '../ui/close-button/close-button';
-import useProductPopup from '@/hooks/useProductPopup';
 import styles from './product-content.module.scss';
 import FavoriteButton from '../ui/favorite-button/favorite-button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,20 +17,22 @@ import { RootState } from '@/store/store';
 import { ISize } from '@/types/sizes.interface';
 import { addToCart } from '@/store/cart/cart-slice';
 import { Carousel } from 'antd';
-import Popup from '../ui/popup/popup';
 import SizeChartContent from '../size-chart-content/size-chart-content';
 import useSizeChartPopup from '@/hooks/useSizeChartPopup';
+import Modal from '../ui/modal/modal';
 
 interface IProductContent {
   product: IProduct;
   closeButton: boolean;
   onClick?: () => void;
+  modal?: boolean;
 }
 
 export default function ProductContent({
   product,
   closeButton,
-  onClick }: IProductContent) {
+  onClick,
+  modal = false }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
@@ -40,17 +40,12 @@ export default function ProductContent({
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  // const [isSizeChartPopupOpened, setIsSizeChartPopupOpened] = useState<boolean>(false);
   const { isSizeChartPopupOpened, toggleSizeChartPopup } = useSizeChartPopup();
 
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
   }
-
-  // const toggleSizeChartPopup = () => {
-  //   setIsSizeChartPopupOpened(p => !p);
-  // }
 
   const handleSelectSize = (size: ISize) => {
     setSelectedSize(size);
@@ -86,7 +81,7 @@ export default function ProductContent({
 
   return (
     <>
-      <div className={styles.product__content}>
+      <div className={`${styles.product__content} ${modal ? styles.product__content_modal : ''}`}>
         <div className={`
           ${styles['product__content-images']} 
           ${styles.images}
@@ -163,7 +158,7 @@ export default function ProductContent({
             <Title className={styles['title-main']}>
               {product.title}
             </Title>
-            {closeButton ? <CloseButton onClick={onClick} /> : null}
+            {closeButton ? <CloseButton onClose={onClick} /> : null}
           </div>
           <div className={styles.description__color}>
             <div>Color: <span>{product.color}</span></div>
@@ -207,7 +202,7 @@ export default function ProductContent({
             />
             <span>Size Chart</span>
           </button>
-          
+
           <div className={styles['description-text']}>
             <Title className={styles.title}>Description</Title>
             <div className={styles['description-text__text']}>
@@ -224,9 +219,9 @@ export default function ProductContent({
           </div>
         </div>
         {isSizeChartPopupOpened && (
-          <Popup isPopupOpened={isSizeChartPopupOpened}>
-            <SizeChartContent onClick={toggleSizeChartPopup} />
-          </Popup>
+          <Modal isModalOpened={isSizeChartPopupOpened}>
+            <SizeChartContent onClose={toggleSizeChartPopup} />
+          </Modal>
         )}
       </div>
     </>

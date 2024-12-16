@@ -81,3 +81,19 @@
   top: 20px;
   right: 20px;
 }
+.sizes {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__flex {
+    display: flex;
+    column-gap: 10px;
+  }
+}
