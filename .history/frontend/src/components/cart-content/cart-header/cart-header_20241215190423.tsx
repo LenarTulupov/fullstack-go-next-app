@@ -8,7 +8,7 @@ export default function CartHeader() {
   return (
     <header className={styles['cart-header']}>
       <Title weight="bold">your cart</Title>
-      <CloseButton onClose={handleCartSidebarToggle} />
+      <CloseButton onClick={handleCartSidebarToggle} />
     </header>
   )
 };
