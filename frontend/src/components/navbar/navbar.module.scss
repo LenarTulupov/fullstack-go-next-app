@@ -98,7 +98,7 @@
     }
   }
   &__sidebar-content {
-
+    background-color: #fff;
   }
 
 }
@@ -180,6 +180,16 @@
   }
 }  
 .sidebar-content {
+  height: 100%;
+  max-width: 375px;
+  &__block {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    & > *:nth-child(1) {
+      order: 1;
+    }
+  }
 
   &__dropdown {
     margin: 20px 0;
@@ -227,4 +237,8 @@
 }
 .sidebar-content__link {
   -webkit-tap-highlight-color: transparent;
+}
+.sidebar-content__list {
+  background-color: #fff;
+  height: 100%;
 }

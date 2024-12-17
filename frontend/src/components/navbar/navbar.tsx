@@ -33,6 +33,9 @@ import FavoriteButton from '../ui/favorite-button/favorite-button';
 import CartIcon from '../ui/cart-icon/cart-icon';
 import styles from './navbar.module.scss';
 import CartContent from '../cart-content/cart-content';
+import CartCard from '../cart-content/cart-card/cart-card';
+import Cart from '@/client-pages/pages/cart/page';
+import CloseButton from '../ui/close-button/close-button';
 
 interface INavbar {
   isSearchClicked: boolean;
@@ -289,6 +292,68 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
         </>
       )
       }
+      {isCartSidebarOpened && (
+        <Sidebar isSidebarOpened={isCartSidebarOpened}>
+          <CartContent />
+        </Sidebar>
+      )}
+      {isHamburgerClick && (
+        <Sidebar position='left' isSidebarOpened={isHamburgerClick}>
+           <div className={`
+          ${styles['navbar__sidebar-content']} 
+          ${styles['sidebar-content']}
+        `}>
+          <div className={styles['sidebar-content__block']}>
+          <CloseButton onClose={handleHamburgerClick}/>
+          <ul className={styles['sidebar-content__list']}>
+            <Link href='/' className={styles['logo-link_mobile']}>
+              <LogoImage />
+            </Link>
+            {navItems.map((item, index) => (
+              <li key={index} className={styles['sidebar-content__item']}>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    if (item.subItems && item.subItems.length > 0) {
+                      e.preventDefault();
+                      handleDropdownSecond(index)
+                    }
+                  }}
+                  className={`${styles['sidebar-content__link']} ${styles.link}`}
+                >
+                  <div className={styles.link__inner}>
+                    {item.title}
+                    {item.subItems && item.subItems.length > 0 && (
+                      <IoIosArrowDown
+                        className={styles['navbar__link-arrow']}
+                      />
+                    )}
+                  </div>
+                  {activeDropdownSecond === index && item.subItems && item.subItems.length > 0 && (
+                    <div className={styles['sidebar-content__dropdown']}>
+                      <Divider />
+                      <div className={styles['sidebar-content__dropdown-inner']}>
+                        <ul>
+                          {item.subItems?.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              <NavLink href={subItem.href} onClick={(e) => e.stopPropagation()}>
+                                {subItem.title}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Divider />
+                    </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          </div>
+        </div>
+        </Sidebar>
+      )}
       {/* <Sidebar
         header
         variant='left'
