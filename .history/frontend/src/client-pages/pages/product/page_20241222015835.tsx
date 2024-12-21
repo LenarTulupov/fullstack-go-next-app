@@ -61,7 +61,7 @@ export default function Product() {
       <Container>
         <ProductContent
           product={product}
-          onClose={toggleSizeChartPopup}
+          onCloe={toggleSizeChartPopup}
           closeButton={false}
         />
       </Container>
