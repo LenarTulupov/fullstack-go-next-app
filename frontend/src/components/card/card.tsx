@@ -72,7 +72,7 @@ export default function Card({ product, info = true }: ICard) {
 
   const handleSelectSize = (size: ISize) => {
     setSelectedSize(size)
-    dispatch(addToCart({ product, size}))
+    dispatch(addToCart({ product, size }))
     closeSelectSizeModal()
   }
 
@@ -133,28 +133,23 @@ export default function Card({ product, info = true }: ICard) {
         </div>
       )}
 
-      {/* Quick View Modal */}
-      {currentProduct && quickViewModal && (
-        <Modal isOpened={quickViewModal}>
+      <Modal isOpened={!!(currentProduct && quickViewModal)}>
+        {currentProduct && (
           <ProductContent
             product={currentProduct}
             modal
             closeButton
             onClick={closeQuickView}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
 
-      {/* Size Chart Modal */}
-      {sizeChartModal && (
-        <Modal isOpened={sizeChartModal}>
-          <SizeChartContent onClose={() => setSizeChartModal(false)} />
-        </Modal>
-      )}
+      <Modal isOpened={sizeChartModal}>
+        <SizeChartContent onClose={() => setSizeChartModal(false)} />
+      </Modal>
 
-      {/* Select Size Modal */}
-      {currentProduct && selectSizeModal && (
-        <Modal isOpened={selectSizeModal}>
+      <Modal isOpened={!!(currentProduct && selectSizeModal)}>
+        {currentProduct && (
           <div className={styles.sizes}>
             <div className={styles.sizes__header}>
               <h3>Select Size</h3>
@@ -172,8 +167,9 @@ export default function Card({ product, info = true }: ICard) {
               ))}
             </div>
           </div>
-        </Modal>
-      )}
+        )}
+      </Modal>
+
     </div>
   );
 }
