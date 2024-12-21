@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { setSelectedSortOption } from "@/store/selected-sort-option/selected-sort-option-slice";
 import { resetAllFilters } from "@/store/reset-filter/reset-filter-slice";
+import Sidebar from "@/components/ui/sidebar/sidebar";
 import LayoutItemsCenter from "./layout-items-center/layout-items-center";
 import styles from './categories-layout.module.scss';
 
