@@ -1,0 +1,16 @@
+.modal__content {
+
+  &-bottom {
+    left: 0;
+    transform: translateY(-100%);
+    visibility: hidden;
+    &_opened {
+      transform: translateY(0);
+      visibility: visible;
+    }
+    &_closed {
+      transform: translateY(-100%);
+      visibility: hidden;
+    }
+  }
+}

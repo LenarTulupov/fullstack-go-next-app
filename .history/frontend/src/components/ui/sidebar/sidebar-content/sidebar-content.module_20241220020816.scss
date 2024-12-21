@@ -1,0 +1,29 @@
+.sidebar__content {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 300px; /* Пример ширины */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+
+  &-left {
+    transform: translateX(-100%);
+
+    &_opened {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &-right {
+    transform: translateX(100%);
+
+    &_opened {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}

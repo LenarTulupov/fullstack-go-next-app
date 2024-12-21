@@ -1,0 +1,36 @@
+.sidebar__content {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+
+  &-left {
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+
+    &_opened {
+      transform: translateX(0);
+    }
+
+    &_closed {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+
+  &-right {
+    right: 0;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+
+    &_opened {
+      transform: translateX(0);
+    }
+
+    &_closed {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+}

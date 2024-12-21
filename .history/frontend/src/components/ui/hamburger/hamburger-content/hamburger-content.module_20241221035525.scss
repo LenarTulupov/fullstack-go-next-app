@@ -1,0 +1,25 @@
+.hamburger-content {
+  background-color: #fff;
+  height: 100%;
+  padding: 20px;
+  width: 300px;
+  &__block {
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+  &__dropdown {
+    margin-top: 20px;
+  }
+}
+.link__inner {
+  // display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+.logo-link_mobile {
+  margin-top: 20px;
+}

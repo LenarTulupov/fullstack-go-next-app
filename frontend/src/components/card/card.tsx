@@ -135,7 +135,7 @@ export default function Card({ product, info = true }: ICard) {
 
       {/* Quick View Modal */}
       {currentProduct && quickViewModal && (
-        <Modal isModalOpened={quickViewModal}>
+        <Modal isOpened={quickViewModal}>
           <ProductContent
             product={currentProduct}
             modal
@@ -147,14 +147,14 @@ export default function Card({ product, info = true }: ICard) {
 
       {/* Size Chart Modal */}
       {sizeChartModal && (
-        <Modal isModalOpened={sizeChartModal}>
+        <Modal isOpened={sizeChartModal}>
           <SizeChartContent onClose={() => setSizeChartModal(false)} />
         </Modal>
       )}
 
       {/* Select Size Modal */}
       {currentProduct && selectSizeModal && (
-        <Modal isModalOpened={selectSizeModal}>
+        <Modal isOpened={selectSizeModal}>
           <div className={styles.sizes}>
             <div className={styles.sizes__header}>
               <h3>Select Size</h3>

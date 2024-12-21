@@ -1,0 +1,11 @@
+.hamburger-content {
+  background-color: #fff;
+  height: 100%;
+  padding: 20px;
+  width: 250px;
+  &__block-list {
+    display: flex;
+    flex-direction: column;
+    column-gap: 20px;
+  }
+}

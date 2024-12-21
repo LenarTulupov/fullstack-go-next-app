@@ -3,10 +3,8 @@
 import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { navItems } from '@/constants/nav-items';
 import { useSearchBarValue, useSetSearchBarValue } from '@/hooks/useSearchBarValue';
 import { IProduct } from '@/types/product.interface';
-import { IoIosArrowDown } from "react-icons/io";
 import Container from '../ui/container/container';
 import SearchImage from '../ui/search-image/search-image';
 import LogoImage from '../ui/logo/logo';
@@ -28,14 +26,11 @@ import Hamburger from '../ui/hamburger/hamburger';
 import NavLink from '../ui/nav-link/nav-link';
 import NavMain from './nav-main/nav-main';
 import Sidebar from '../ui/sidebar/sidebar';
-import Divider from '../ui/divider/divider';
 import FavoriteButton from '../ui/favorite-button/favorite-button';
 import CartIcon from '../ui/cart-icon/cart-icon';
-import styles from './navbar.module.scss';
 import CartContent from '../cart-content/cart-content';
-import CartCard from '../cart-content/cart-card/cart-card';
-import Cart from '@/client-pages/pages/cart/page';
-import CloseButton from '../ui/close-button/close-button';
+import HamburgerContent from '../ui/hamburger/hamburger-content/hamburger-content';
+import styles from './navbar.module.scss';
 
 interface INavbar {
   isSearchClicked: boolean;
@@ -292,125 +287,22 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
         </>
       )
       }
-      {isCartSidebarOpened && (
-        <Sidebar isSidebarOpened={isCartSidebarOpened}>
-          <CartContent />
-        </Sidebar>
-      )}
-      {isHamburgerClick && (
-        <Sidebar position='left' isSidebarOpened={isHamburgerClick}>
-           <div className={`
-          ${styles['navbar__sidebar-content']} 
-          ${styles['sidebar-content']}
-        `}>
-          <div className={styles['sidebar-content__block']}>
-          <CloseButton onClose={handleHamburgerClick}/>
-          <ul className={styles['sidebar-content__list']}>
-            <Link href='/' className={styles['logo-link_mobile']}>
-              <LogoImage />
-            </Link>
-            {navItems.map((item, index) => (
-              <li key={index} className={styles['sidebar-content__item']}>
-                <Link
-                  href={item.href}
-                  onClick={(e) => {
-                    if (item.subItems && item.subItems.length > 0) {
-                      e.preventDefault();
-                      handleDropdownSecond(index)
-                    }
-                  }}
-                  className={`${styles['sidebar-content__link']} ${styles.link}`}
-                >
-                  <div className={styles.link__inner}>
-                    {item.title}
-                    {item.subItems && item.subItems.length > 0 && (
-                      <IoIosArrowDown
-                        className={styles['navbar__link-arrow']}
-                      />
-                    )}
-                  </div>
-                  {activeDropdownSecond === index && item.subItems && item.subItems.length > 0 && (
-                    <div className={styles['sidebar-content__dropdown']}>
-                      <Divider />
-                      <div className={styles['sidebar-content__dropdown-inner']}>
-                        <ul>
-                          {item.subItems?.map((subItem, subIndex) => (
-                            <li key={subIndex}>
-                              <NavLink href={subItem.href} onClick={(e) => e.stopPropagation()}>
-                                {subItem.title}
-                              </NavLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <Divider />
-                    </div>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          </div>
-        </div>
-        </Sidebar>
-      )}
-      {/* <Sidebar
-        header
-        variant='left'
-        isCartSidebarOpened={isHamburgerClick}
-        onClick={handleHamburgerClick}
-      >
-        <div className={`
-          ${styles['navbar__sidebar-content']} 
-          ${styles['sidebar-content']}
-        `}>
-          <ul className={styles['sidebar-content__list']}>
-            <Link href='/' className={styles['logo-link_mobile']}>
-              <LogoImage />
-            </Link>
-            {navItems.map((item, index) => (
-              <li key={index} className={styles['sidebar-content__item']}>
-                <Link
-                  href={item.href}
-                  onClick={(e) => {
-                    if (item.subItems && item.subItems.length > 0) {
-                      e.preventDefault();
-                      handleDropdownSecond(index)
-                    }
-                  }}
-                  className={`${styles['sidebar-content__link']} ${styles.link}`}
-                >
-                  <div className={styles.link__inner}>
-                    {item.title}
-                    {item.subItems && item.subItems.length > 0 && (
-                      <IoIosArrowDown
-                        className={styles['navbar__link-arrow']}
-                      />
-                    )}
-                  </div>
-                  {activeDropdownSecond === index && item.subItems && item.subItems.length > 0 && (
-                    <div className={styles['sidebar-content__dropdown']}>
-                      <Divider />
-                      <div className={styles['sidebar-content__dropdown-inner']}>
-                        <ul>
-                          {item.subItems?.map((subItem, subIndex) => (
-                            <li key={subIndex}>
-                              <NavLink href={subItem.href} onClick={(e) => e.stopPropagation()}>
-                                {subItem.title}
-                              </NavLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <Divider />
-                    </div>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Sidebar> */}
+
+
+      <Sidebar isOpened={isCartSidebarOpened}>
+        <CartContent />
+      </Sidebar>
+
+
+      <Sidebar position='left' isOpened={isHamburgerClick}>
+        <HamburgerContent
+          handleHamburgerClick={handleHamburgerClick}
+          handleDropdownSecond={handleDropdownSecond}
+          activeDropdownSecond={activeDropdownSecond}
+        />
+      </Sidebar>
+
+
     </nav >
   )
 }

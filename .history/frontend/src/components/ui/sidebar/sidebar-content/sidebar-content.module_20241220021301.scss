@@ -1,0 +1,26 @@
+.sidebar__content {
+  position: absolute;
+  top: 0;
+  height: 100%;
+
+  &-left {
+    left: -100%;
+    transition: left .3s ease-in-out;
+
+    &_opened {
+      left: 0;
+    }
+    &_closed {
+      
+    }
+  }
+
+  &-right {
+    right: -100%;
+    transition: right .3s ease-in-out;
+
+    &_opened {
+      right: 0;
+    }
+  }
+}

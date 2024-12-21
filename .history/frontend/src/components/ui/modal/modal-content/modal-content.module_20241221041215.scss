@@ -1,0 +1,28 @@
+// .modal__content {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 100%;
+//   height: 100%;
+// }
+
+.sidebar__content {
+  position: absolute;
+  top: 50%;
+  height: 100%;
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+  &-bottom {
+    left: 0;
+    transform: translateX(-100%);
+    visibility: hidden;
+    &_opened {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    &_closed {
+      transform: translateX(-100%);
+      visibility: hidden;
+    }
+  }
+}

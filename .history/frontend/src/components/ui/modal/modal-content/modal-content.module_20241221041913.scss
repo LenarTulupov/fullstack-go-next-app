@@ -1,0 +1,28 @@
+.modal__content {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 50vw;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out,
+  opacity 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  &-bottom {
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+    visibility: hidden;
+    &_opened {
+      bottom: 50%;
+      transform: translate(-50%, 50%);
+      visibility: visible;
+      opacity: 1;
+    }
+    &_closed {
+      bottom: 0;
+      transform: translateX(-50%);
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}

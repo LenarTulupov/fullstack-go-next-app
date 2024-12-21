@@ -90,17 +90,6 @@
       cursor: pointer;
     }
   }
-  &__sidebar {
-    &-content {
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-  }
-  &__sidebar-content {
-    background-color: #fff;
-  }
-
 }
 .search-bar__container {
   height: 100%;

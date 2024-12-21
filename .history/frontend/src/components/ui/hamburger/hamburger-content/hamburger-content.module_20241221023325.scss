@@ -1,0 +1,12 @@
+.navbar {
+  &__sidebar {
+    &-content {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  &__sidebar-content {
+    background-color: #fff;
+  }
+}

@@ -1,0 +1,15 @@
+.sidebar {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 10;
+  transition: right .3s ease-in-out;
+  &_opened {
+    // display: flex;
+    right: 100%
+  }
+  &_closed {
+    display: none;
+  }
+}

@@ -1,0 +1,19 @@
+.sidebar__content {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  height: 100%;
+  transition: right 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  &_left {
+    left: -100%;
+  }
+  &_right {
+    right: -1000;
+  }
+  &_opened {
+    right: 0; visibility: visible;
+  }
+  &_closed {
+    right: 0;
+  }
+}
