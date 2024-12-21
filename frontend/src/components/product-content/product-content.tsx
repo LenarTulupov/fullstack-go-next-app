@@ -219,7 +219,7 @@ export default function ProductContent({
           </div>
         </div>
         {isSizeChartPopupOpened && (
-          <Modal isModalOpened={isSizeChartPopupOpened}>
+          <Modal isOpened={isSizeChartPopupOpened}>
             <SizeChartContent onClose={toggleSizeChartPopup} />
           </Modal>
         )}
