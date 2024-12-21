@@ -2,12 +2,8 @@ import Image from "next/image";
 import CloseButton from "../ui/close-button/close-button";
 import styles from './size-chart-content.module.scss';
 
-interface ISizeChartContent {
-  onClose: () => void;
-}
-
 export default function SizeChartContent(
-  { onClose }: ISizeChartContent) {
+  { onClose }: { onClose: () => void }) {
   const sizesImage = 
   'https://cdn.kiwisizing.com/simpleretro-1610555643896.png';
   return (

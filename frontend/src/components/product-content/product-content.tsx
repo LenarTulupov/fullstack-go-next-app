@@ -24,14 +24,14 @@ import Modal from '../ui/modal/modal';
 interface IProductContent {
   product: IProduct;
   closeButton: boolean;
-  onClick?: () => void;
+  onClose?: () => void;
   modal?: boolean;
 }
 
 export default function ProductContent({
   product,
   closeButton,
-  onClick,
+  onClose,
   modal = false }: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
@@ -158,7 +158,7 @@ export default function ProductContent({
             <Title className={styles['title-main']}>
               {product.title}
             </Title>
-            {closeButton ? <CloseButton onClose={onClick} /> : null}
+            {closeButton ? <CloseButton onClose={onClose} /> : null}
           </div>
           <div className={styles.description__color}>
             <div>Color: <span>{product.color}</span></div>
