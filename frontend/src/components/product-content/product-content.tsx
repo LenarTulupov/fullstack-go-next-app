@@ -20,6 +20,7 @@ import { Carousel } from 'antd';
 import SizeChartContent from '../size-chart-content/size-chart-content';
 import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 import Modal from '../ui/modal/modal';
+import { div } from 'framer-motion/client';
 
 interface IProductContent {
   product: IProduct;
@@ -81,7 +82,10 @@ export default function ProductContent({
 
   return (
     <>
-      <div className={`${styles.product__content} ${modal ? styles.product__content_modal : ''}`}>
+      <div className={`
+        ${styles.product__content} 
+        ${modal ? styles.product__content_modal : ''}
+      `}>
         <div className={`
           ${styles['product__content-images']} 
           ${styles.images}
@@ -117,18 +121,18 @@ export default function ProductContent({
             </>
           ) : (
             <Carousel
-              className={styles['carousel-wrapper']}
+            className={styles['carousel-wrapper']}
               draggable
-              slidesToShow={1.3}
+              slidesToShow={2.5}
               infinite={false}
               dots={false}
               responsive={[
                 {
-                  breakpoint: 992,
+                  breakpoint: 768,
                   settings: {
-                    slidesToShow: 1.3,
-                  },
-                },
+                    slidesToShow: 1.5,
+                  }
+                }
               ]}
             >
               {Array.isArray(product.images) ? (
@@ -218,9 +222,9 @@ export default function ProductContent({
             />
           </div>
         </div>
-          <Modal isOpened={isSizeChartPopupOpened}>
-            <SizeChartContent onClose={toggleSizeChartPopup} />
-          </Modal>
+        <Modal isOpened={isSizeChartPopupOpened}>
+          <SizeChartContent onClose={toggleSizeChartPopup} />
+        </Modal>
       </div>
     </>
   )

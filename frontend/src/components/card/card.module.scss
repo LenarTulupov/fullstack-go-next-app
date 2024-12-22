@@ -91,9 +91,14 @@
   &__header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   &__flex {
     display: flex;
     column-gap: 10px;
+    @media(max-width: 480px) {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
   }
 }
