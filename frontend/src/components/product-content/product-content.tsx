@@ -209,7 +209,7 @@ export default function ProductContent({
 
           <div className={styles['description-text']}>
             <Title className={styles.title}>Description</Title>
-            <div className={styles['description-text__text']}>
+            <div className={`${styles['description-text__text']} ${ modal ? styles['descr-modal'] : ''}`}>
               {product.description}
             </div>
           </div>
