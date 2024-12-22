@@ -18,27 +18,14 @@ export default function Modal({
   isOpened,
   position = 'bottom' }: IModal) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(isOpened);
-  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     setPortalTarget(document.body);
   }, []);
 
-  useEffect(() => {
-    if (isOpened) {
-      setIsVisible(true); 
-      setTimeout(() => setAnimate(true), 10);
-    } else {
-      setAnimate(false); 
-      const timeout = setTimeout(() => setIsVisible(false), 300);
-      return () => clearTimeout(timeout);
-    }
-  }, [isOpened]);
-
   useScrollLock(isOpened);
 
-  if (!portalTarget || !isVisible) {
+  if (!portalTarget) {
     return null;
   }
 
@@ -46,7 +33,7 @@ export default function Modal({
     <div className={styles.modal}>
       <Overlay isOpened={isOpened}>
         <ModalContent
-          isOpened={animate}
+          isOpened={isOpened}
           position={position}
         >
             {children}

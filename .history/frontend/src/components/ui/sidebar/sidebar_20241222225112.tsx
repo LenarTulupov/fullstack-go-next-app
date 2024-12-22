@@ -19,7 +19,6 @@ export default function Sidebar({
   position = 'right' }: ISidebar) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState<boolean>(isOpened);
-  const [animate, setAnimate] = useState(false);
 
   useScrollLock(isOpened);
 
@@ -38,7 +37,7 @@ export default function Sidebar({
     }
   }, [isOpened]);
 
-  if (!portalTarget || !isVisible) {
+  if (!portalTarget) {
     return null;
   }
 
@@ -46,7 +45,7 @@ export default function Sidebar({
     <div className={styles.sidebar}>
       <Overlay isOpened={isOpened}>
         <SidebarContent
-          isOpened={animate}
+          isOpened={isOpened}
           position={position}
         >
           {children}

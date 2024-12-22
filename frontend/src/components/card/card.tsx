@@ -23,6 +23,7 @@ import SizeChartContent from "../size-chart-content/size-chart-content";
 import CloseButton from "../ui/close-button/close-button";
 import { ISize } from "@/types/sizes.interface";
 import { addToCart } from "@/store/cart/cart-slice";
+import { div } from "framer-motion/client";
 
 export default function Card({ product, info = true }: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
@@ -134,9 +135,7 @@ export default function Card({ product, info = true }: ICard) {
         </div>
       )}
 
-      <Modal 
-        isOpened={!!(currentProduct && quickViewModal)}
-      >
+      <Modal isOpened={!!(currentProduct && quickViewModal)}>
         {currentProduct && (
           <ProductContent
             closeButton
@@ -145,10 +144,6 @@ export default function Card({ product, info = true }: ICard) {
             onClose={closeQuickView}
           />
         )}
-      </Modal>
-
-      <Modal isOpened={sizeChartModal}>
-        <SizeChartContent onClose={closeSizeChart}/>
       </Modal>
 
       <Modal 

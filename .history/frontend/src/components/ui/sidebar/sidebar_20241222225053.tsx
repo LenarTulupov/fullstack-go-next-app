@@ -18,8 +18,7 @@ export default function Sidebar({
   isOpened,
   position = 'right' }: ISidebar) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState<boolean>(isOpened);
-  const [animate, setAnimate] = useState(false);
+  const [isVisible, setIsVisible] = useState(isOpened);
 
   useScrollLock(isOpened);
 
@@ -27,18 +26,7 @@ export default function Sidebar({
     setPortalTarget(document.body);
   }, []);
 
-  useEffect(() => {
-    if (isOpened) {
-      setIsVisible(true); 
-      setTimeout(() => setAnimate(true), 10);
-    } else {
-      setAnimate(false); 
-      const timeout = setTimeout(() => setIsVisible(false), 300);
-      return () => clearTimeout(timeout);
-    }
-  }, [isOpened]);
-
-  if (!portalTarget || !isVisible) {
+  if (!portalTarget) {
     return null;
   }
 
@@ -46,7 +34,7 @@ export default function Sidebar({
     <div className={styles.sidebar}>
       <Overlay isOpened={isOpened}>
         <SidebarContent
-          isOpened={animate}
+          isOpened={isOpened}
           position={position}
         >
           {children}

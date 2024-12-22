@@ -27,14 +27,16 @@ export default function Modal({
 
   useEffect(() => {
     if (isOpened) {
-      setIsVisible(true); 
-      setTimeout(() => setAnimate(true), 10);
+      setIsVisible(true); // Монтируем компонент
+      setTimeout(() => setAnimate(true), 10); // Небольшая задержка для активации анимации
     } else {
-      setAnimate(false); 
-      const timeout = setTimeout(() => setIsVisible(false), 300);
+      setAnimate(false); // Отключаем анимацию
+      const timeout = setTimeout(() => setIsVisible(false), 300); // Ждём завершение анимации закрытия
       return () => clearTimeout(timeout);
     }
   }, [isOpened]);
+
+  useScrollLock(isOpened);
 
   useScrollLock(isOpened);
 
@@ -46,7 +48,7 @@ export default function Modal({
     <div className={styles.modal}>
       <Overlay isOpened={isOpened}>
         <ModalContent
-          isOpened={animate}
+          isOpened={isOpened}
           position={position}
         >
             {children}

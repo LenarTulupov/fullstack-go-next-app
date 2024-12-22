@@ -46,7 +46,7 @@ export default function Sidebar({
     <div className={styles.sidebar}>
       <Overlay isOpened={isOpened}>
         <SidebarContent
-          isOpened={animate}
+          isOpened={isOpened}
           position={position}
         >
           {children}

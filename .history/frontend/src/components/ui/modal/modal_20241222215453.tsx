@@ -2,26 +2,24 @@
 
 import { ReactNode, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import styles from './sidebar.module.scss';
 import useScrollLock from '@/hooks/useScrollLock';
-import SidebarContent from './sidebar-content/sidebar-content';
 import Overlay from '../overlay/overlay';
+import ModalContent from './modal-content/modal-content';
+import styles from './modal.module.scss';
 
-interface ISidebar {
+interface IModal {
   children: ReactNode;
   isOpened: boolean;
-  position?: 'left' | 'right';
+  position?: 'bottom' | 'right'
 }
 
-export default function Sidebar({
+export default function Modal({
   children,
   isOpened,
-  position = 'right' }: ISidebar) {
+  position = 'bottom' }: IModal) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState<boolean>(isOpened);
+  const [isVisible, setIsVisible] = useState(isOpened);
   const [animate, setAnimate] = useState(false);
-
-  useScrollLock(isOpened);
 
   useEffect(() => {
     setPortalTarget(document.body);
@@ -29,28 +27,28 @@ export default function Sidebar({
 
   useEffect(() => {
     if (isOpened) {
-      setIsVisible(true); 
-      setTimeout(() => setAnimate(true), 10);
+      setIsVisible(true);
     } else {
-      setAnimate(false); 
       const timeout = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timeout);
     }
   }, [isOpened]);
+
+  useScrollLock(isOpened);
 
   if (!portalTarget || !isVisible) {
     return null;
   }
 
   return createPortal(
-    <div className={styles.sidebar}>
+    <div className={styles.modal}>
       <Overlay isOpened={isOpened}>
-        <SidebarContent
-          isOpened={animate}
+        <ModalContent
+          isOpened={isOpened}
           position={position}
         >
-          {children}
-        </SidebarContent>
+            {children}
+        </ModalContent>
       </Overlay>
     </div>,
     portalTarget

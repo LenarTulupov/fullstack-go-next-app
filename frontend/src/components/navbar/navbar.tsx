@@ -288,7 +288,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
       )
       }
 
-
+      
       <Sidebar isOpened={isCartSidebarOpened}>
         <CartContent />
       </Sidebar>

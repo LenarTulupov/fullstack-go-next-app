@@ -13,35 +13,15 @@
   &-bottom {
     bottom: 50%;
     transform: translate(-50%, 50%);
-
     &_opened {
       visibility: visible;
       opacity: 1;
       transform: translate(-50%, 50%);
     }
-
     &_closed {
       visibility: hidden;
       opacity: 0;
       transform: translate(-50%, 70%);
-    }
-  }
-
-  &-right {
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-
-    &_opened {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(-50%);
-    }
-
-    &_closed {
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(-70%);
     }
   }
 }
