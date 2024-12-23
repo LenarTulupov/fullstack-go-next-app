@@ -80,8 +80,6 @@ export default function Card({ product, info = true }: ICard) {
     const handleResize = () => {
       if(window.innerWidth <= 1025) {
         closeQuickView();
-        closeSizeChart();
-        closeSelectSizeModal();
       }
     }
     handleResize();
