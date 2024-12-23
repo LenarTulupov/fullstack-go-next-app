@@ -62,9 +62,7 @@ export default function FeaturedCollection() {
         </div>
         {isCarousel ?
           <ProductsCarousel 
-            displayedProducts={displayedProducts} 
-            isLoading={isLoading} 
-          />
+            displayedProducts={displayedProducts} isLoading={isLoading} />
           : <div className={styles['featured-collection__grid']}>
             {filteredProducts.map((product) => (
               <Card key={product.id} product={product} info={false} />

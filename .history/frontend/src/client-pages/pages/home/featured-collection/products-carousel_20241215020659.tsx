@@ -18,7 +18,6 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
   const carouselRef = useRef<CarouselRef | null>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [itemsPerSlide, setItemsPerSlide] = useState<number>(4);
-  console.log(isLoading)
 
   useEffect(() => {
     const updateItemsPerSlide = () => {
