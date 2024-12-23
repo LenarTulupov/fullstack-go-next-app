@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Providers from "@/utils/Providers";
 import "./globals.scss";
 import StoreProvider from "@/store/store-provider";
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: "Simple Retro | Women Designed, Everyday Retro.",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <StoreProvider>
           <Providers>
             {children}
+            <Analytics />
             <div id="dropdown-root" />
           </Providers>
         </StoreProvider>
