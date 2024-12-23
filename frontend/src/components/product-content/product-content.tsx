@@ -132,7 +132,7 @@ export default function ProductContent({
                   settings: {
                     slidesToShow: 1.5,
                   }
-                }
+                },
               ]}
             >
               {Array.isArray(product.images) ? (
@@ -155,8 +155,9 @@ export default function ProductContent({
           )}
         </div>
         <div className={`
-                ${styles['product__content-description']} 
+          ${styles['product__content-description']} 
           ${styles.description}
+          ${modal ? styles.description_modal : ''}
           `}>
           <div className={styles['title-block']}>
             <Title className={styles['title-main']}>
@@ -209,7 +210,7 @@ export default function ProductContent({
 
           <div className={styles['description-text']}>
             <Title className={styles.title}>Description</Title>
-            <div className={`${styles['description-text__text']} ${ modal ? styles['descr-modal'] : ''}`}>
+            <div className={styles['description-text__text']}>
               {product.description}
             </div>
           </div>
