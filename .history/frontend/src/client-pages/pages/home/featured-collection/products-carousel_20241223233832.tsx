@@ -56,29 +56,29 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
 
   return (
     <div className={styles['products-carousel']}>
-      <Carousel
-        ref={carouselRef}
-        className={styles['products-carousel__carousel']}
-        arrows={false}
-        dots={false}
-        beforeChange={handleBeforeChange}
-      >
-        {isLoading ? (
-          <div className={styles['products-carousel__grid']}>
-            {Array.from({ length: itemsPerSlide }).map((_, index) => (
-              <CardSkeleton key={index} info={false} />
+<Carousel
+      ref={carouselRef}
+      className={styles['products-carousel__carousel']}
+      arrows={false}
+      dots={false}
+      beforeChange={handleBeforeChange}
+    >
+      {isLoading ? (
+        <div className={styles['products-carousel__grid']}>
+          {Array.from({ length: itemsPerSlide }).map((_, index) => (
+            <CardSkeleton key={index} info={false} />
+          ))}
+        </div>
+      ) : (
+        groupedProducts.map((group, index) => (
+          <div key={index} className={styles['products-carousel__grid']}>
+            {group.map((product) => (
+              <Card key={product.id} product={product} info={false} />
             ))}
           </div>
-        ) : (
-          groupedProducts.map((group, index) => (
-            <div key={index} className={styles['products-carousel__grid']}>
-              {group.map((product) => (
-                <Card key={product.id} product={product} info={false} />
-              ))}
-            </div>
-          ))
-        )}
-      </Carousel>
+        ))
+      )}
+    </Carousel>
       {showPrevButton && (
         <button
           className={styles['products-carousel__prev-arrow']}

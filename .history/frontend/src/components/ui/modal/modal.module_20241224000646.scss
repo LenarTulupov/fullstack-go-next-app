@@ -5,7 +5,5 @@
   top: 0;
   left: 0;
   z-index: 10;
-  @media(max-width: 1024px) {
-    display: none;
-  }
+  @media(max-width: 1024)
 }

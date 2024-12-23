@@ -20,7 +20,6 @@ import { Carousel } from 'antd';
 import SizeChartContent from '../size-chart-content/size-chart-content';
 import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 import Modal from '../ui/modal/modal';
-import { div } from 'framer-motion/client';
 
 interface IProductContent {
   product: IProduct;

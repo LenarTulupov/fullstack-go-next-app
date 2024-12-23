@@ -2,7 +2,7 @@
 
 import { ICard } from "@/types/card.interface";
 import Link from "next/link";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { toggleFavorite, isFavorite } from "@/store/favorites/favorites-slice";
@@ -18,12 +18,10 @@ import { MdShoppingCart } from "react-icons/md";
 import ProductContent from "../product-content/product-content";
 import Modal from "../ui/modal/modal";
 import { IProduct } from "@/types/product.interface";
-import styles from './card.module.scss';
-import SizeChartContent from "../size-chart-content/size-chart-content";
 import CloseButton from "../ui/close-button/close-button";
 import { ISize } from "@/types/sizes.interface";
 import { addToCart } from "@/store/cart/cart-slice";
-import { div } from "framer-motion/client";
+import styles from './card.module.scss';
 
 export default function Card({ product, info = true }: ICard) {
   const { id, images, title, price_new, price_old, color } = product;
@@ -77,6 +75,19 @@ export default function Card({ product, info = true }: ICard) {
     dispatch(addToCart({ product, size }))
     closeSelectSizeModal()
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      if(window.innerWidth <= 1025) {
+        closeQuickView();
+        closeSizeChart();
+        closeSelectSizeModal();
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className={styles.card}>

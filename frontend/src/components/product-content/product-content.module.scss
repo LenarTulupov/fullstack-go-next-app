@@ -2,14 +2,6 @@
   background-color: #fff;
   padding: 20px;
   border-radius: 20px;
-  @media(max-width: 768px) {
-    max-height: 80vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
 }
 
 .popup-page {
