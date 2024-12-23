@@ -24,7 +24,7 @@ export default function Home() {
           ease: 'easeInOut',
         }}
       >
-        {isInView && <FeaturedCollection />}
+        <FeaturedCollection />
       </motion.div>
       <BlackFriday/>
       <Categories/>

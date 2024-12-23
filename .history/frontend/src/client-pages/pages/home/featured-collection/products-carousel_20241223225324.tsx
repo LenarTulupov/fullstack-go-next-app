@@ -65,21 +65,15 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
         beforeChange={handleBeforeChange}
       >
         {groupedProducts.map((group, index) => (
-          <div
-            key={index}
-            className={styles['products-carousel__grid']}
-          >
+          <div key={index} className={styles['products-carousel__grid']}>
             {isLoading ? (
               Array.from({ length: itemsPerSlide }).map((_, index) =>
                 <CardSkeleton key={index} info={false} />
               )
             ) : (
               group.map((product) => (
-                <Card
-                  key={product.id}
-                  product={product}
-                  info={false}
-                />
+                <Card 
+                  key={product.id} product={product} info={false} />
               ))
             )}
           </div>

@@ -75,11 +75,11 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
               )
             ) : (
               group.map((product) => (
-                <Card
-                  key={product.id}
-                  product={product}
-                  info={false}
-                />
+                // <Card
+                //   key={product.id}
+                //   product={product}
+                //   info={false}
+                // />
               ))
             )}
           </div>

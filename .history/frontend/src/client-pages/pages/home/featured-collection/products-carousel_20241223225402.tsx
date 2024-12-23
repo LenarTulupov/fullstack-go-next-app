@@ -57,7 +57,7 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
 
   return (
     <div className={styles['products-carousel']}>
-      <Carousel
+      {/* <Carousel
         ref={carouselRef}
         className={styles['products-carousel__carousel']}
         arrows={false}
@@ -84,7 +84,7 @@ export default function ProductsCarousel({ displayedProducts, isLoading }: IProd
             )}
           </div>
         ))}
-      </Carousel>
+      </Carousel> */}
       {showPrevButton && (
         <button
           className={styles['products-carousel__prev-arrow']}
