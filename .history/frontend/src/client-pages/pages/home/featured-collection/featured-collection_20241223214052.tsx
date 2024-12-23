@@ -62,21 +62,18 @@ export default function FeaturedCollection() {
           </div>
         </div>
         {isCarousel ? (
-          <ProductsCarousel 
-            displayedProducts={displayedProducts} 
-            isLoading={isLoading} 
-          />
-        ) : (
-          <div className={styles['featured-collection__grid']}>
-            {isLoading
-              ? Array.from({ length: 4 }).map((_, index) => (
-                <CardSkeleton key={index} /* className={styles['featured-collection__skeleton']} */ />
-              ))
-              : filteredProducts.map((product) => (
-                <Card key={product.id} product={product} info={false} />
-              ))}
-          </div>
-        )}
+  <ProductsCarousel displayedProducts={displayedProducts} isLoading={isLoading} />
+) : (
+  <div className={styles['featured-collection__grid']}>
+    {isLoading
+      ? Array.from({ length: 4 }).map((_, index) => (
+          <CardSkeleton key={index} className={styles['featured-collection__skeleton']} />
+        ))
+      : filteredProducts.map((product) => (
+          <Card key={product.id} product={product} info={false} />
+        ))}
+  </div>
+)}
         {displayedProducts.length > 4 && (
           <Button
             className={styles['featured-collection__button']}

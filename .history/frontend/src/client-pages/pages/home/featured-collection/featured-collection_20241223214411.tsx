@@ -72,9 +72,9 @@ export default function FeaturedCollection() {
               ? Array.from({ length: 4 }).map((_, index) => (
                 <CardSkeleton key={index} /* className={styles['featured-collection__skeleton']} */ />
               ))
-              : filteredProducts.map((product) => (
-                <Card key={product.id} product={product} info={false} />
-              ))}
+              : Array.from({ length: 4 }).map((_, index) => (
+                <CardSkeleton key={index} /* className={styles['featured-collection__skeleton']} */ />
+              )))}
           </div>
         )}
         {displayedProducts.length > 4 && (

@@ -63,9 +63,7 @@ export default function FeaturedCollection() {
         </div>
         {isCarousel ? (
           <ProductsCarousel 
-            displayedProducts={displayedProducts} 
-            isLoading={isLoading} 
-          />
+            displayedProducts={displayedProducts} isLoading={isLoading} />
         ) : (
           <div className={styles['featured-collection__grid']}>
             {isLoading

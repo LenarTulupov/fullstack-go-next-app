@@ -14,7 +14,7 @@ export default function FeaturedCollection() {
   const tabsFirstUpperLetter = tabs.map((item) => item.slice(0, 1).toUpperCase() + item.slice(1));
   const [selectedTab, setSelectedTab] = useState<string>(tabsFirstUpperLetter[0]);
   const [isCarousel, setIsCarousel] = useState<boolean>(true);
-  const { products, isLoading } = useProducts();
+  const { products/* , isLoading */ } = useProducts();
 
   const filteredProducts = products.filter((product) => {
     if (selectedTab === 'Hot') {
