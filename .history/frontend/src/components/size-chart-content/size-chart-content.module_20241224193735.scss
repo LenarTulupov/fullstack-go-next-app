@@ -1,0 +1,28 @@
+.size-chart-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #fff;
+  // @media(max-width: 1024px) {
+    width: calc(100vw - 40px);
+  // }
+  padding: 400px 0;
+}
+.text-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  :first-child {
+    display: flex;
+    justify-content: center;
+    grid-column-start: 2;
+  }
+}
+.subtitle {
+  margin-bottom: 10px;
+}

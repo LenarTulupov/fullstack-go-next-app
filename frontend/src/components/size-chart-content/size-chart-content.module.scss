@@ -6,12 +6,15 @@
   padding: 20px;
   border-radius: 20px;
   background-color: #fff;
+  @media(max-width: 1024px) {
+    width: calc(100vw - 40px);
+  }
 }
 .text-wrapper {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  width: calc(100vw - 60px);
+  width: 100%;
   margin-bottom: 20px;
   :first-child {
     display: flex;
