@@ -1,8 +1,6 @@
-import { URL } from "@/constants/url";
-
 export async function fetchProducts() {
   try {
-    const res = await fetch(`${URL}/products`);
+    const res = await fetch('https://backend-bbpq.onrender.com/products');
     
     if (!res.ok) {
       throw new Error('Failed to fetch products' + res.statusText);

@@ -2,7 +2,7 @@ import { URL } from "@/constants/url";
 
 export async function fetchProducts() {
   try {
-    const res = await fetch(`${URL}/products`);
+    const res = await fetch(`${URL}`);
     
     if (!res.ok) {
       throw new Error('Failed to fetch products' + res.statusText);

@@ -76,17 +76,6 @@ export default function Card({ product, info = true }: ICard) {
     closeSelectSizeModal()
   }
 
-  useEffect(() => {
-    const handleResize = () => {
-      if(window.innerWidth <= 1025) {
-        closeQuickView();
-      }
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
     <div className={styles.card}>
       <div className={styles['image-wrapper']}>

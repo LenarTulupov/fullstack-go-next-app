@@ -4,12 +4,12 @@ import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { productsData, setProducts } from '@/store/products/productsSlice';
+import styles from './page.module.scss';
 import Container from '@/components/ui/container/container';
 import ProductContent from '@/components/product-content/product-content';
 import Loader from '@/components/ui/loader/loader';
 import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 import { URL } from '@/constants/url';
-import styles from './page.module.scss';
 
 export default function Product() {
   const { id } = useParams();
