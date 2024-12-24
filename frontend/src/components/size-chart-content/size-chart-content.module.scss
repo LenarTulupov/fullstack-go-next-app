@@ -6,8 +6,9 @@
   padding: 20px;
   border-radius: 20px;
   background-color: #fff;
+  width: 55vw;
   @media(max-width: 1024px) {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 20px);
   }
 }
 .text-wrapper {

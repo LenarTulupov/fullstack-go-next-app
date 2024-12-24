@@ -9,13 +9,16 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-top: 10px;
+    }
+    &-item {
+      margin: 0 auto;
     }
   }
   &__dropdown {
     margin-top: 20px;
   }
   &__dropdown-inner {
+    width: 100%;
     display: flex;
     justify-content: center;
     padding: 20px 0;
@@ -24,7 +27,6 @@
 .link__inner {
   display: flex;
   align-items: center;
-  justify-content: center;
   column-gap: 10px;
 }
 .logo-link_mobile {
