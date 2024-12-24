@@ -140,10 +140,10 @@
   }
 }
 .carousel-wrapper {
-  // width: 100vw;
-  @media (max-width: 992px) {
-    width: 500px;
-  }
+  width: calc(100vw - 50px);
+  // @media (max-width: 992px) {
+  //   width: 500px;
+  // }
   &__image {
     padding-right: 10px;
   }
