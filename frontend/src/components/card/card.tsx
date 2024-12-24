@@ -32,6 +32,7 @@ export default function Card({ product, info = true }: ICard) {
   const [sizeChartModal, setSizeChartModal] = useState(false);
   const [selectSizeModal, setSelectSizeModal] = useState(false);
   const [selectedSize, setSelectedSize] = useState<null | ISize>(null);
+  const [closeProductModal, setCloseProductModal] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const isProductFavorite = useSelector((state: RootState) => isFavorite(state, id));
@@ -76,6 +77,22 @@ export default function Card({ product, info = true }: ICard) {
     closeSelectSizeModal()
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      const isNowMobile = window.innerWidth <= 1024;
+      setCloseProductModal(isNowMobile);
+      if (isNowMobile) {
+        setQuickViewModal(false);
+        setSelectSizeModal(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className={styles.card}>
       <div className={styles['image-wrapper']}>
@@ -119,8 +136,15 @@ export default function Card({ product, info = true }: ICard) {
           </Link>
           <Color color={color} />
           <div className={styles.prices}>
-            <Price className={styles.prices__old} price={price_old} old />
-            <Price price={price_new} className={styles.prices_active} />
+            <Price
+              className={styles.prices__old}
+              price={price_old}
+              old
+            />
+            <Price
+              price={price_new}
+              className={styles.prices_active}
+            />
           </div>
           <Button
             variant="black"
@@ -132,19 +156,21 @@ export default function Card({ product, info = true }: ICard) {
           </Button>
         </div>
       )}
+      
+      {!closeProductModal && (
+        <Modal isOpened={!!(currentProduct && quickViewModal)}>
+          {currentProduct && (
+            <ProductContent
+              closeButton
+              product={currentProduct}
+              modal
+              onClose={closeQuickView}
+            />
+          )}
+        </Modal>
+      )}
 
-      <Modal isOpened={!!(currentProduct && quickViewModal)}>
-        {currentProduct && (
-          <ProductContent
-            closeButton
-            product={currentProduct}
-            modal
-            onClose={closeQuickView}
-          />
-        )}
-      </Modal>
-
-      <Modal 
+      <Modal
         isOpened={!!(currentProduct && selectSizeModal)}>
         {currentProduct && (
           <div className={styles.sizes}>

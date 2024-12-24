@@ -87,12 +87,6 @@
     gap: 20px;
   }
   &-text {
-    &__text {
-      // width: 400px;
-      @media (max-width: 992px) {
-        width: 100%;
-      }
-    }
     &_modal {
       width: 400px;
     }
@@ -146,7 +140,7 @@
 }
 .carousel-wrapper {
   @media (max-width: 992px) {
-    width: calc(100vw - 50px);
+    width: 100vw;
   }
   &__image {
     padding-right: 10px;
