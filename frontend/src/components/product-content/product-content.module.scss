@@ -86,10 +86,15 @@
   @media (max-width: 992px) {
     gap: 20px;
   }
-  &-text__text {
-    width: 400px;
-    @media (max-width: 992px) {
-      width: 100%;
+  &-text {
+    &__text {
+      // width: 400px;
+      @media (max-width: 992px) {
+        width: 100%;
+      }
+    }
+    &_modal {
+      width: 400px;
     }
   }
   &__size-button {
@@ -140,10 +145,9 @@
   }
 }
 .carousel-wrapper {
-  width: calc(100vw - 50px);
-  // @media (max-width: 992px) {
-  //   width: 500px;
-  // }
+  @media (max-width: 992px) {
+    width: calc(100vw - 50px);
+  }
   &__image {
     padding-right: 10px;
   }
