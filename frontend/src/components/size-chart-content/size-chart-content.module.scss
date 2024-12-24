@@ -11,7 +11,7 @@
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  width: 100%;
+  width: calc(100vw - 60px);
   margin-bottom: 20px;
   :first-child {
     display: flex;
