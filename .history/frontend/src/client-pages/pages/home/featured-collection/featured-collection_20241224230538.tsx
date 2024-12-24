@@ -1,13 +1,12 @@
 import Title from '@/components/ui/title/title';
 import Container from '@/components/ui/container/container';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import useProducts from '@/utils/useProducts';
 import Button from '@/components/ui/button/button';
 import ProductsCarousel from './products-carousel';
 import styles from './featured-collection.module.scss';
 import Card from '@/components/card/card';
 import Tab from '@/components/ui/tabs/tab';
-import { motion, useInView } from 'framer-motion';
 
 export default function FeaturedCollection() {
   const tabs = ['hot', 'new'];
@@ -15,8 +14,7 @@ export default function FeaturedCollection() {
   const [selectedTab, setSelectedTab] = useState<string>(tabsFirstUpperLetter[0]);
   const [isCarousel, setIsCarousel] = useState<boolean>(true);
   const { products, isLoading } = useProducts();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '20%' });
+  
 
   const filteredProducts = products.filter((product) => {
     if (selectedTab === 'Hot') {
@@ -41,15 +39,6 @@ export default function FeaturedCollection() {
   return (
     <section className={styles['featured-collection']}>
       <Container>
-      <motion.div
-        ref={ref}
-        initial={{ y: 200, opacity: 0 }}
-        animate={isInView ? { y: 0, opacity: 1 } : {}}
-        transition={{
-          duration: .5,
-          ease: 'easeInOut',
-        }}
-        >
         <div className={styles['featured-collection__text']}>
           <Title
             className={styles['featured-collection__title']}
@@ -87,7 +76,6 @@ export default function FeaturedCollection() {
             {isCarousel ? 'View All' : 'Close'}
           </Button>
         )}
-              </motion.div>
       </Container>
     </section>
   )

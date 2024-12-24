@@ -1,13 +1,12 @@
 import Title from '@/components/ui/title/title';
 import Container from '@/components/ui/container/container';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import useProducts from '@/utils/useProducts';
 import Button from '@/components/ui/button/button';
 import ProductsCarousel from './products-carousel';
 import styles from './featured-collection.module.scss';
 import Card from '@/components/card/card';
 import Tab from '@/components/ui/tabs/tab';
-import { motion, useInView } from 'framer-motion';
 
 export default function FeaturedCollection() {
   const tabs = ['hot', 'new'];

@@ -8,11 +8,11 @@ import styles from './home.module.scss';
 
 export default function Home() {
   return (
-    <main className={styles.home}>
+    <div className={styles.home}>
       <Banner />
       <FeaturedCollection />
       <BlackFriday />
       <Categories />
-    </main>
+    </div>
   );
 }
