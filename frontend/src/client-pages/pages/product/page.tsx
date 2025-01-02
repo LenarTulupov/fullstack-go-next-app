@@ -10,6 +10,7 @@ import Loader from '@/components/ui/loader/loader';
 import useSizeChartPopup from '@/hooks/useSizeChartPopup';
 import { URL } from '@/constants/url';
 import styles from './page.module.scss';
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
 
 export default function Product() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function Product() {
     async function fetchProduct() {
       if (!product) {
         try {
-          const res = await fetch(`${URL}/products/${id}`);
+          const res = await fetch(`${URL}${API_ENDPOINTS}/${id}`);
           if (res.ok) {
             const data = await res.json();
             dispatch(setProducts([data]));
