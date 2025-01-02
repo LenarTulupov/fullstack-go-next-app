@@ -25,7 +25,7 @@ export default function Product() {
     async function fetchProduct() {
       if (!product) {
         try {
-          const res = await fetch(`${URL}${API_ENDPOINTS}/${id}`);
+          const res = await fetch(`${URL}${API_ENDPOINTS.PRODUCTS}/${id}`);
           if (res.ok) {
             const data = await res.json();
             dispatch(setProducts([data]));
