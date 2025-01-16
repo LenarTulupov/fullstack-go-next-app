@@ -19,6 +19,15 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     productService := services.NewProductService(productRepo)
     productHandler := handlers.NewProductHandler(productService)
 
+    // Admin 
+    r.POST("/admin/login", handlers.AdminLogin)
+
+    admin := r.Group("/admin")
+    admin.Use(middleware.AuthMiddleware("admin"))
+    {
+        admin.GET("/dashboard", handlers.AdminDashboard)
+    }
+
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
     r.GET("/users/:id", handlers.GetUser)
