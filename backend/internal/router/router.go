@@ -7,6 +7,8 @@ import (
     "api/pkg/repository"
     "api/internal/middleware"
     "database/sql"
+    "net/http"
+    "api/pkg/config"
 )
 
 func SetupRouter(db *sql.DB) *gin.Engine {
@@ -40,6 +42,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     // Product routes
     r.GET("/products", productHandler.GetProducts)
     r.GET("/products/:id", productHandler.GetProduct)
+
+    r.GET("/debug/jwt-secret", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{"JWT_SECRET_KEY": config.JwtSecretKey})
+    })
 
     return r
 }
