@@ -27,6 +27,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'burst.shopifycdn.com',
+        port: '',
+        pathname: '/**'
+      }
     ],
   },
 };

@@ -75,7 +75,7 @@ export default function Footer() {
                   <Link href="/privacy-policy">Privacy Policy</Link>
                 </li>
                 <li className={styles['footer__menu__item']}>
-                  <Link href="/">Cookie Policy & GDPR</Link>
+                  <Link href="/cookie-policy">Cookie Policy & GDPR</Link>
                 </li>
                 <li className={styles['footer__menu__item']}>
                   <Link href="/">Refund Policy</Link>
