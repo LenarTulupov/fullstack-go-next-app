@@ -3,12 +3,13 @@
 import Link from "next/link";
 import Button from "../ui/button/button";
 import Title from "../ui/title/title";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setIsCookieModalOpened } from "@/store/cookie-modal/cookie-modal-slice";
 import styles from "./cookie-consent.module.scss";
 
-export default function CookieConsent({ onClick}) {
+interface ICookieConsent {
+  onClick: () => void;
+}
+
+export default function CookieConsent({ onClick }: ICookieConsent) {
   return (
     <div className={styles["cookie-consent"]}>
       <div className={styles["cookie-consent__content"]}>
