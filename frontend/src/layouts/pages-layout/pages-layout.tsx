@@ -6,8 +6,8 @@ import Header from "@/components/header/header";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactNode, useEffect } from "react";
-import styles from "./pages-layout.module.scss";
 import { setIsCookieModalOpened } from "@/store/cookie-modal/cookie-modal-slice";
+import styles from "./pages-layout.module.scss";
 
 export default function PagesLayoutClient({ children }: { children: ReactNode }) {
   const isCookieModalOpened = useSelector(
