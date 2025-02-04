@@ -1,5 +1,5 @@
 import Container from '@/components/ui/container/container'
-import styles from './page.module.scss'
+import styles from './sign-up.module.scss'
 import Link from 'next/link'
 import Logo from '@/components/ui/logo/logo'
 import Title from '@/components/ui/title/title'
@@ -7,7 +7,7 @@ import InputField from '@/components/input-field/input-field'
 import { signUpFields } from '@/constants/sign-up-fields'
 import Button from '@/components/ui/button/button'
 
-export default function SignUp() {
+export default function UserSignUp() {
   return (
     <main className={styles['sign-up']}>
       <Container>
@@ -30,7 +30,7 @@ export default function SignUp() {
             <Button variant='white'>Sign Up with Google</Button>
             <p className={styles['sign-up__form-text2']}>
               Already have an account?
-              <Link href='/sign-in' className={styles['sign-up__form-link']}>
+              <Link href='/user/sign-in' className={styles['sign-up__form-link']}>
                 Sign in
               </Link>
             </p>

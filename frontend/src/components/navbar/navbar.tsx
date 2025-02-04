@@ -191,7 +191,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
                   </Tooltip>
                 </li>
                 <li className={styles.navbar__item}>
-                  <NavLink href='/sign-in'
+                  <NavLink href='/user/sign-in'
                   >
                     {isMobile ? 'Sign In' : <MdFace className={styles['navbar__item-sign']} />}
                   </NavLink>

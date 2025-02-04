@@ -1,4 +1,4 @@
-import styles from './page.module.scss'
+import styles from './sign-in.module.scss'
 import Container from "@/components/ui/container/container";
 import InputField from "@/components/input-field/input-field";
 import { signInFields } from '@/constants/sign-in-fields';
@@ -7,7 +7,7 @@ import Title from '@/components/ui/title/title';
 import Link from 'next/link';
 import Logo from '@/components/ui/logo/logo';
 
-export default function SignIn() {
+export default function UserSignIn() {
   return (
     <main className={styles['sign-in']}>
       <Container>
@@ -31,7 +31,7 @@ export default function SignIn() {
             <Button variant='white'>Login with Google</Button>
             <p className={styles['sign-in__form-text2']}>
               Don&apos;t have an account?
-              <Link href='/sign-up' className={styles['sign-in__form-link']}>
+              <Link href='/user/sign-up' className={styles['sign-in__form-link']}>
                 Sign up
               </Link>
             </p>
