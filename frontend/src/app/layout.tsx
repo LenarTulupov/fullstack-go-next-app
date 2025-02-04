@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Providers from "@/utils/Providers";
 import "./globals.scss";
+// import "./tailwind.scss"
 import StoreProvider from "@/store/store-provider";
 import { Analytics } from "@vercel/analytics/react"
 
