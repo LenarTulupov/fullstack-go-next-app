@@ -7,7 +7,7 @@ import (
     "api/pkg/services"
 )
 
-func AuthMiddleware(role string) gin.HandlerFunc {
+func AuthMiddleware(requiredRole string) gin.HandlerFunc {
     return func(c *gin.Context) {
         token := c.GetHeader("Authorization")
         if token == "" {
@@ -25,7 +25,7 @@ func AuthMiddleware(role string) gin.HandlerFunc {
             return
         }
 
-        if userRole != role {
+        if userRole != requiredRole {
             c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient permissions"})
             c.Abort()
             return

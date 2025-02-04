@@ -23,8 +23,13 @@ func AdminLogin(c *gin.Context) {
         return
     }
 
-    var storedPasswordHash string
-    err := config.DB.QueryRow("SELECT password_hash, role FROM users WHERE email = $1", admin.Email).Scan(&storedPasswordHash, &admin.Role)
+    var storedPasswordHash, role string
+    err := config.DB.QueryRow(`
+        SELECT u.password_hash, r.role_name 
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        LEFT JOIN roles r ON ur.role_id = r.id
+        WHERE u.email = $1`, admin.Email).Scan(&storedPasswordHash, &role)
     if err != nil {
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
         return
@@ -38,7 +43,7 @@ func AdminLogin(c *gin.Context) {
     // Generate token with role included
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": admin.Email,
-        "role":  admin.Role,
+        "role":  role,
         "exp":   time.Now().Add(time.Hour * 2).Unix(),
     })
 

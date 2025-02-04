@@ -27,6 +27,10 @@ export default function AdminSignIn() {
         body: JSON.stringify({ email, password }),
       });
 
+      const responseText = await response.text();
+      console.log("Response from server:", responseText);
+
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Something went wrong");
@@ -54,25 +58,25 @@ export default function AdminSignIn() {
           <div>
             <label htmlFor="email">Email:</label>
             <input
+              className="border border-black w-full !px-[15px] !py-[10px]"
               type="email"
               id="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border border-black w-full !px-[15px] !py-[10px]"
             />
           </div>
           <div>
             <label htmlFor="password">Password:</label>
             <input
+              className="border border-black w-full !px-[15px] !py-[10px]"
               type="password"
               id="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border border-black w-full !px-[15px] !py-[10px]"
             />
           </div>
           {error && <p className="text-red-500">{error}</p>}

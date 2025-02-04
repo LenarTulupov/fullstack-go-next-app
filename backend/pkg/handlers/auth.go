@@ -22,8 +22,13 @@ func LoginUser(c *gin.Context) {
         return
     }
 
-    var storedPasswordHash string
-    err := config.DB.QueryRow("SELECT password_hash FROM users WHERE email = $1", req.Email).Scan(&storedPasswordHash)
+    var storedPasswordHash, role string
+    err := config.DB.QueryRow(`
+        SELECT u.password_hash, r.role_name 
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        LEFT JOIN roles r ON ur.role_id = r.id
+        WHERE u.email = $1`, req.Email).Scan(&storedPasswordHash, &role)
     if err == sql.ErrNoRows {
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
         return
@@ -41,6 +46,7 @@ func LoginUser(c *gin.Context) {
     // Генерация токена
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": req.Email,
+        "role":  role, // Добавляем роль в токен
         "exp":   time.Now().Add(time.Hour * 2).Unix(),
     })
 
