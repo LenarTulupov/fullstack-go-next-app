@@ -8,6 +8,8 @@ import (
     "golang.org/x/crypto/bcrypt"
     "github.com/golang-jwt/jwt"
     "time"
+    "database/sql"
+    "fmt"
 )
 
 type AdminLoginRequest struct {
@@ -31,16 +33,22 @@ func AdminLogin(c *gin.Context) {
         LEFT JOIN roles r ON ur.role_id = r.id
         WHERE u.email = $1`, admin.Email).Scan(&storedPasswordHash, &role)
     if err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+        if err == sql.ErrNoRows {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+        }
         return
     }
+
+    fmt.Println("Stored password hash:", storedPasswordHash)
+    fmt.Println("Role:", role)
 
     if err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(admin.Password)); err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
         return
     }
 
-    // Generate token with role included
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": admin.Email,
         "role":  role,
