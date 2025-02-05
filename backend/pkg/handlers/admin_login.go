@@ -1,4 +1,3 @@
-// handlers/admin_login.go
 package handlers
 
 import (
@@ -15,7 +14,6 @@ import (
 type AdminLoginRequest struct {
     Email    string `json:"email" binding:"required,email"`
     Password string `json:"password" binding:"required"`
-    Role     string `json:"role"` // Add the Role field
 }
 
 func AdminLogin(c *gin.Context) {
@@ -43,8 +41,10 @@ func AdminLogin(c *gin.Context) {
 
     fmt.Println("Stored password hash:", storedPasswordHash)
     fmt.Println("Role:", role)
+    fmt.Println("Provided password:", admin.Password)
 
     if err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(admin.Password)); err != nil {
+        fmt.Println("Password comparison error:", err)
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
         return
     }
