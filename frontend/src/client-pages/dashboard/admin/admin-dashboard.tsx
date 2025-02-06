@@ -28,6 +28,7 @@ export default function AdminDashboardRight() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
         });
 
         if (!response.ok) {
