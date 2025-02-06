@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import Button from "@/components/ui/button/button";
 import Title from "@/components/ui/title/title";
 import { API_ENDPOINTS } from "@/constants/api-endpoints";
 import { URL } from "@/constants/url";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminSignIn() {
@@ -14,32 +14,36 @@ export default function AdminSignIn() {
   const [error, setError] = useState<string>("");
   const router = useRouter();
 
+  useEffect(() => {
+    const token = document.cookie.split("; ").find(row => row.startsWith("token="));
+    if (token) {
+      router.push("/dashboard/admin");
+    }
+  }, [router]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setLoading(true);
     setError("");
 
     try {
       const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_SIGN_IN}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
         credentials: "include",
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
+        if (response.status === 401) {
+          throw new Error("Invalid email or password.");
+        }
+        throw new Error(errorData.message || "Something went wrong.");
       }
 
       const data = await response.json();
-      console.log("Login successful:", data);
-
       document.cookie = `token=${data.token}; path=/; max-age=3600`;
-      console.log("Token saved in cookies:", data.token);
 
       router.push("/dashboard/admin");
     } catch (err) {
@@ -50,14 +54,14 @@ export default function AdminSignIn() {
   };
 
   return (
-    <div className="flex justify-center items-center h-[100vh]">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-[50vw]">
-        <Title className="!mb-[20px] text-center font-bold">Admin Sign In</Title>
-        <form className="flex flex-col gap-y-[10px]" onSubmit={handleSubmit}>
+        <Title className="!mb-5 text-center font-bold">Admin Sign In</Title>
+        <form className="flex flex-col gap-y-3" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email">Email:</label>
             <input
-              className="border border-black w-full !px-[15px] !py-[10px]"
+              className="border border-black w-full px-4 py-2"
               type="email"
               id="email"
               name="email"
@@ -69,7 +73,7 @@ export default function AdminSignIn() {
           <div>
             <label htmlFor="password">Password:</label>
             <input
-              className="border border-black w-full !px-[15px] !py-[10px]"
+              className="border border-black w-full px-4 py-2"
               type="password"
               id="password"
               name="password"

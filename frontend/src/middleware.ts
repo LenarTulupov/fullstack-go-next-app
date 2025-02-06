@@ -5,7 +5,7 @@ export default function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
     if (!token && path.startsWith("/dashboard/admin")) {
-        return NextResponse.redirect(new URL("/dashboard/admin", request.url));
+        return NextResponse.redirect(new URL("/admin/sign-in", request.url));
     }
 
     if (token && path === "/dashboard/admin") {
