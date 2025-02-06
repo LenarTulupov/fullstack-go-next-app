@@ -5,32 +5,44 @@ import (
     "net/http"
     "strings"
     "api/pkg/services"
+    "log"
 )
 
 func AuthMiddleware(requiredRole string) gin.HandlerFunc {
     return func(c *gin.Context) {
-        token := c.GetHeader("Authorization")
-        if token == "" {
+        // Извлечение токена из заголовка Authorization
+        authHeader := c.GetHeader("Authorization")
+        if authHeader == "" {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token is required"})
             c.Abort()
             return
         }
 
-        token = strings.TrimPrefix(token, "Bearer ")
-
-        userRole, err := services.ValidateToken(token)
-        if err != nil {
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+        // Удаление префикса "Bearer " из токена
+        token := strings.TrimPrefix(authHeader, "Bearer ")
+        if token == "" {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
             c.Abort()
             return
         }
 
+        // Валидация токена
+        userRole, err := services.ValidateToken(token)
+        if err != nil {
+            log.Printf("Token validation failed: %v", err) // Логирование ошибки
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
+            c.Abort()
+            return
+        }
+
+        // Проверка роли пользователя
         if userRole != requiredRole {
             c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient permissions"})
             c.Abort()
             return
         }
 
+        // Передача управления следующему обработчику
         c.Next()
     }
 }
