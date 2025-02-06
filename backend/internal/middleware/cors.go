@@ -2,12 +2,14 @@ package middleware
 
 import (
 	"time"
+	"fmt"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
+	fmt.Println("CORS middleware applied")
 	config := cors.Config{
 		AllowOrigins:     []string{
 			"https://frontend-ouox.onrender.com",
