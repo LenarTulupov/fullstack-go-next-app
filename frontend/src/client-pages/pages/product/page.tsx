@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { productsData, setProducts } from '@/store/products/productsSlice';
-import Container from '@/components/ui/container/container';
-import ProductContent from '@/components/product-content/product-content';
-import Loader from '@/components/ui/loader/loader';
-import useSizeChartPopup from '@/hooks/useSizeChartPopup';
-import { URL } from '@/constants/url';
-import styles from './page.module.scss';
-import { API_ENDPOINTS } from '@/constants/api-endpoints';
+import { useParams } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { productsData, setProducts } from "@/store/products/productsSlice";
+import Container from "@/components/ui/container/container";
+import ProductContent from "@/components/product-content/product-content";
+import Loader from "@/components/ui/loader/loader";
+import useSizeChartPopup from "@/utils/hooks/useSizeChartPopup";
+import { URL } from "@/constants/url";
+import styles from "./page.module.scss";
+import { API_ENDPOINTS } from "@/constants/api-endpoints";
 
 export default function Product() {
   const { id } = useParams();
@@ -67,4 +67,4 @@ export default function Product() {
       </Container>
     </div>
   );
-};
+}

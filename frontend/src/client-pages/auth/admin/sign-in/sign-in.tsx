@@ -1,19 +1,21 @@
 "use client"
 
-import Button from "@/components/ui/button/button"
-import Title from "@/components/ui/title/title"
+import Button from "@/components/ui/button/button";
+import Title from "@/components/ui/title/title";
 import { API_ENDPOINTS } from "@/constants/api-endpoints";
 import { URL } from "@/constants/url";
-import { useState } from "react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminSignIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     setLoading(true);
     setError("");
@@ -27,10 +29,6 @@ export default function AdminSignIn() {
         body: JSON.stringify({ email, password }),
       });
 
-      const responseText = await response.text();
-      console.log("Response from server:", responseText);
-
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Something went wrong");
@@ -38,13 +36,13 @@ export default function AdminSignIn() {
 
       const data = await response.json();
       console.log("Login successful:", data);
+
+      document.cookie = `token=${data.token}; path=/; max-age=3600`;
+      console.log("Token saved in cookies:", data.token);
+
+      router.push("/admin/dashboard");
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An error occurred during login.");
-      }
-    
+      setError(err instanceof Error ? err.message : "An error occurred during login.");
     } finally {
       setLoading(false);
     }

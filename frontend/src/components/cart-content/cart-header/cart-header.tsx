@@ -1,14 +1,14 @@
 import CloseButton from "@/components/ui/close-button/close-button";
-import styles from './cart-header.module.scss';
+import styles from "./cart-header.module.scss";
 import Title from "@/components/ui/title/title";
-import useCart from "@/hooks/useCart";
+import useCart from "@/utils/hooks/useCart";
 
 export default function CartHeader() {
   const { handleCartSidebarToggle } = useCart();
   return (
-    <header className={styles['cart-header']}>
+    <header className={styles["cart-header"]}>
       <Title weight="bold">your cart</Title>
       <CloseButton onClose={handleCartSidebarToggle} />
     </header>
-  )
-};
+  );
+}

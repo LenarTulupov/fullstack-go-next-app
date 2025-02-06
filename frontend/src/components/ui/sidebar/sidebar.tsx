@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { ReactNode, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import styles from './sidebar.module.scss';
-import useScrollLock from '@/hooks/useScrollLock';
-import SidebarContent from './sidebar-content/sidebar-content';
-import Overlay from '../overlay/overlay';
+import { ReactNode, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import styles from "./sidebar.module.scss";
+import useScrollLock from "@/utils/hooks/useScrollLock";
+import SidebarContent from "./sidebar-content/sidebar-content";
+import Overlay from "../overlay/overlay";
 
 interface ISidebar {
   children: ReactNode;
   isOpened: boolean;
-  position?: 'left' | 'right';
+  position?: "left" | "right";
 }
 
 export default function Sidebar({
   children,
   isOpened,
-  position = 'right' }: ISidebar) {
+  position = "right",
+}: ISidebar) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState<boolean>(isOpened);
   const [animate, setAnimate] = useState(false);
@@ -29,10 +30,10 @@ export default function Sidebar({
 
   useEffect(() => {
     if (isOpened) {
-      setIsVisible(true); 
+      setIsVisible(true);
       setTimeout(() => setAnimate(true), 10);
     } else {
-      setAnimate(false); 
+      setAnimate(false);
       const timeout = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timeout);
     }
@@ -45,10 +46,7 @@ export default function Sidebar({
   return createPortal(
     <div className={styles.sidebar}>
       <Overlay isOpened={isOpened}>
-        <SidebarContent
-          isOpened={animate}
-          position={position}
-        >
+        <SidebarContent isOpened={animate} position={position}>
           {children}
         </SidebarContent>
       </Overlay>

@@ -1,47 +1,62 @@
-'use client'
+"use client";
 
-import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useSearchBarValue, useSetSearchBarValue } from '@/hooks/useSearchBarValue';
-import { IProduct } from '@/types/product.interface';
-import Container from '../ui/container/container';
-import SearchImage from '../ui/search-image/search-image';
-import LogoImage from '../ui/logo/logo';
-import SearchBar from '../search-bar/search-bar';
-import Tooltip from '../ui/tooltip/tooltip';
-import useProducts from '@/utils/useProducts';
-import Card from '../card/card';
-import ProductsGrid from '../ui/products-grid/products-grid';
-import Title from '../ui/title/title';
-import Button from '../ui/button/button';
-import CardSkeleton from '../ui/card-skeleton/card-skeleton';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectFavorites } from '@/store/favorites/favorites-slice';
-import useCart from '@/hooks/useCart';
-import CartService from '@/services/cart.service';
-import { setFilteredProducts } from '@/store/search-products/search-products-slice';
-import { MdFace } from 'react-icons/md';
-import Hamburger from '../ui/hamburger/hamburger';
-import NavLink from '../ui/nav-link/nav-link';
-import NavMain from './nav-main/nav-main';
-import Sidebar from '../ui/sidebar/sidebar';
-import FavoriteButton from '../ui/favorite-button/favorite-button';
-import CartIcon from '../ui/cart-icon/cart-icon';
-import CartContent from '../cart-content/cart-content';
-import HamburgerContent from '../ui/hamburger/hamburger-content/hamburger-content';
-import styles from './navbar.module.scss';
+import {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  useSearchBarValue,
+  useSetSearchBarValue,
+} from "@/utils/hooks/useSearchBarValue";
+import { IProduct } from "@/types/product.interface";
+import Container from "../ui/container/container";
+import SearchImage from "../ui/search-image/search-image";
+import LogoImage from "../ui/logo/logo";
+import SearchBar from "../search-bar/search-bar";
+import Tooltip from "../ui/tooltip/tooltip";
+import useProducts from "@/utils/useProducts";
+import Card from "../card/card";
+import ProductsGrid from "../ui/products-grid/products-grid";
+import Title from "../ui/title/title";
+import Button from "../ui/button/button";
+import CardSkeleton from "../ui/card-skeleton/card-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFavorites } from "@/store/favorites/favorites-slice";
+import useCart from "@/utils/hooks/useCart";
+import CartService from "@/services/cart.service";
+import { setFilteredProducts } from "@/store/search-products/search-products-slice";
+import { MdFace } from "react-icons/md";
+import Hamburger from "../ui/hamburger/hamburger";
+import NavLink from "../ui/nav-link/nav-link";
+import NavMain from "./nav-main/nav-main";
+import Sidebar from "../ui/sidebar/sidebar";
+import FavoriteButton from "../ui/favorite-button/favorite-button";
+import CartIcon from "../ui/cart-icon/cart-icon";
+import CartContent from "../cart-content/cart-content";
+import HamburgerContent from "../ui/hamburger/hamburger-content/hamburger-content";
+import styles from "./navbar.module.scss";
 
 interface INavbar {
   isSearchClicked: boolean;
   setIsSearchClicked: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar) {
+export default function Navbar({
+  isSearchClicked,
+  setIsSearchClicked,
+}: INavbar) {
   const searchBarFocus = useRef<HTMLInputElement>(null);
   const searchBarValue = useSearchBarValue();
   const setSearchBarValue = useSetSearchBarValue();
-  const [showFilteredProducts, setShowFilteredProducts] = useState<boolean>(false);
+  const [showFilteredProducts, setShowFilteredProducts] =
+    useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
   const favorites = useSelector(selectFavorites);
@@ -49,11 +64,16 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
   const { products, isLoading } = useProducts();
   const { handleCartSidebarToggle } = useCart();
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const itemRef = useRef<HTMLLIElement | null>(null);
   const dispatch = useDispatch();
   const [isHamburgerClick, setIsHamburgerClick] = useState<boolean>(false);
-  const [activeDropdownSecond, setActiveDropdownSecond] = useState<number | null>(null);
+  const [activeDropdownSecond, setActiveDropdownSecond] = useState<
+    number | null
+  >(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const { isCartSidebarOpened } = useCart();
   const handleDropdownSecond = (index: number) => {
@@ -61,78 +81,84 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
   };
 
   const handleHamburgerClick = () => {
-    setIsHamburgerClick(p => {
+    setIsHamburgerClick((p) => {
       if (!p) {
-        setActiveDropdownSecond(null)
+        setActiveDropdownSecond(null);
       }
-      return !p
-    })
-  }
+      return !p;
+    });
+  };
 
   const handleMouseEnter = (index: number) => {
-    setActiveDropdown(index)
-  }
+    setActiveDropdown(index);
+  };
 
   const handleMouseLeave = () => {
-    setActiveDropdown(null)
-  }
+    setActiveDropdown(null);
+  };
 
   const handleSearchBar = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchBarValue(e.target.value);
-  }
+  };
 
   const filteredProducts = products.filter((product: IProduct) => {
     const searchTerms = searchBarValue
       .toLowerCase()
-      .split(' ')
-      .filter(term => term);
+      .split(" ")
+      .filter((term) => term);
 
     return searchTerms.every((term) => {
       return (
         product.title.toLowerCase().includes(term) ||
         product.color.toLowerCase().includes(term) ||
         product.subcategory?.toLowerCase().includes(term) ||
-        product.categories?.some(category => category.toLowerCase().includes(term)) ||
-        product.sizes?.some(size =>
-          size.name && size.available === true && size.name.toLowerCase().includes(term))
-      )
+        product.categories?.some((category) =>
+          category.toLowerCase().includes(term)
+        ) ||
+        product.sizes?.some(
+          (size) =>
+            size.name &&
+            size.available === true &&
+            size.name.toLowerCase().includes(term)
+        )
+      );
     });
   });
 
   const handleSearch = () => {
     setIsSearchClicked((prev) => {
       if (prev) {
-        setSearchBarValue('')
+        setSearchBarValue("");
         setShowFilteredProducts(false);
       }
       return !prev;
-    })
+    });
   };
 
   const clearInputValue = () => {
-    setSearchBarValue('');
-  }
+    setSearchBarValue("");
+  };
 
   const handleShowFilteredProducts = () => {
     // setShowFilteredProducts(true);
     dispatch(setFilteredProducts(filteredProducts));
-    router.push(`/search?name=${encodeURIComponent(searchBarValue)}`)
-  }
+    router.push(`/search?name=${encodeURIComponent(searchBarValue)}`);
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleShowFilteredProducts();
     }
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth > 768);
-    }
+    };
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [])
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (isSearchClicked && searchBarFocus.current) {
@@ -141,8 +167,8 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
   }, [isSearchClicked]);
 
   useEffect(() => {
-    if (pathname !== '/search') {
-      setIsSearchClicked(false)
+    if (pathname !== "/search") {
+      setIsSearchClicked(false);
     }
   }, [pathname]);
 
@@ -162,7 +188,7 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
               isHamburgerClick={isHamburgerClick}
               onClick={handleHamburgerClick}
             />
-            <Link href='/' className={styles['logo-link']}>
+            <Link href="/" className={styles["logo-link"]}>
               <LogoImage />
             </Link>
             <NavMain
@@ -176,14 +202,14 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
             />
             <div className={styles.navbar__sub}>
               <ul className={styles.navbar__list}>
-                <li className={styles['navbar__item-search']}>
+                <li className={styles["navbar__item-search"]}>
                   <Tooltip
-                    position='bottom'
-                    content='search panel'
-                    className={styles['navbar__item-tooltip']}
+                    position="bottom"
+                    content="search panel"
+                    className={styles["navbar__item-tooltip"]}
                   >
                     <button
-                      className={styles['navbar__button-search']}
+                      className={styles["navbar__button-search"]}
                       onClick={handleSearch}
                     >
                       <SearchImage />
@@ -191,29 +217,38 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
                   </Tooltip>
                 </li>
                 <li className={styles.navbar__item}>
-                  <NavLink href='/user/sign-in'
-                  >
-                    {isMobile ? 'Sign In' : <MdFace className={styles['navbar__item-sign']} />}
+                  <NavLink href="/user/sign-in">
+                    {isMobile ? (
+                      "Sign In"
+                    ) : (
+                      <MdFace className={styles["navbar__item-sign"]} />
+                    )}
                   </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
-                  <NavLink href='/favorite'
-                  >
-                    {isMobile
-                      ? 'Favorite'
-                      : <FavoriteButton border={false} className={styles['navbar__item-favorite']} />
-                    }<span>{favorites.length}</span>
+                  <NavLink href="/favorite">
+                    {isMobile ? (
+                      "Favorite"
+                    ) : (
+                      <FavoriteButton
+                        border={false}
+                        className={styles["navbar__item-favorite"]}
+                      />
+                    )}
+                    <span>{favorites.length}</span>
                   </NavLink>
                 </li>
                 <li className={styles.navbar__item}>
                   <button
-                    className={styles['navbar__item-button']}
+                    className={styles["navbar__item-button"]}
                     onClick={handleCartSidebarToggle}
                   >
-                    {isMobile
-                      ? 'Cart'
-                      : <CartIcon className={styles['navbar__item-cart']} />
-                    }<span>{productsQuantity}</span>
+                    {isMobile ? (
+                      "Cart"
+                    ) : (
+                      <CartIcon className={styles["navbar__item-cart"]} />
+                    )}
+                    <span>{productsQuantity}</span>
                   </button>
                 </li>
               </ul>
@@ -222,87 +257,70 @@ export default function Navbar({ isSearchClicked, setIsSearchClicked }: INavbar)
         </Container>
       ) : (
         <>
-          <Container className={styles['search-bar__container']}>
+          <Container className={styles["search-bar__container"]}>
             <SearchBar
-              className={styles['search-bar']}
+              className={styles["search-bar"]}
               onClick={clearInputValue}
               value={searchBarValue}
               onChange={handleSearchBar}
               ref={searchBarFocus}
               onKeyDown={handleKeyDown}
             />
-            <div className={styles['search-bar__container-buttons']}>
-              <Button onClick={handleShowFilteredProducts}>
-                Search
-              </Button>
-              <Button variant='white' onClick={handleSearch}>
+            <div className={styles["search-bar__container-buttons"]}>
+              <Button onClick={handleShowFilteredProducts}>Search</Button>
+              <Button variant="white" onClick={handleSearch}>
                 Close
               </Button>
             </div>
           </Container>
-          {pathname !== '/search' && (
-            <div className={styles['search-bar__products-wrapper']}>
-              <Container className={styles['search-bar__products-container']}>
-                <Title className={styles['search-bar__products-title']}>
+          {pathname !== "/search" && (
+            <div className={styles["search-bar__products-wrapper"]}>
+              <Container className={styles["search-bar__products-container"]}>
+                <Title className={styles["search-bar__products-title"]}>
                   Popular Products
                 </Title>
                 <ProductsGrid>
                   {!showFilteredProducts
                     ? isLoading
                       ? Array.from({ length: 5 }).map((_, index) => (
-                        <CardSkeleton key={index} />
-                      ))
-                      : products
-                        .filter((product) =>
-                          product.categories?.includes('trends')
-                        )
-                        .slice(0, 5)
-                        .map((product) => (
-                          <Card
-                            key={product.id}
-                            product={product}
-                          />
+                          <CardSkeleton key={index} />
                         ))
+                      : products
+                          .filter((product) =>
+                            product.categories?.includes("trends")
+                          )
+                          .slice(0, 5)
+                          .map((product) => (
+                            <Card key={product.id} product={product} />
+                          ))
                     : filteredProducts.map((product) => {
-                      console.log(filteredProducts)
-                      return (
-                        <Card
-                          key={product.id}
-                          product={product}
-                        />
-                      )
-                    })}
+                        console.log(filteredProducts);
+                        return <Card key={product.id} product={product} />;
+                      })}
                 </ProductsGrid>
                 <Link
-                  href='/category/all-clothing'
-                  className={styles['search-bar__products-button']}
+                  href="/category/all-clothing"
+                  className={styles["search-bar__products-button"]}
                 >
-                  <Button>
-                    Show All
-                  </Button>
+                  <Button>Show All</Button>
                 </Link>
               </Container>
             </div>
           )}
         </>
-      )
-      }
+      )}
 
-      
       <Sidebar isOpened={isCartSidebarOpened}>
         <CartContent />
       </Sidebar>
 
-
-      <Sidebar position='left' isOpened={isHamburgerClick}>
+      <Sidebar position="left" isOpened={isHamburgerClick}>
         <HamburgerContent
           handleHamburgerClick={handleHamburgerClick}
           handleDropdownSecond={handleDropdownSecond}
           activeDropdownSecond={activeDropdownSecond}
         />
       </Sidebar>
-
-
-    </nav >
-  )
+    </nav>
+  );
 }

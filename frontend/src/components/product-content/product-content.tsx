@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
-import Image from 'next/image';
-import ZoomImagePopup from '../zoom-image-popup/zoom-image-popup';
-import Color from '../ui/color/color';
-import Button from '../ui/button/button';
-import Price from '../ui/price/price';
-import Title from '../ui/title/title';
-import { MouseEvent, useEffect, useState } from 'react';
-import { IProduct } from '@/types/product.interface';
-import CloseButton from '../ui/close-button/close-button';
-import styles from './product-content.module.scss';
-import FavoriteButton from '../ui/favorite-button/favorite-button';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleFavorite, isFavorite } from '@/store/favorites/favorites-slice';
-import { RootState } from '@/store/store';
-import { ISize } from '@/types/sizes.interface';
-import { addToCart } from '@/store/cart/cart-slice';
-import { Carousel } from 'antd';
-import SizeChartContent from '../size-chart-content/size-chart-content';
-import useSizeChartPopup from '@/hooks/useSizeChartPopup';
-import Modal from '../ui/modal/modal';
+import Image from "next/image";
+import ZoomImagePopup from "../zoom-image-popup/zoom-image-popup";
+import Color from "../ui/color/color";
+import Button from "../ui/button/button";
+import Price from "../ui/price/price";
+import Title from "../ui/title/title";
+import { MouseEvent, useEffect, useState } from "react";
+import { IProduct } from "@/types/product.interface";
+import CloseButton from "../ui/close-button/close-button";
+import styles from "./product-content.module.scss";
+import FavoriteButton from "../ui/favorite-button/favorite-button";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite, isFavorite } from "@/store/favorites/favorites-slice";
+import { RootState } from "@/store/store";
+import { ISize } from "@/types/sizes.interface";
+import { addToCart } from "@/store/cart/cart-slice";
+import { Carousel } from "antd";
+import SizeChartContent from "../size-chart-content/size-chart-content";
+import useSizeChartPopup from "@/utils/hooks/useSizeChartPopup";
+import Modal from "../ui/modal/modal";
 
 interface IProductContent {
   product: IProduct;
@@ -32,7 +32,8 @@ export default function ProductContent({
   product,
   closeButton,
   onClose,
-  modal = false }: IProductContent) {
+  modal = false,
+}: IProductContent) {
   const [isManeImage, setIsManeImage] = useState<string>(
     product.images[0].image_url
   );
@@ -45,7 +46,7 @@ export default function ProductContent({
   const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     dispatch(toggleFavorite(product));
-  }
+  };
 
   const handleSelectSize = (size: ISize) => {
     setSelectedSize(size);
@@ -63,11 +64,13 @@ export default function ProductContent({
 
   const id = product.id;
 
-  const isProductFavorite = useSelector((state: RootState) => isFavorite(state, id));
+  const isProductFavorite = useSelector((state: RootState) =>
+    isFavorite(state, id)
+  );
 
   const handleImageMain = (image: string) => {
     setIsManeImage(image);
-  }
+  };
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 992);
@@ -75,20 +78,24 @@ export default function ProductContent({
 
   useEffect(() => {
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <>
-      <div className={`
+      <div
+        className={`
         ${styles.product__content} 
-        ${modal ? styles.product__content_modal : ''}
-      `}>
-        <div className={`
-          ${styles['product__content-images']} 
+        ${modal ? styles.product__content_modal : ""}
+      `}
+      >
+        <div
+          className={`
+          ${styles["product__content-images"]} 
           ${styles.images}
-          `}>
+          `}
+        >
           {!isMobile ? (
             <>
               <div className={styles.images__all}>
@@ -100,12 +107,12 @@ export default function ProductContent({
                       src={image.image_url}
                       className={
                         isManeImage === image.image_url
-                          ? styles['images__all_active']
-                          : ''
+                          ? styles["images__all_active"]
+                          : ""
                       }
                       width={0}
                       height={0}
-                      layout='responsive'
+                      layout="responsive"
                       priority
                       onClick={() => handleImageMain(image.image_url)}
                     />
@@ -120,7 +127,7 @@ export default function ProductContent({
             </>
           ) : (
             <Carousel
-            className={styles['carousel-wrapper']}
+              className={styles["carousel-wrapper"]}
               draggable
               slidesToShow={2.5}
               infinite={false}
@@ -130,48 +137,59 @@ export default function ProductContent({
                   breakpoint: 768,
                   settings: {
                     slidesToShow: 1.5,
-                  }
+                  },
                 },
               ]}
             >
               {Array.isArray(product.images) ? (
-                product.images.map((image: { image_url: string }, index: number) => (
-                  <div className={styles['carousel-wrapper__image']} key={index}>
-                    <Image
-                      alt={product.title}
-                      src={image.image_url}
-                      width={0}
-                      height={0}
-                      layout="responsive"
-                      priority
-                    />
-                  </div>
-                ))
+                product.images.map(
+                  (image: { image_url: string }, index: number) => (
+                    <div
+                      className={styles["carousel-wrapper__image"]}
+                      key={index}
+                    >
+                      <Image
+                        alt={product.title}
+                        src={image.image_url}
+                        width={0}
+                        height={0}
+                        layout="responsive"
+                        priority
+                      />
+                    </div>
+                  )
+                )
               ) : (
                 <p>No images available</p>
               )}
             </Carousel>
           )}
         </div>
-        <div className={`
-          ${styles['product__content-description']} 
+        <div
+          className={`
+          ${styles["product__content-description"]} 
           ${styles.description}
-          ${modal ? styles.description_modal : ''}
-          `}>
-          <div className={styles['title-block']}>
-            <Title className={styles['title-main']}>
-              {product.title}
-            </Title>
+          ${modal ? styles.description_modal : ""}
+          `}
+        >
+          <div className={styles["title-block"]}>
+            <Title className={styles["title-main"]}>{product.title}</Title>
             {closeButton ? <CloseButton onClose={onClose} /> : null}
           </div>
           <div className={styles.description__color}>
-            <div>Color: <span>{product.color}</span></div>
+            <div>
+              Color: <span>{product.color}</span>
+            </div>
             <Color color={product.color} />
           </div>
           <div className={styles.sizes}>
             {product.sizes.map((size) => (
               <Button
-                className={selectedSize?.id === size.id ? styles['sizes-button_active'] : ''}
+                className={
+                  selectedSize?.id === size.id
+                    ? styles["sizes-button_active"]
+                    : ""
+                }
                 key={size.id}
                 disabled={!size.available}
                 onClick={() => handleSelectSize(size)}
@@ -182,23 +200,20 @@ export default function ProductContent({
             ))}
           </div>
           <div className={styles.description__prices}>
-            <Price
-              price={product.price_new}
-              className={styles['main-price']}
-            />
+            <Price price={product.price_new} className={styles["main-price"]} />
             <Price
               price={product.price_old}
-              className={styles['old-price']}
+              className={styles["old-price"]}
               old
             />
           </div>
 
           <button
-            className={styles['description__size-button']}
+            className={styles["description__size-button"]}
             onClick={toggleSizeChartPopup}
           >
             <Image
-              src={'/size.svg'}
+              src={"/size.svg"}
               alt="size"
               width={30}
               height={20}
@@ -207,11 +222,12 @@ export default function ProductContent({
             <span>Size Chart</span>
           </button>
 
-          <div className={styles['description-text']}>
+          <div className={styles["description-text"]}>
             <Title className={styles.title}>Description</Title>
-            <div className={`
-              ${styles['description-text__text']}
-              ${modal ? styles['description-text_modal'] : ''}
+            <div
+              className={`
+              ${styles["description-text__text"]}
+              ${modal ? styles["description-text_modal"] : ""}
             `}
             >
               {product.description}
@@ -231,5 +247,5 @@ export default function ProductContent({
         </Modal>
       </div>
     </>
-  )
-};
+  );
+}

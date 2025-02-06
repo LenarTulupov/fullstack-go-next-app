@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { ReactNode, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import useScrollLock from '@/hooks/useScrollLock';
-import Overlay from '../overlay/overlay';
-import ModalContent from './modal-content/modal-content';
-import styles from './modal.module.scss';
+import { ReactNode, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import useScrollLock from "@/utils/hooks/useScrollLock";
+import Overlay from "../overlay/overlay";
+import ModalContent from "./modal-content/modal-content";
+import styles from "./modal.module.scss";
 
 interface IModal {
   children: ReactNode;
   isOpened: boolean;
-  position?: 'bottom' | 'right'
+  position?: "bottom" | "right";
 }
 
 export default function Modal({
   children,
   isOpened,
-  position = 'bottom' }: IModal) {
+  position = "bottom",
+}: IModal) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(isOpened);
   const [animate, setAnimate] = useState(false);
@@ -27,10 +28,10 @@ export default function Modal({
 
   useEffect(() => {
     if (isOpened) {
-      setIsVisible(true); 
+      setIsVisible(true);
       setTimeout(() => setAnimate(true), 10);
     } else {
-      setAnimate(false); 
+      setAnimate(false);
       const timeout = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timeout);
     }
@@ -45,11 +46,8 @@ export default function Modal({
   return createPortal(
     <div className={styles.modal}>
       <Overlay isOpened={isOpened}>
-        <ModalContent
-          isOpened={animate}
-          position={position}
-        >
-            {children}
+        <ModalContent isOpened={animate} position={position}>
+          {children}
         </ModalContent>
       </Overlay>
     </div>,

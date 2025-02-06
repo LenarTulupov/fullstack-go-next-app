@@ -40,6 +40,7 @@ func AdminLogin(c *gin.Context) {
     }
 
     fmt.Println("Stored password hash:", storedPasswordHash)
+    fmt.Println("Length of stored password hash:", len(storedPasswordHash))
     fmt.Println("Role:", role)
     fmt.Println("Provided password:", admin.Password)
 
