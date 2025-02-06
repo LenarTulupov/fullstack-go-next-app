@@ -40,7 +40,7 @@ export default function AdminSignIn() {
       document.cookie = `token=${data.token}; path=/; max-age=3600`;
       console.log("Token saved in cookies:", data.token);
 
-      router.push("/admin/dashboard");
+      router.push("/dashboard/admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred during login.");
     } finally {

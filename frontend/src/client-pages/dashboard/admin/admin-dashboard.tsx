@@ -1,59 +1,62 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "@/constants/api-endpoints";
 import { URL } from "@/constants/url";
 
-export default function AdminDashboard() {
-    const [dashboardData, setDashboardData] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
+const getCookie = (name: string): string | null => {
+  const match = document.cookie.match(`(^|;)\\s*${name}=([^;]+)`);
+  return match ? decodeURIComponent(match[2]) : null;
+};
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('token='))
-                ?.split('=')[1];
+export default function AdminDashboardRight() {
+  const [dashboardData, setDashboardData] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-            if (!token) {
-                setError("No token found");
-                return;
-            }
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = getCookie("token");
 
-            try {
-                const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_DASHBOARD}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                });
+      if (!token) {
+        setError("No token found");
+        return;
+      }
 
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || "Something went wrong");
-                }
+      try {
+        const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_DASHBOARD}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-                setDashboardData(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "An error occurred");
-            }
-        };
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Something went wrong");
+        }
 
-        fetchData();
-    }, []);
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      }
+    };
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    fetchData();
+  }, []);
 
-    if (!dashboardData) {
-        return <div>Loading...</div>;
-    }
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
-    return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <pre>{JSON.stringify(dashboardData, null, 2)}</pre>
-        </div>
-    );
+  if (!dashboardData) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h1 className="text-xl font-bold">Admin Dashboard</h1>
+            <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(dashboardData, null, 2)}</pre>
+    </div>
+  );
 }

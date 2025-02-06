@@ -24,10 +24,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     // Admin 
     r.POST("/admin/login", handlers.AdminLogin)
 
-    admin := r.Group("/admin")
+    admin := r.Group("/dashboard/admin")
     admin.Use(middleware.AuthMiddleware("admin"))
     {
-        admin.GET("/dashboard", handlers.AdminDashboard)
+        admin.GET("/", handlers.AdminDashboard)
     }
 
     r.POST("/register", handlers.RegisterUser)
