@@ -11,26 +11,31 @@ func CORSMiddleware() gin.HandlerFunc {
 	fmt.Println("CORS middleware applied")
 
 	config := cors.Config{
-		AllowOrigins: []string{
-			"https://frontend-ouox.onrender.com",
-			"http://localhost:3000",
-			"https://frontend-five-inky-90.vercel.app",
-			"https://bloom-lemon.vercel.app",
-		},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders: []string{
-			"Origin",
-			"Content-Type",
-			"Accept",
-			"Authorization",
-		},
-		ExposeHeaders: []string{"Content-Length"},
+		AllowAllOrigins: false,
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:   []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge: 12 * time.Hour,
+		MaxAge:          12 * time.Hour,
+	}
+
+	allowedOrigins := map[string]bool{
+		"https://frontend-ouox.onrender.com": true,
+		"http://localhost:3000":              true,
+		"https://frontend-five-inky-90.vercel.app": true,
+		"https://bloom-lemon.vercel.app":     true,
 	}
 
 	return func(c *gin.Context) {
-		fmt.Printf("CORS request from origin: %s\n", c.Request.Header.Get("Origin"))
+		origin := c.Request.Header.Get("Origin")
+		fmt.Printf("CORS request from origin: %s\n", origin)
+
+		if allowedOrigins[origin] {
+			config.AllowOrigins = []string{origin}
+		} else {
+			config.AllowOrigins = []string{"https://frontend-ouox.onrender.com"} // По умолчанию
+		}
+
 		cors.New(config)(c)
 	}
 }

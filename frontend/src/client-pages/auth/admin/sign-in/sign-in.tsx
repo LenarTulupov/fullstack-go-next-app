@@ -15,10 +15,27 @@ export default function AdminSignIn() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = document.cookie.split("; ").find(row => row.startsWith("token="));
-    if (token) {
-      router.push("/dashboard/admin");
-    }
+    const checkToken = async () => {
+      const token = document.cookie.split("; ").find(row => row.startsWith("token="))?.split("=")[1];
+  
+      if (!token) return;
+  
+      try {
+        const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_DASHBOARD}`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          router.push("/dashboard/admin");
+        }
+      } catch (err) {
+        console.error("Token validation failed:", err);
+      }
+    };
+  
+    checkToken();
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

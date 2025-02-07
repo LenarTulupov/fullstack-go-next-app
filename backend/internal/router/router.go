@@ -26,32 +26,32 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     r.POST("/admin/login", handlers.AdminLogin)
 
     admin := r.Group("/dashboard/admin")
-    admin.Use(middleware.AuthMiddleware("admin"))
-    {
-        // Обработка OPTIONS запросов для CORS
-        admin.OPTIONS("/", func(c *gin.Context) {
-            origin := c.Request.Header.Get("Origin")
-            allowedOrigins := map[string]bool{
-                "https://frontend-ouox.onrender.com": true,
-                "http://localhost:3000":              true,
-                "https://frontend-five-inky-90.vercel.app": true,
-                "https://bloom-lemon.vercel.app":     true,
-            }
 
-            if allowedOrigins[origin] {
-                c.Header("Access-Control-Allow-Origin", origin)
-            } else {
-                c.Header("Access-Control-Allow-Origin", "https://frontend-ouox.onrender.com")
-            }
+// Обработка CORS для OPTIONS-запросов
+admin.OPTIONS("/*any", func(c *gin.Context) {
+	origin := c.Request.Header.Get("Origin")
+	allowedOrigins := map[string]bool{
+		"https://frontend-ouox.onrender.com": true,
+		"http://localhost:3000":              true,
+		"https://frontend-five-inky-90.vercel.app": true,
+		"https://bloom-lemon.vercel.app":     true,
+	}
 
-            c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-            c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
-            c.Header("Access-Control-Allow-Credentials", "true")
-            c.Status(http.StatusNoContent)
-        })
+	if allowedOrigins[origin] {
+		c.Header("Access-Control-Allow-Origin", origin)
+	} else {
+		c.Header("Access-Control-Allow-Origin", "https://frontend-ouox.onrender.com")
+	}
 
-        admin.GET("/", handlers.AdminDashboard)
-    }
+	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+	c.Header("Access-Control-Allow-Credentials", "true")
+	c.Status(http.StatusNoContent)
+})
+
+admin.Use(middleware.AuthMiddleware("admin"))
+admin.GET("/", handlers.AdminDashboard)
+
 
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)

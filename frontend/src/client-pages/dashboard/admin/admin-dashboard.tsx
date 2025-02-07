@@ -18,25 +18,23 @@ export default function AdminDashboardRight() {
   useEffect(() => {
     const fetchData = async () => {
       const token = getCookie("token");
-
+  
       if (!token) {
         setError("No token found");
         router.push("/admin/sign-in");
         return;
       }
-
+  
       try {
         const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_DASHBOARD}`, {
           method: "GET",
-          headers: { 
-            Authorization: `Bearer ${token}`, 
-            "Content-Type": "application/json",
-          },
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
           credentials: "include",
         });
-
+  
         if (!response.ok) {
           if (response.status === 401) {
+            document.cookie = "token=; path=/; max-age=0"; // Удаляем cookie
             setError("Session expired. Please sign in again.");
             router.push("/admin/sign-in");
             return;
@@ -44,16 +42,17 @@ export default function AdminDashboardRight() {
           const errorData = await response.json();
           throw new Error(errorData.message || "Something went wrong");
         }
-
+  
         const data = await response.json();
         setDashboardData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       }
     };
-
+  
     fetchData();
   }, [router]);
+  
 
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
