@@ -27,6 +27,27 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     admin := r.Group("/dashboard/admin")
     admin.Use(middleware.AuthMiddleware("admin"))
     {
+        admin.OPTIONS("/", func(c *gin.Context) {
+            origin := c.Request.Header.Get("Origin")
+            allowedOrigins := map[string]bool{
+                "https://frontend-ouox.onrender.com": true,
+                "http://localhost:3000":              true,
+                "https://frontend-five-inky-90.vercel.app": true,
+                "https://bloom-lemon.vercel.app":     true,
+            }
+
+            if allowedOrigins[origin] {
+                c.Header("Access-Control-Allow-Origin", origin)
+            } else {
+                c.Header("Access-Control-Allow-Origin", "https://frontend-ouox.onrender.com")
+            }
+
+            c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+            c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+            c.Header("Access-Control-Allow-Credentials", "true")
+            c.Status(http.StatusNoContent)
+        })
+
         admin.GET("/", handlers.AdminDashboard)
     }
 
