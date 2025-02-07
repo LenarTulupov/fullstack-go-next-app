@@ -11,12 +11,13 @@ func CORSMiddleware() gin.HandlerFunc {
 	fmt.Println("CORS middleware applied")
 
 	config := cors.Config{
-		AllowOrigins: []string{
+		/* AllowOrigins: []string{
 			"https://frontend-ouox.onrender.com",
 			"http://localhost:3000",
 			"https://frontend-five-inky-90.vercel.app",
 			"https://bloom-lemon.vercel.app",
-		},
+		}, */
+		AllowAllOrigins: true,
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{
 			"Origin",
