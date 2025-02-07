@@ -1,9 +1,8 @@
 package middleware
 
 import (
-	"fmt"
 	"time"
-
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -23,29 +22,15 @@ func CORSMiddleware() gin.HandlerFunc {
 			"Origin",
 			"Content-Type",
 			"Accept",
-			"Authorization",
+			"Authorization", 
 		},
-		ExposeHeaders:    []string{"Content-Length"},
+		ExposeHeaders: []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge: 12 * time.Hour,
 	}
 
-	corsMiddleware := cors.New(config)
-
 	return func(c *gin.Context) {
-		origin := c.Request.Header.Get("Origin")
-		fmt.Printf("CORS request from origin: %s\n", origin)
-
-		// Обрабатываем preflight-запрос
-		if c.Request.Method == "OPTIONS" {
-			c.Header("Access-Control-Allow-Origin", origin)
-			c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-			c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
-			c.Header("Access-Control-Allow-Credentials", "true")
-			c.AbortWithStatus(204)
-			return
-		}
-
-		corsMiddleware(c)
+		fmt.Printf("CORS request from origin: %s\n", c.Request.Header.Get("Origin"))
+		cors.New(config)(c)
 	}
 }
