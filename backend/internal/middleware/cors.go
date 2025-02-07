@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"time"
 	"fmt"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -29,8 +30,14 @@ func CORSMiddleware() gin.HandlerFunc {
 		MaxAge: 12 * time.Hour,
 	}
 
+	corsMiddleware := cors.New(config)
+
 	return func(c *gin.Context) {
-		fmt.Printf("CORS request from origin: %s\n", c.Request.Header.Get("Origin"))
-		cors.New(config)(c)
+		origin := c.Request.Header.Get("Origin")
+		fmt.Printf("CORS request from origin: %s\n", origin)
+
+		corsMiddleware(c)
+
+		c.Writer.WriteHeaderNow()
 	}
 }
