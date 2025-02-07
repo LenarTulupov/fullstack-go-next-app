@@ -28,7 +28,10 @@ export default function AdminDashboardRight() {
       try {
         const response = await fetch(`${URL}${API_ENDPOINTS.ADMIN_DASHBOARD}`, {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { 
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
 
