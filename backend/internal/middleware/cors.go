@@ -25,9 +25,9 @@ func CORSMiddleware() gin.HandlerFunc {
 			"Accept",
 			"Authorization",
 		},
-		ExposeHeaders: []string{"Content-Length"},
+		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge: 12 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}
 
 	corsMiddleware := cors.New(config)
@@ -36,8 +36,16 @@ func CORSMiddleware() gin.HandlerFunc {
 		origin := c.Request.Header.Get("Origin")
 		fmt.Printf("CORS request from origin: %s\n", origin)
 
-		corsMiddleware(c)
+		// Обрабатываем preflight-запрос
+		if c.Request.Method == "OPTIONS" {
+			c.Header("Access-Control-Allow-Origin", origin)
+			c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+			c.Header("Access-Control-Allow-Credentials", "true")
+			c.AbortWithStatus(204)
+			return
+		}
 
-		c.Writer.WriteHeaderNow()
+		corsMiddleware(c)
 	}
 }
