@@ -34,7 +34,7 @@ export default function AdminDashboardRight() {
   
         if (!response.ok) {
           if (response.status === 401) {
-            document.cookie = "token=; path=/; max-age=0"; // Удаляем cookie
+            document.cookie = "token=; path=/; max-age=0";
             setError("Session expired. Please sign in again.");
             router.push("/admin/sign-in");
             return;

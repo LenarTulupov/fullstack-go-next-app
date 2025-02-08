@@ -1,5 +1,6 @@
 import Button from "@/components/ui/button/button";
 import { ReactNode } from "react";
+import DashboardHeader from "./dashboard-header";
 
 interface IDashboardLayout {
   children: ReactNode;
@@ -7,7 +8,7 @@ interface IDashboardLayout {
 
 export default function DashboardLayoutClient({ children }: IDashboardLayout) {
   return (
-    <div>
+    <div className="flex">
       <aside className="flex flex-col w-[15%]">
         <Button>Dashboard</Button>
         <Button>Orders</Button>
@@ -16,7 +17,10 @@ export default function DashboardLayoutClient({ children }: IDashboardLayout) {
         <Button>Kanban</Button>
         <Button>Sign Out</Button>
       </aside>
-      {children}
+      <div className="flex flex-col">
+        <DashboardHeader/>
+        {children}
+      </div>
     </div>
   );
 }

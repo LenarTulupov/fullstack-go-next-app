@@ -27,7 +27,7 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
         }
 
         // Валидация токена
-        userRole, err := services.ValidateToken(token)
+        userRole, userName, err := services.ValidateToken(token)
         if err != nil {
             log.Printf("Token validation failed: %v", err) // Логирование ошибки
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
@@ -41,6 +41,12 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
             c.Abort()
             return
         }
+
+        // Передача данных о пользователе в контекст
+        c.Set("user", gin.H{
+            "name": userName,
+            "role": userRole,
+        })
 
         // Передача управления следующему обработчику
         c.Next()
