@@ -49,6 +49,7 @@ export default function AdminSignIn() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
         credentials: "include",
+        mode: "cors"
       });
 
       if (!response.ok) {

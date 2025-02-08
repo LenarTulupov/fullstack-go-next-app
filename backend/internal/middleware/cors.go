@@ -26,6 +26,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 
 	config.AllowOrigins = allowedOrigins
+	fmt.Println("Allowed Origins:", allowedOrigins)
 
 	return cors.New(config)
 }
