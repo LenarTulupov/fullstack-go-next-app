@@ -13,7 +13,7 @@ func AdminDashboard(c *gin.Context) {
     }
 
     userData := user.(gin.H)
-    username := userData["username"].(string) // Здесь username вместо name
+    username := userData["username"].(string)
 
     c.JSON(http.StatusOK, gin.H{
         "message": "Welcome to the Admin Dashboard",

@@ -8,7 +8,6 @@ import (
     "github.com/golang-jwt/jwt"
     "time"
     "database/sql"
-    "fmt"
 )
 
 type AdminLoginRequest struct {
@@ -23,13 +22,13 @@ func AdminLogin(c *gin.Context) {
         return
     }
 
-    var storedPasswordHash, role string
+    var storedPasswordHash, role, username string
     err := config.DB.QueryRow(`
-        SELECT u.password_hash, r.role_name 
+        SELECT u.password_hash, r.role_name, u.name 
         FROM users u
         LEFT JOIN user_roles ur ON u.id = ur.user_id
         LEFT JOIN roles r ON ur.role_id = r.id
-        WHERE u.email = $1`, admin.Email).Scan(&storedPasswordHash, &role)
+        WHERE u.email = $1`, admin.Email).Scan(&storedPasswordHash, &role, &username)
     if err != nil {
         if err == sql.ErrNoRows {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
@@ -39,13 +38,7 @@ func AdminLogin(c *gin.Context) {
         return
     }
 
-    fmt.Println("Stored password hash:", storedPasswordHash)
-    fmt.Println("Length of stored password hash:", len(storedPasswordHash))
-    fmt.Println("Role:", role)
-    fmt.Println("Provided password:", admin.Password)
-
     if err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(admin.Password)); err != nil {
-        fmt.Println("Password comparison error:", err)
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
         return
     }
@@ -53,6 +46,7 @@ func AdminLogin(c *gin.Context) {
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": admin.Email,
         "role":  role,
+        "username": username, // Добавляем username в JWT
         "exp":   time.Now().Add(time.Hour * 2).Unix(),
     })
 

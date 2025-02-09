@@ -32,7 +32,7 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
             return
         }
 
-        if userRole != requiredRole {
+        if strings.ToLower(userRole) != strings.ToLower(requiredRole) {
             c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient permissions"})
             c.Abort()
             return
@@ -46,4 +46,5 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
         c.Next()
     }
 }
+
 
