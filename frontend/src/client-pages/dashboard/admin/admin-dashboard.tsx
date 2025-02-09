@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "@/constants/api-endpoints";
 import { URL } from "@/constants/url";
 import { useRouter } from "next/navigation";
+import { setRole } from "@/store/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const getCookie = (name: string): string | null => {
-  const match = document.cookie.match(`(^|;)\\s*${name}=([^;]+)`);
-  return match ? decodeURIComponent(match[2]) : null;
+  if (typeof document !== "undefined") {
+    const match = document.cookie.match(`(^|;)\\s*${name}=([^;]+)`);
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+  return null;
 };
 
 export default function AdminDashboardRight() {
-  const [dashboardData, setDashboardData] = useState<string>("");
+  const [dashboardData, setDashboardData] = useState<{ role: string} | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,13 +51,14 @@ export default function AdminDashboardRight() {
   
         const data = await response.json();
         setDashboardData(data);
+        dispatch(setRole(data.role));
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       }
     };
   
     fetchData();
-  }, [router]);
+  }, [router, dispatch]);
   
 
   if (error) {
@@ -65,7 +72,6 @@ export default function AdminDashboardRight() {
   return (
     <div>
       <h1 className="text-xl font-bold">Admin Dashboard</h1>
-      <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(dashboardData, null, 2)}</pre>
     </div>
   );
 }
