@@ -6,28 +6,27 @@ import (
     "fmt"
 )
 
-func ValidateToken(token string) (string, string, error) {
-    claims := jwt.MapClaims{}
-    parsedToken, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+func ValidateToken(tokenString string) (string, string, error) {
+    token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return []byte(config.JwtSecretKey), nil
     })
-
-    if err != nil || !parsedToken.Valid {
-        return "", "", fmt.Errorf("invalid token")
+    if err != nil {
+        return "", "", err
     }
 
-    role, ok := claims["role"].(string)
-    if !ok {
-        return "", "", fmt.Errorf("role not found in token claims")
-    }
+    if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+        role, roleOk := claims["role"].(string)
+        username, nameOk := claims["username"].(string) // Здесь username вместо name
 
-    name, ok := claims["name"].(string)  // Извлекаем имя пользователя из токена
-    if !ok {
-        return "", "", fmt.Errorf("name not found in token claims")
-    }
+        if !roleOk || !nameOk {
+            return "", "", fmt.Errorf("role or username not found in token")
+        }
 
-    return role, name, nil
+        return role, username, nil
+    }
+    return "", "", fmt.Errorf("invalid token")
 }
+
 
 
 

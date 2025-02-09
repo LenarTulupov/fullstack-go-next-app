@@ -10,7 +10,6 @@ import (
 
 func AuthMiddleware(requiredRole string) gin.HandlerFunc {
     return func(c *gin.Context) {
-        // Извлечение токена из заголовка Authorization
         authHeader := c.GetHeader("Authorization")
         if authHeader == "" {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token is required"})
@@ -18,7 +17,6 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
             return
         }
 
-        // Удаление префикса "Bearer " из токена
         token := strings.TrimPrefix(authHeader, "Bearer ")
         if token == "" {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
@@ -26,29 +24,26 @@ func AuthMiddleware(requiredRole string) gin.HandlerFunc {
             return
         }
 
-        // Валидация токена
-        userRole, userName, err := services.ValidateToken(token)
+        userRole, username, err := services.ValidateToken(token)
         if err != nil {
-            log.Printf("Token validation failed: %v", err) // Логирование ошибки
+            log.Printf("Token validation failed: %v", err)
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
             c.Abort()
             return
         }
 
-        // Проверка роли пользователя
         if userRole != requiredRole {
             c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient permissions"})
             c.Abort()
             return
         }
 
-        // Передача данных о пользователе в контекст
         c.Set("user", gin.H{
-            "name": userName,
+            "username": username, // Здесь username вместо name
             "role": userRole,
         })
 
-        // Передача управления следующему обработчику
         c.Next()
     }
 }
+
