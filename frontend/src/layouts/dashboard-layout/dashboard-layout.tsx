@@ -17,7 +17,7 @@ export default function DashboardLayoutClient({ children }: IDashboardLayout) {
         <Button>Kanban</Button>
         <Button>Sign Out</Button>
       </aside>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         <DashboardHeader/>
         {children}
       </div>

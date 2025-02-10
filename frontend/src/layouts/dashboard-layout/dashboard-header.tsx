@@ -20,7 +20,7 @@ export default function DashboardHeader() {
     router.push("/admin/sign-in");
   };
   return (
-    <header>
+    <header className="flex justify-end items-center gap-x-[20px]">
       <div>{role}</div>
       <Button onClick={handleLogout}>Log Out</Button>
     </header>

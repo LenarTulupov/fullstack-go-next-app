@@ -10,15 +10,15 @@ import (
 )
 
 type RegisterRequest struct {
-    Name     string `json:"name" binding:"required"`
+    Username string `json:"username" binding:"required"` // Заменили name на username
     Email    string `json:"email" binding:"required,email"`
     Password string `json:"password" binding:"required"`
 }
 
 type User struct {
-    Id    int    `json:"id"`
-    Name  string `json:"name"`
-    Email string `json:"email"`
+    Id       int    `json:"id"`
+    Username string `json:"username"` // Заменили name на username
+    Email    string `json:"email"`
 }
 
 func RegisterUser(c *gin.Context) {
@@ -38,8 +38,8 @@ func RegisterUser(c *gin.Context) {
     // Создаем пользователя
     var userId int
     err = config.DB.QueryRow(
-        "INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id",
-        req.Name, req.Email, string(hashedPassword),
+        "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id", // Заменили name на username
+        req.Username, req.Email, string(hashedPassword),
     ).Scan(&userId)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
@@ -62,7 +62,7 @@ func RegisterUser(c *gin.Context) {
 }
 
 func GetAllUsers(c *gin.Context) {
-    rows, err := config.DB.Query("SELECT id, name, email FROM users")
+    rows, err := config.DB.Query("SELECT id, username, email FROM users") // Заменили name на username
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch users"})
         return
@@ -72,7 +72,8 @@ func GetAllUsers(c *gin.Context) {
     var users []User
     for rows.Next() {
         var u User
-        if err := rows.Scan(&u.Id, &u.Name, &u.Email); err != nil {
+        if err := rows.Scan(&u.Id, &u.Username, &u.Email); // Заменили name на username
+            err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning user data"})
             return
         }
@@ -85,7 +86,7 @@ func GetAllUsers(c *gin.Context) {
 func GetUser(c *gin.Context) {
     id := c.Param("id")
     var user User
-    err := config.DB.QueryRow("SELECT id, name, email FROM users WHERE id = $1", id).Scan(&user.Id, &user.Name, &user.Email)
+    err := config.DB.QueryRow("SELECT id, username, email FROM users WHERE id = $1", id).Scan(&user.Id, &user.Username, &user.Email) // Заменили name на username
     if err == sql.ErrNoRows {
         c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
         return
@@ -104,7 +105,7 @@ func CreateUser(c *gin.Context) {
         return
     }
 
-    err := config.DB.QueryRow("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id", user.Name, user.Email).Scan(&user.Id)
+    err := config.DB.QueryRow("INSERT INTO users (username, email) VALUES ($1, $2) RETURNING id", user.Username, user.Email).Scan(&user.Id) // Заменили name на username
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
         return
@@ -121,7 +122,7 @@ func UpdateUser(c *gin.Context) {
         return
     }
 
-    _, err := config.DB.Exec("UPDATE users SET name = $1, email = $2 WHERE id = $3", user.Name, user.Email, id)
+    _, err := config.DB.Exec("UPDATE users SET username = $1, email = $2 WHERE id = $3", user.Username, user.Email, id) // Заменили name на username
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not update user"})
         return

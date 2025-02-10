@@ -13,7 +13,7 @@ const getCookie = (name: string): string | null => {
     return match ? decodeURIComponent(match[2]) : null;
   }
   return null;
-};
+}; 
 
 export default function AdminDashboardRight() {
   const [dashboardData, setDashboardData] = useState<{ role: string} | null>(null);
@@ -67,7 +67,7 @@ export default function AdminDashboardRight() {
 
   if (!dashboardData) {
     return <div>Loading...</div>;
-  }
+  } 
 
   return (
     <div>
