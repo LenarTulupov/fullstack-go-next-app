@@ -14,7 +14,7 @@ import styles from './sign-up.module.scss'
 import { useRouter } from 'next/navigation'
 
 export default function UserSignUp() {
-  const [name, setName] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
@@ -37,7 +37,7 @@ export default function UserSignUp() {
       const response = await fetch(`${URL}${API_ENDPOINTS.USER_REGISTRATION}`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ username, email, password }),
     });
 
     if(!response.ok) {
@@ -73,15 +73,15 @@ export default function UserSignUp() {
                 labelProps={field.labelProps}
                 textInputProps={{
                   ...field.textInputProps,
-                  value: field.textInputProps.name === "name" 
-                    ? name 
+                  value: field.textInputProps.name === "username" 
+                    ? username 
                     : field.textInputProps.name === "email" 
                     ? email 
                     : field.textInputProps.name === "password" 
                     ? password 
                     : passwordConfirm,
                   onChange: (e) => {
-                    if(field.textInputProps.name === "name") setName(e.target.value);
+                    if(field.textInputProps.name === "username") setUsername(e.target.value);
                     if(field.textInputProps.name === "email") setEmail(e.target.value);
                     if(field.textInputProps.name === "password") setPassword(e.target.value);
                     if(field.textInputProps.name === "passwordConfirm") setPasswordConfirm(e.target.value);

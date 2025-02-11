@@ -2,8 +2,8 @@ import { IInputField } from "@/types/input-field";
 
 export const signUpFields: IInputField[] = [
   {
-    labelProps: { htmlFor: 'name', label: 'Name' },
-    textInputProps: { id: 'name', name: "name", placeholder: 'Name', type: 'text', required: true }
+    labelProps: { htmlFor: 'username', label: 'Username' },
+    textInputProps: { id: 'username', name: "username", placeholder: 'Username', type: 'text', required: true }
   },
   {
     labelProps: { htmlFor: 'email', label: 'Email' },
