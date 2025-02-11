@@ -9,7 +9,7 @@ $colors: (
 );
 
 @each $name, $value in $colors {
-  .color-#{$name} {
+  .color-#{"" + $name} {
     background-color: $value;
   }
 }
