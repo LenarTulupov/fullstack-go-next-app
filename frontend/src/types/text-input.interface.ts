@@ -7,6 +7,6 @@ export interface ITextInput {
   className?: string;
   required: boolean;
   value?: string;
-  name?: string;
+  name: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
