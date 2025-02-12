@@ -8,6 +8,7 @@ import (
     "github.com/golang-jwt/jwt"
     "time"
     "api/pkg/config" 
+    "log"
 )
 
 type LoginRequest struct {
@@ -18,6 +19,7 @@ type LoginRequest struct {
 func LoginUser(c *gin.Context) {
     var req LoginRequest
     if err := c.ShouldBindJSON(&req); err != nil {
+        log.Printf("Error binding JSON: %v", err)
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
@@ -30,31 +32,35 @@ func LoginUser(c *gin.Context) {
         LEFT JOIN roles r ON ur.role_id = r.id
         WHERE u.email = $1`, req.Email).Scan(&storedPasswordHash, &role)
     if err == sql.ErrNoRows {
+        log.Printf("User not found: %v", req.Email)
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
         return
     }
     if err != nil {
+        log.Printf("Database error: %v", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not authenticate user"})
         return
     }
 
     if err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(req.Password)); err != nil {
+        log.Printf("Password mismatch for user: %v", req.Email)
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
         return
     }
 
-    // Генерация токена
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": req.Email,
-        "role":  role, // Добавляем роль в токен
+        "role":  role,
         "exp":   time.Now().Add(time.Hour * 2).Unix(),
     })
 
     tokenString, err := token.SignedString([]byte(config.JwtSecretKey))
     if err != nil {
+        log.Printf("Error generating token: %v", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
         return
     }
 
+    log.Printf("User %v logged in successfully", req.Email)
     c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
