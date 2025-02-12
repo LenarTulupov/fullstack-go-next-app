@@ -43,7 +43,7 @@ export default function UserSignIn() {
       const data = await response.json();
       document.cookie = `token=${data.token}; path=/; max-age=3600;`
 
-      router.push("/")
+      router.push("/profile/user")
     } catch(err) {
       setError(err instanceof Error ? err.message : "An error occurred during user login")
     } finally {
