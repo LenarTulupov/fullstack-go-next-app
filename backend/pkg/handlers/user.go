@@ -38,11 +38,21 @@ func RegisterUser(c *gin.Context) {
     // Создаем пользователя
     var userId int
     err = config.DB.QueryRow(
-        "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id", // Заменили name на username
+        "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id",
         req.Username, req.Email, string(hashedPassword),
     ).Scan(&userId)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
+        return
+    }
+
+    // Назначаем роль 'user' по умолчанию
+    _, err = config.DB.Exec(
+        "INSERT INTO user_roles (user_id, role_id) VALUES ($1, (SELECT id FROM roles WHERE role_name = 'user'))",
+        userId,
+    )
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not assign default role to user"})
         return
     }
 

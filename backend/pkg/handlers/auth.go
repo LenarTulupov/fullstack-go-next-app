@@ -24,7 +24,9 @@ func LoginUser(c *gin.Context) {
         return
     }
 
-    var storedPasswordHash, role string
+    var storedPasswordHash string
+    var role sql.NullString
+
     err := config.DB.QueryRow(`
         SELECT u.password_hash, r.role_name 
         FROM users u
@@ -42,6 +44,15 @@ func LoginUser(c *gin.Context) {
         return
     }
 
+    // Проверяем, есть ли роль у пользователя
+    if !role.Valid {
+        log.Printf("User %v has no role assigned", req.Email)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "User role is not assigned"})
+        return
+    }
+
+    userRole := role.String
+
     if err := bcrypt.CompareHashAndPassword([]byte(storedPasswordHash), []byte(req.Password)); err != nil {
         log.Printf("Password mismatch for user: %v", req.Email)
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
@@ -50,7 +61,7 @@ func LoginUser(c *gin.Context) {
 
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": req.Email,
-        "role":  role,
+        "role":  userRole,
         "exp":   time.Now().Add(time.Hour * 2).Unix(),
     })
 
