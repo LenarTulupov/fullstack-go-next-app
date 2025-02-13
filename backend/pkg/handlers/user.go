@@ -120,6 +120,8 @@ func GetAllUsers(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
     idStr := c.Param("id")
+    log.Printf("Received user ID: %s", idStr) // Логирование для отладки
+
     if idStr == "" {
         log.Printf("User ID is required")
         c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
