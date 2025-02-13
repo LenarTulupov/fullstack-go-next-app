@@ -120,8 +120,14 @@ func GetAllUsers(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
     idStr := c.Param("id")
-    id, err := strconv.Atoi(idStr) // Преобразуем строку в целое число
-    if err != nil {
+    if idStr == "" {
+        log.Printf("User ID is required")
+        c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+        return
+    }
+
+    id, err := strconv.Atoi(idStr)
+    if err != nil || id <= 0 {
         log.Printf("Invalid user ID: %s", idStr)
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
         return
