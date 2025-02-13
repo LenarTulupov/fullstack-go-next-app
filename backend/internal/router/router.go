@@ -34,7 +34,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     r.POST("/register", handlers.RegisterUser)
     r.POST("/login", handlers.LoginUser)
     r.GET("/users/:id", handlers.GetUser)
-    r.GET("/users", handlers.GetUser)
+    r.GET("/users", handlers.GetAllUsers)
     r.POST("/users", handlers.CreateUser)
     r.PUT("/users/:id", handlers.UpdateUser)
     r.DELETE("/users/:id", handlers.DeleteUser)
