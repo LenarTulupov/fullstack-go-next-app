@@ -8,6 +8,7 @@ import (
     "golang.org/x/crypto/bcrypt"
     "api/pkg/config"
     "log"
+    "encoding/json"
 )
 
 type RegisterRequest struct {
@@ -17,9 +18,10 @@ type RegisterRequest struct {
 }
 
 type User struct {
-    Id       int    `json:"id"`
-    Username string `json:"username"` // Заменили name на username
-    Email    string `json:"email"`
+    Id       int      `json:"id"`
+    Username string   `json:"username"`
+    Email    string   `json:"email"`
+    Roles    []string `json:"roles"`
 }
 
 func RegisterUser(c *gin.Context) {
@@ -73,9 +75,15 @@ func RegisterUser(c *gin.Context) {
 }
 
 func GetAllUsers(c *gin.Context) {
-    rows, err := config.DB.Query("SELECT id, username, email FROM users")
+    rows, err := config.DB.Query(`
+        SELECT u.id, u.username, u.email, COALESCE(json_agg(r.role_name) FILTER (WHERE r.role_name IS NOT NULL), '[]') 
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        LEFT JOIN roles r ON ur.role_id = r.id
+        GROUP BY u.id, u.username, u.email
+    `)
     if err != nil {
-        log.Printf("Error fetching users: %v", err) // Логируем ошибку
+        log.Printf("Error fetching users: %v", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch users"})
         return
     }
@@ -84,16 +92,19 @@ func GetAllUsers(c *gin.Context) {
     var users []User
     for rows.Next() {
         var u User
-        if err := rows.Scan(&u.Id, &u.Username, &u.Email); err != nil {
-            log.Printf("Error scanning user data: %v", err) // Логируем ошибку
+        var rolesJSON string
+        if err := rows.Scan(&u.Id, &u.Username, &u.Email, &rolesJSON); err != nil {
+            log.Printf("Error scanning user data: %v", err)
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning user data"})
             return
         }
+        json.Unmarshal([]byte(rolesJSON), &u.Roles)
         users = append(users, u)
     }
 
     c.JSON(http.StatusOK, users)
 }
+
 
 func GetUser(c *gin.Context) {
     id := c.Param("id")
