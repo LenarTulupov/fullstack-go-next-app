@@ -7,6 +7,7 @@ import (
     "github.com/gin-gonic/gin"
     "golang.org/x/crypto/bcrypt"
     "api/pkg/config"
+    "log"
 )
 
 type RegisterRequest struct {
@@ -72,8 +73,9 @@ func RegisterUser(c *gin.Context) {
 }
 
 func GetAllUsers(c *gin.Context) {
-    rows, err := config.DB.Query("SELECT id, username, email FROM users") // Заменили name на username
+    rows, err := config.DB.Query("SELECT id, username, email FROM users")
     if err != nil {
+        log.Printf("Error fetching users: %v", err) // Логируем ошибку
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch users"})
         return
     }
@@ -82,8 +84,8 @@ func GetAllUsers(c *gin.Context) {
     var users []User
     for rows.Next() {
         var u User
-        if err := rows.Scan(&u.Id, &u.Username, &u.Email); // Заменили name на username
-            err != nil {
+        if err := rows.Scan(&u.Id, &u.Username, &u.Email); err != nil {
+            log.Printf("Error scanning user data: %v", err) // Логируем ошибку
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning user data"})
             return
         }
