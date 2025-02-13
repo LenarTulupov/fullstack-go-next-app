@@ -16,6 +16,7 @@ import sizeChartPopupReducer from './size-chart-popup/size-chart-popup-slice'
 import modalReducer from './modal/modal-slice'
 import cookieModalReducer from './cookie-modal/cookie-modal-slice'
 import userReducer from './user/userSlice'
+import usersReducer from './users/users-slice'
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
     modal: modalReducer,
     cookieModalState: cookieModalReducer,
     userState: userReducer,
+    users: usersReducer,
   },
 });
 

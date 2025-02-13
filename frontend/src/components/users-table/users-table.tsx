@@ -2,15 +2,21 @@ import { IUser } from "@/types/user.interface";
 import { Table, TableBody, TableBodyItem, TableHeader, TableHeaderItem, TableList } from "../ui/table";
 
 interface IUsersTable {
-  users: IUser[];
-  loading: boolean;
-  error: string;
+  data: {
+    users: IUser[];
+    loading: boolean;
+    error: string | null;
+  }
 }
 
 
-export default function UsersTable({ users, loading, error }: IUsersTable) {
+export default function UsersTable({ data }: IUsersTable) {
+  const { users, loading, error } = data;
+
   if(loading) return <div>Loading...</div>
+
   if(error) return <div>Error: {error}</div>
+  
   return (
     <Table>
     <TableHeader>

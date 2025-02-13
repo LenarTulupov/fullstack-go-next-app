@@ -5,6 +5,7 @@ import (
     "encoding/json"
     "log"
     "net/http"
+    "strconv"
 
     "api/pkg/config"
     "github.com/gin-gonic/gin"
@@ -118,15 +119,21 @@ func GetAllUsers(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-    id := c.Param("id")
-    var user User
+    idStr := c.Param("id")
+    id, err := strconv.Atoi(idStr) // Преобразуем строку в целое число
+    if err != nil {
+        log.Printf("Invalid user ID: %s", idStr)
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+        return
+    }
 
-    err := config.DB.QueryRow(
+    var user User
+    err = config.DB.QueryRow(
         "SELECT id, username, email FROM users WHERE id = $1", id,
     ).Scan(&user.Id, &user.Username, &user.Email)
 
     if err == sql.ErrNoRows {
-        log.Printf("User not found: id=%s", id)
+        log.Printf("User not found: id=%d", id)
         c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
         return
     } else if err != nil {
