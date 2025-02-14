@@ -6,7 +6,7 @@ interface ITableHeader {
 
 export function TableHeader({ children }: ITableHeader) {
   return (
-    <thead>
+    <thead className="border-b">
       { children }
     </thead>
   )

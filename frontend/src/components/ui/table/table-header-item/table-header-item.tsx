@@ -1,13 +1,13 @@
-import { IUser } from "@/types/user.interface";
+import { ReactNode } from "react";
 
 interface ITableHeaderItem {
-  item: IUser;
+  children: ReactNode;
 }
 
-export function TableHeaderItem({ item }: ITableHeaderItem) {
+export function TableHeaderItem({ children  }: ITableHeaderItem) {
   return (
     <th>
-      {item.name}
+      { children } 
     </th>
   )
 }

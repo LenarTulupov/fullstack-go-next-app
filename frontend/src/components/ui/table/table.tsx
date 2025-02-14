@@ -6,7 +6,7 @@ interface ITable {
 
 export function Table({ children }: ITable) {
   return (
-    <table>
+    <table className="w-full border">
       { children }
     </table>
   )
