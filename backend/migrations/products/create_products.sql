@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS products CASCADE;
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
+    slug TEXT UNIQUE,
     description TEXT,
     price_new DECIMAL(10, 2) NOT NULL,
     price_old DECIMAL(10, 2),
