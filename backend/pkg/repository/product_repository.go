@@ -26,6 +26,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	SELECT 
 		p.id AS product_id,
 		p.title, 
+		p.slug,
 		p.description, 
 		p.price_new, 
 		p.price_old, 
@@ -66,7 +67,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		var imagesJSON, sizesJSON, categoriesJSON string
 
 		err := rows.Scan(
-			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
+			&product.ID, &product.Title, &product.Slug, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imagesJSON, &sizesJSON, &categoriesJSON,
 		)
@@ -135,6 +136,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 		SELECT 
 			p.id, 
 			p.title, 
+			p.slug,
 			p.description, 
 			p.price_new, 
 			p.price_old, 
@@ -166,7 +168,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 
 	if rows.Next() {
 		err := rows.Scan(
-			&product.ID, &product.Title, &product.Description, &product.PriceNew, &product.PriceOld,
+			&product.ID, &product.Title, &product.Slug, &product.Description, &product.PriceNew, &product.PriceOld,
 			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
 			&imagesJSON, 
 			&sizesJSON,
