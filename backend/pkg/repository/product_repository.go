@@ -10,6 +10,7 @@ import (
 type ProductRepository interface {
 	GetAll() ([]models.Product, error)
 	GetByID(id int) (models.Product, error)
+	GetBySlug(slug string) (models.Product, error)
 }
 
 type productRepository struct {
@@ -204,6 +205,82 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			product.Quantity += size.Quantity
 		}
 	}
+
+	return product, nil
+}
+
+func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
+	var product models.Product
+	var imagesJSON, sizesJSON, categoriesJSON string
+
+	query := `
+			SELECT 
+					p.id, 
+					p.title, 
+					p.slug,
+					p.description, 
+					p.price_new, 
+					p.price_old, 
+					p.subcategory_id,
+					subcat.name AS subcategory,
+					p.color_id, 
+					cl.name AS color, 
+					p.thumbnail,
+					COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
+							FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
+					COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
+							FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes,
+					COALESCE(JSON_AGG(DISTINCT cat.name)
+							FILTER (WHERE cat.id IS NOT NULL), '{}') AS categories
+			FROM products p
+			LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
+			LEFT JOIN colors cl ON p.color_id = cl.id
+			LEFT JOIN images img ON p.id = img.product_id
+			LEFT JOIN product_sizes ps ON p.id = ps.product_id
+			LEFT JOIN sizes s ON ps.size_id = s.id
+			LEFT JOIN product_categories pc ON p.id = pc.product_id
+			LEFT JOIN categories cat ON pc.category_id = cat.id
+			WHERE p.slug = $1
+			GROUP BY p.id, subcat.name, cl.name
+	`
+
+	row := r.db.QueryRow(query, slug)
+	err := row.Scan(
+			&product.ID, &product.Title, &product.Slug, &product.Description,
+			&product.PriceNew, &product.PriceOld, &product.SubcategoryID,
+			&product.Subcategory, &product.ColorID, &product.Color,
+			&product.Thumbnail, &imagesJSON, &sizesJSON, &categoriesJSON,
+	)
+	if err != nil {
+			return product, err
+	}
+
+	product.Images, err = parseImages(imagesJSON)
+	if err != nil {
+			return product, err
+	}
+
+	product.Sizes, err = parseSizes(sizesJSON)
+	if err != nil {
+			return product, err
+	}
+
+	json.Unmarshal([]byte(categoriesJSON), &product.Categories)
+
+	totalQuantity := 0
+	hasAvailableSize := false
+	for i := range product.Sizes {
+			size := &product.Sizes[i]
+			if size.Quantity > 0 {
+					size.Available = true
+					hasAvailableSize = true
+			} else {
+					size.Available = false
+			}
+			totalQuantity += size.Quantity
+	}
+	product.Quantity = totalQuantity
+	product.Available = hasAvailableSize
 
 	return product, nil
 }

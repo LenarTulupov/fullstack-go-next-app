@@ -44,3 +44,17 @@ func (h *ProductHandler) GetProduct(c *gin.Context) {
 
     c.JSON(http.StatusOK, product) // Отправка успешного ответа с продуктом
 }
+
+func (h * ProductHandler) GetProductBySlug(c *gin.Context) {
+    slug := c.Param("slug")
+    product, err := h.service.GetProductBySlug(slug)
+    if err != nil {
+        if err == services.ErrProductNotFound {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        }
+        return 
+    }
+    c.JSON(http.StatusOK, product)
+}

@@ -7,6 +7,7 @@ import (
 type Product struct {
     ID             int       `json:"id"`
     Title          string    `json:"title"`
+    Slug           string    `json:"slug"`
     Description    string    `json:"description"`
     PriceNew       float64   `json:"price_new"`
     PriceOld       float64   `json:"price_old,omitempty"`

@@ -43,7 +43,8 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
     // Product routes
     r.GET("/products", productHandler.GetProducts)
-    r.GET("/products/:id", productHandler.GetProduct)
+    r.GET("/products/id/:id", productHandler.GetProduct)
+    r.GET("/products/:slug", productHandler.GetProductBySlug)
 
     r.GET("/debug/jwt-secret", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{"JWT_SECRET_KEY": config.JwtSecretKey})
