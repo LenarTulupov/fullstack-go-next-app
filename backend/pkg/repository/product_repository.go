@@ -35,6 +35,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		p.color_id, 
 		cl.name AS color, 
 		p.thumbnail,
+		p.created_at,
+		p.updated_at,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
 		FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
@@ -49,7 +51,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	LEFT JOIN sizes s ON ps.size_id = s.id
 	LEFT JOIN product_categories pc ON p.id = pc.product_id
 	LEFT JOIN categories cat ON pc.category_id = cat.id
-	GROUP BY p.id, subcat.name, cl.name
+	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	ORDER BY p.id
 	`
 
@@ -68,7 +70,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Slug, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
+			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail, &product.CreatedAt, &product.UpdatedAt, 
 			&imagesJSON, &sizesJSON, &categoriesJSON,
 		)
 		if err != nil {
@@ -145,6 +147,8 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			p.color_id, 
 			cl.name AS color, 
 			p.thumbnail,
+			p.created_at, 
+			p.updated_at,
 			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
 				FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
 			COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
@@ -156,7 +160,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 		LEFT JOIN product_sizes ps ON p.id = ps.product_id
 		LEFT JOIN sizes s ON ps.size_id = s.id
 		WHERE p.id = $1
-		GROUP BY p.id, subcat.name, cl.name
+		GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	`
 
 	rows, err := r.db.Query(query, id)
@@ -169,7 +173,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	if rows.Next() {
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Slug, &product.Description, &product.PriceNew, &product.PriceOld,
-			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail,
+			&product.SubcategoryID, &product.Subcategory, &product.ColorID, &product.Color, &product.Thumbnail, &product.CreatedAt, &product.UpdatedAt,
 			&imagesJSON, 
 			&sizesJSON,
 		)
@@ -228,6 +232,8 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 					p.color_id, 
 					cl.name AS color, 
 					p.thumbnail,
+					p.created_at,
+					p.updated_at,
 					COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', img.id, 'image_url', img.image_url)) 
 							FILTER (WHERE img.id IS NOT NULL), '[]') AS images,
 					COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) 
@@ -243,7 +249,7 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 			LEFT JOIN product_categories pc ON p.id = pc.product_id
 			LEFT JOIN categories cat ON pc.category_id = cat.id
 			WHERE p.slug = $1
-			GROUP BY p.id, subcat.name, cl.name
+			GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	`
 
 	row := r.db.QueryRow(query, slug)
@@ -251,7 +257,7 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 			&product.ID, &product.Title, &product.Slug, &product.Description,
 			&product.PriceNew, &product.PriceOld, &product.SubcategoryID,
 			&product.Subcategory, &product.ColorID, &product.Color,
-			&product.Thumbnail, &imagesJSON, &sizesJSON, &categoriesJSON,
+			&product.Thumbnail, &product.CreatedAt, &product.UpdatedAt, &imagesJSON, &sizesJSON, &categoriesJSON,
 	)
 	if err != nil {
 			return product, err
