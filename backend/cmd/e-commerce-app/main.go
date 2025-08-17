@@ -64,6 +64,7 @@ func main() {
     executeSchema("products", "create_sizes.sql")
     executeSchema("products", "create_products.sql")
     executeSchema("products", "slug_trigger.sql")
+    executeSchema("products", "update_updated_at_trigger.sql")
     executeSchema("products", "create_product_categories.sql")
     executeSchema("products", "create_images.sql")
     executeSchema("products", "create_product_sizes.sql")

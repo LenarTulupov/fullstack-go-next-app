@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS products (
     subcategory_id INT,
     color_id INT REFERENCES colors(id),
     thumbnail VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
