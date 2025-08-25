@@ -53,10 +53,9 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			'user_id', r.user_id,
 			'rating', r.rating,
 			'comment', r.comment,
-			'images', r.images,
 			'created_at', r.created_at,
 			'updated_at', r.updated_at
-		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
+		)) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
@@ -140,10 +139,9 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 			'user_id', r.user_id,
 			'rating', r.rating,
 			'comment', r.comment,
-			'images', r.images,
 			'created_at', r.created_at,
 			'updated_at', r.updated_at
-		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
+		)) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
@@ -219,10 +217,9 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 			'user_id', r.user_id,
 			'rating', r.rating,
 			'comment', r.comment,
-			'images', r.images,
 			'created_at', r.created_at,
 			'updated_at', r.updated_at
-		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
+		)) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
