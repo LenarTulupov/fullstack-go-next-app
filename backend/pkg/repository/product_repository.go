@@ -68,7 +68,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
 	LEFT JOIN reviews r ON p.id = r.product_id
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	ORDER BY p.id
@@ -155,7 +155,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
 	LEFT JOIN reviews r ON p.id = r.product_id
 	WHERE p.id = $1
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
@@ -234,7 +234,7 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
 	LEFT JOIN reviews r ON p.id = r.product_id
 	WHERE p.slug = $1
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
