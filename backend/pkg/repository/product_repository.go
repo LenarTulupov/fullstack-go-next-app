@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"api/pkg/models"
+	"api/pkg/models/product"
 	"database/sql"
 	"encoding/json"
 	"errors"

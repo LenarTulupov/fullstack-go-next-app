@@ -1,7 +1,7 @@
 package services
 
 import (
-	"api/pkg/models"
+	"api/pkg/models/product"
 	"api/pkg/repository"
 	"errors"
 )
