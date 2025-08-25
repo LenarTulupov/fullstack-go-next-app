@@ -46,7 +46,17 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 			FILTER (WHERE mat.id IS NOT NULL), '[]') AS materials,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', ci.id, 'name', ci.name, 'instructions', ci.instructions))
 			FILTER (WHERE ci.id IS NOT NULL), '[]') AS care_instructions,
-		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories
+		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories,
+		COALESCE(JSON_AGG(DISTINCT jsonb_build_object(
+			'id', r.id,
+			'product_id', r.product_id,
+			'user_id', r.user_id,
+			'rating', r.rating,
+			'comment', r.comment,
+			'images', r.images,
+			'created_at', r.created_at,
+			'updated_at', r.updated_at
+		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
@@ -58,7 +68,8 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN reviews r ON p.id = r.product_id
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	ORDER BY p.id
 	`
@@ -74,13 +85,13 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 
 	for rows.Next() {
 		var product models.Product
-		var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON string
+		var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON, reviewsJSON string
 
 		err := rows.Scan(
 			&product.ID, &product.Title, &product.Slug, &product.Description,
 			&product.PriceNew, &product.PriceOld, &product.SubcategoryID, &product.Subcategory,
 			&product.ColorID, &product.Color, &product.Thumbnail, &product.CreatedAt, &product.UpdatedAt,
-			&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON,
+			&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON, &reviewsJSON,
 		)
 		if err != nil {
 			return nil, err
@@ -91,6 +102,7 @@ func (r *productRepository) GetAll() ([]models.Product, error) {
 		product.Materials, _ = parseMaterials(materialsJSON)
 		product.CareInstructions, _ = parseCareInstructions(careJSON)
 		json.Unmarshal([]byte(categoriesJSON), &product.Categories)
+		product.Reviews, _ = parseReviews(reviewsJSON)
 
 		totalQuantity := 0
 		hasAvailableSize := false
@@ -121,7 +133,17 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', mat.id, 'name', mat.name, 'description', mat.description)) FILTER (WHERE mat.id IS NOT NULL), '[]') AS materials,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', ci.id, 'name', ci.name, 'instructions', ci.instructions)) FILTER (WHERE ci.id IS NOT NULL), '[]') AS care_instructions,
-		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories
+		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories,
+		COALESCE(JSON_AGG(DISTINCT jsonb_build_object(
+			'id', r.id,
+			'product_id', r.product_id,
+			'user_id', r.user_id,
+			'rating', r.rating,
+			'comment', r.comment,
+			'images', r.images,
+			'created_at', r.created_at,
+			'updated_at', r.updated_at
+		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
@@ -133,7 +155,8 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN reviews r ON p.id = r.product_id
 	WHERE p.id = $1
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	`
@@ -141,13 +164,13 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	row := r.db.QueryRow(query, id)
 
 	var product models.Product
-	var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON string
+	var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON, reviewsJSON string
 
 	err := row.Scan(
 		&product.ID, &product.Title, &product.Slug, &product.Description,
 		&product.PriceNew, &product.PriceOld, &product.SubcategoryID, &product.Subcategory,
 		&product.ColorID, &product.Color, &product.Thumbnail, &product.CreatedAt, &product.UpdatedAt,
-		&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON,
+		&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON, &reviewsJSON,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -161,6 +184,7 @@ func (r *productRepository) GetByID(id int) (models.Product, error) {
 	product.Materials, _ = parseMaterials(materialsJSON)
 	product.CareInstructions, _ = parseCareInstructions(careJSON)
 	json.Unmarshal([]byte(categoriesJSON), &product.Categories)
+	product.Reviews, _ = parseReviews(reviewsJSON)
 
 	totalQuantity := 0
 	hasAvailableSize := false
@@ -188,7 +212,17 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', s.id, 'name', s.name, 'abbreviation', s.abbreviation, 'quantity', ps.quantity)) FILTER (WHERE s.id IS NOT NULL), '[]') AS sizes,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', mat.id, 'name', mat.name, 'description', mat.description)) FILTER (WHERE mat.id IS NOT NULL), '[]') AS materials,
 		COALESCE(JSON_AGG(DISTINCT jsonb_build_object('id', ci.id, 'name', ci.name, 'instructions', ci.instructions)) FILTER (WHERE ci.id IS NOT NULL), '[]') AS care_instructions,
-		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories
+		COALESCE(JSON_AGG(DISTINCT cat.name) FILTER (WHERE cat.id IS NOT NULL), '[]') AS categories,
+		COALESCE(JSON_AGG(DISTINCT jsonb_build_object(
+			'id', r.id,
+			'product_id', r.product_id,
+			'user_id', r.user_id,
+			'rating', r.rating,
+			'comment', r.comment,
+			'images', r.images,
+			'created_at', r.created_at,
+			'updated_at', r.updated_at
+		) ) FILTER (WHERE r.id IS NOT NULL), '[]') AS reviews
 	FROM products p
 	LEFT JOIN subcategories subcat ON p.subcategory_id = subcat.id
 	LEFT JOIN colors cl ON p.color_id = cl.id
@@ -200,7 +234,8 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 	LEFT JOIN product_materials pm ON p.id = pm.product_id
 	LEFT JOIN materials mat ON pm.material_id = mat.id
 	LEFT JOIN product_care_instructions pci ON p.id = pci.product_id
-	LEFT JOIN care_instructions ci ON pci.care_instruction_id = ci.id
+	LEFT JOIN care_instructions ci ON pci.care_instructions_id = ci.id
+	LEFT JOIN reviews r ON p.id = r.product_id
 	WHERE p.slug = $1
 	GROUP BY p.id, subcat.name, cl.name, p.created_at, p.updated_at
 	`
@@ -208,13 +243,13 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 	row := r.db.QueryRow(query, slug)
 
 	var product models.Product
-	var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON string
+	var imagesJSON, sizesJSON, materialsJSON, careJSON, categoriesJSON, reviewsJSON string
 
 	err := row.Scan(
 		&product.ID, &product.Title, &product.Slug, &product.Description,
 		&product.PriceNew, &product.PriceOld, &product.SubcategoryID, &product.Subcategory,
 		&product.ColorID, &product.Color, &product.Thumbnail, &product.CreatedAt, &product.UpdatedAt,
-		&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON,
+		&imagesJSON, &sizesJSON, &materialsJSON, &careJSON, &categoriesJSON, &reviewsJSON,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -228,6 +263,7 @@ func (r *productRepository) GetBySlug(slug string) (models.Product, error) {
 	product.Materials, _ = parseMaterials(materialsJSON)
 	product.CareInstructions, _ = parseCareInstructions(careJSON)
 	json.Unmarshal([]byte(categoriesJSON), &product.Categories)
+	product.Reviews, _ = parseReviews(reviewsJSON)
 
 	totalQuantity := 0
 	hasAvailableSize := false
@@ -267,6 +303,12 @@ func parseCareInstructions(jsonData string) ([]models.CareInstruction, error) {
 	var care []models.CareInstruction
 	err := json.Unmarshal([]byte(jsonData), &care)
 	return care, err
+}
+
+func parseReviews(jsonData string) ([]models.Review, error) {
+	var reviews []models.Review
+	err := json.Unmarshal([]byte(jsonData), &reviews)
+	return reviews, err
 }
 
 var ErrNotFound = errors.New("not found")
