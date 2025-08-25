@@ -3,6 +3,7 @@ package handlers
 
 import (
     "api/pkg/services"
+		"api/pkg/models/product" 
     "github.com/gin-gonic/gin"
     "net/http"
     "strconv"
