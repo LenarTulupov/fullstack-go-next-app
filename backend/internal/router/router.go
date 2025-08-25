@@ -18,12 +18,12 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     // Применяем CORS middleware глобально
     r.Use(middleware.CORSMiddleware())
 
-    // Инициализация product service и repository
+    // Инициализация Product
     productRepo := repository.NewProductRepository(db)
     productService := services.NewProductService(productRepo)
     productHandler := handlers.NewProductHandler(productService)
 
-    // Инициализация review service и repository
+    // Инициализация Review
     reviewRepo := repository.NewReviewRepository(db)
     reviewService := services.NewReviewService(reviewRepo)
     reviewHandler := handlers.NewReviewHandler(reviewService)
@@ -47,19 +47,13 @@ func SetupRouter(db *sql.DB) *gin.Engine {
     r.GET("/health", handlers.HealthHandler)
 
     // Product routes
-    products := r.Group("/products")
-    {
-        products.GET("", productHandler.GetProducts)
-        products.GET("/id/:id", productHandler.GetProduct)
-        products.GET("/:slug", productHandler.GetProductBySlug)
+    r.GET("/products", productHandler.GetProducts)
+    r.GET("/products/id/:id", productHandler.GetProduct)      // По ID
+    r.GET("/products/:slug", productHandler.GetProductBySlug) // По slug
 
-        // Review routes (вложены в product)
-        reviews := products.Group("/id/:productID/reviews")
-        {
-            reviews.GET("", reviewHandler.GetReviews)
-            reviews.POST("", reviewHandler.AddReview)
-        }
-    }
+    // Review routes (обязательно выше wildcard /products/:slug)
+    r.GET("/products/id/:id/reviews", reviewHandler.GetReviews)
+    r.POST("/products/id/:id/reviews", reviewHandler.AddReview)
 
     // Debug route
     r.GET("/debug/jwt-secret", func(c *gin.Context) {
